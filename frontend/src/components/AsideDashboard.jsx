@@ -12,7 +12,7 @@ export const AsideDashboard = () => {
           className="h-full"
           draggable={false}
         />
-        <h1 className="text-2xl font-bold text-primary-color">AxisPOS</h1>
+        <h1 className="text-2xl font-bold text-primary-color">NOVA 348</h1>
       </header>
 
       <nav>
