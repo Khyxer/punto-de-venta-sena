@@ -149,18 +149,18 @@ export const loginUserController = async (req, res) => {
   }
 };
 
-// //obtener datos del usuario autenticado verificando su JWT
-// export const getProfileController = async (req, res) => {
-//   try {
-//     return res.json({
-//       success: true,
-//       data: req.user,
-//     });
-//   } catch (error) {
-//     return res.status(500).json({
-//       success: false,
-//       message: "Error al obtener el perfil.",
-//       error: error.message,
-//     });
-//   }
-// };
+//obtener datos del usuario autenticado verificando su JWT
+export const getProfileController = async (req, res) => {
+  try {
+    return res.json({
+      success: true,
+      data: req.user,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Error al obtener el perfil.",
+      error: error.message,
+    });
+  }
+};
