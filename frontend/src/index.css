@@ -1,0 +1,39 @@
+@import "tailwindcss";
+
+@theme {
+  /* Paleta de colores de la apliación */
+  --color-primary-color: #2563eb;
+  --color-second-color: #1e40af;
+  --color-accent-color: #06b6d4;
+  --color-dark-color: #1e293b; /* Este es el color del texto, solo que lo llame dark color para que no suene tan unico en caso de querer usarlo en otra cosa */
+  --color-light-color: #f8fafc; /* Este es del los fondos, pero lo mismo que el dark, lo llamo así para que suene mas general */
+  --color-error-color: #ef4444;
+}
+
+/* ---- Fuentes (Falta optimizarlas) ---- */
+
+/* Open Sans */
+@font-face {
+  font-family: OpenSans;
+  src: url("../public/fonts/OpenSans-VariableFont.ttf");
+  font-weight: 100 200 300 400 500 600 700 800 900;
+}
+
+/* DM Sans */
+@font-face {
+  font-family: DMSans;
+  src: url("../public/fonts/DMSans-VariableFont.ttf");
+  font-weight: 100 200 300 400 500 600 700 800 900;
+}
+
+/* Poppins */
+@font-face {
+  font-family: Poppins;
+  src: url("../public/fonts/Poppins-VariableFont.otf");
+  font-weight: 100 200 300 400 500 600 700 800 900;
+}
+
+body {
+  font-family: Poppins;
+}
+
