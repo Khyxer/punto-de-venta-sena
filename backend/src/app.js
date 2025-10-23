@@ -35,7 +35,7 @@ mongoose
 app.use("/api/inventory", inventoryRoutes);
 
 // rutas de cuentas
-app.use("/api/accounts", accountsRoutes);
+app.use("/api/auth", accountsRoutes);
 
 // ====== servidor ======
 

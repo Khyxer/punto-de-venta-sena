@@ -1,9 +1,17 @@
-import { Home, ShoppingCart, Box, User, File } from "lucide-react";
+import {
+  Home,
+  ShoppingCart,
+  Box,
+  User,
+  File,
+  Settings,
+  LayoutDashboard,
+} from "lucide-react";
 
 export const dashboardNavMenu = [
   {
     name: "Dashboard",
-    icon: Home,
+    icon: LayoutDashboard,
     path: "/",
   },
   {
@@ -30,5 +38,10 @@ export const dashboardNavMenu = [
     name: "Reportes",
     icon: File,
     path: "/reportes",
+  },
+  {
+    name: "Configuración",
+    icon: Settings,
+    path: "/config",
   },
 ];
