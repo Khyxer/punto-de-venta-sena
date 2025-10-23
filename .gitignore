@@ -7,8 +7,6 @@ dist-ssr
 build
 *.local
 .env
-.env.*
-!.env.example
 .DS_Store
 Thumbs.db
 
@@ -30,7 +28,6 @@ frontend/node_modules
 frontend/dist
 frontend/.vite
 frontend/.env
-frontend/.env.*
 
 # ============================================
 # ⚙️ Backend (Express + MongoDB)
@@ -40,7 +37,6 @@ backend/dist
 backend/logs
 backend/uploads
 backend/.env
-backend/.env.*
 
 # ============================================
 # 🧰 Editor & IDE
