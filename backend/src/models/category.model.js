@@ -5,7 +5,7 @@ const categorySchema = new mongoose.Schema(
     name: {
       type: String,
       required: true,
-      unique: true,
+      unique: [true, "La categoria ya existe"],
     },
     description: {
       type: String,

@@ -1,24 +1,23 @@
-import { configMenu } from "../constants/configPageNavMenu";
+import { configMenu } from "../constants/constConfigPageNavMenu";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import React from "react";
 
 export const ConfigPage = () => {
-  const [currentOption, setCurrentOption] = useState(configMenu[0]);
+  const [currentOption, setCurrentOption] = useState(0);
   return (
     <section className="h-full flex">
-      <aside className=" border-primary-color border-r h-full p-4">
-        {/* <header className="mb-2">
-          <h1 className="font-medium text-dark-color">Configuración</h1>
-        </header> */}
+      {/* menu de navegación */}
+      <aside className=" border-primary-color border-r h-full p-4 select-none">
         <nav>
           {configMenu.map((item, index) => (
             <Link
               key={index}
               to={item.path}
-              onClick={() => setCurrentOption(item.path)}
+              onClick={() => setCurrentOption(index)}
               className={`flex items-center gap-3 px-3 py-2 duration-100 rounded-lg
                         ${
-                          currentOption === item.path
+                          currentOption === index
                             ? " bg-primary-color text-light-color"
                             : " hover:bg-gray-200 text-gray-600 hover:text-black"
                         }
@@ -30,6 +29,11 @@ export const ConfigPage = () => {
           ))}
         </nav>
       </aside>
+
+      {/* contenido */}
+      <main className="p-4 flex-1">
+        {React.createElement(configMenu[currentOption].component)}
+      </main>
     </section>
   );
 };
