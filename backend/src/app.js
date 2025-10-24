@@ -25,7 +25,7 @@ app.use(express.json());
 
 // conectar a la base de datos
 mongoose
-  .connect(process.env.MONGO_URI)
+  .connect(process.env.MONGODB_ATLAS_URI)
   .then(() => console.log("Conectado a MongoDB"))
   .catch((err) => console.error("Error de conexión:", err));
 

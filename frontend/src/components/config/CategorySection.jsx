@@ -73,19 +73,34 @@ export const CategorySection = () => {
 
   //   console.log(categories);
 
+  // const data = categories.map((category) => ({
+  //   id: category?._id,
+  //   name: formatText(category?.name),
+  //   description:
+  //     category?.description === ""
+  //       ? "Sin descripción"
+  //       : formatText(category?.description),
+  //   nameCreator:
+  //     formatText(category?.userCreator?.name) +
+  //     " " +
+  //     formatText(category?.userCreator?.lastName),
+  //   createdAt: formatDate(category?.createdAt),
+  //   totalProducts: category?.totalProducts,
+  // }));
+
   const data = categories.map((category) => ({
-    id: category._id,
-    name: formatText(category.name),
+    id: category?._id,
+    name: formatText(category?.name),
     description:
-      category.description === ""
+      category?.description === ""
         ? "Sin descripción"
-        : formatText(category.description),
+        : formatText(category?.description),
     nameCreator:
-      formatText(category.userCreator.name) +
+      formatText(category?.userCreator?.name) +
       " " +
-      formatText(category.userCreator.lastName),
-    createdAt: formatDate(category.createdAt),
-    totalProducts: category.totalProducts,
+      formatText(category?.userCreator?.lastName),
+    createdAt: formatDate(category?.createdAt),
+    totalProducts: category?.totalProducts,
   }));
 
   //   console.log(data);
