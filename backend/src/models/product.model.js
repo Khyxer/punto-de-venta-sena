@@ -48,9 +48,9 @@ const productSchema = new mongoose.Schema(
       required: [true, "El stock mínimo es requerido"],
       min: [0, "El stock mínimo debe ser mayor o igual a 0"],
     },
-    unitOfMeasure: {
+    measureUnit: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "UnitOfMeasure",
+      ref: "MeasureUnit",
     },
     expirationDate: {
       type: Date,

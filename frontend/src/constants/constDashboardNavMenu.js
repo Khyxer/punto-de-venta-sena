@@ -29,11 +29,11 @@ export const dashboardNavMenu = [
     icon: User,
     path: "/clientes",
   },
-  {
-    name: "Empleados",
-    icon: User,
-    path: "/empleados",
-  },
+  // {
+  //   name: "Empleados",
+  //   icon: User,
+  //   path: "/empleados",
+  // },
   {
     name: "Reportes",
     icon: File,
