@@ -26,6 +26,7 @@ export const AuthProvider = ({ children }) => {
       if (!response.ok) {
         throw new Error(data.message);
       }
+      // console.log(data);
       setIsAuthenticated(true);
       setCurrentUser(data.data);
     } catch (error) {

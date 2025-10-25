@@ -4,7 +4,7 @@ import User from "../../models/user.model.js";
 // Controlador para registrar un usuario
 export const registerUserController = async (req, res) => {
   try {
-    const { name, userName, password, role } = req.body;
+    const { name, lastName, userName, password, role } = req.body;
 
     // validar datos
     if (
@@ -41,6 +41,7 @@ export const registerUserController = async (req, res) => {
     // el usuario debe ser en minusculas y sin espacios en ningun lado
     const user = new User({
       name,
+      lastName,
       userName: userName.trim().toLowerCase().replace(/\s/g, ""),
       password,
       role,

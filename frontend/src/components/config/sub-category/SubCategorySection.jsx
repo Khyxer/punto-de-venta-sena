@@ -1,12 +1,20 @@
-import { HeaderConfig } from "./HeaderConfig";
-import { LayoutModal } from "../general/LayoutModal";
-import { useState } from "react";
+import { HeaderConfig } from "../HeaderConfig";
+import { LayoutModal } from "../../general/LayoutModal";
+import { useState, useEffect } from "react";
 import { NewSubCategory } from "./NewSubCategoryForm";
+import { useSubCategory } from "../../../hooks/config/useSubCategory";
 
 export const SubCategorySection = () => {
   // manejar el estado de la modal
   const [showModal, setShowModal] = useState(false);
 
+  // hook
+  const { getSubCategories } = useSubCategory();
+
+  // obtener subcategorias
+  useEffect(() => {
+    getSubCategories();
+  }, []);
   return (
     <section className="max-w-6xl mx-auto">
       <LayoutModal

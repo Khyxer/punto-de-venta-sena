@@ -8,8 +8,15 @@ import {
   createCategoryController,
   searchCategoriesController,
   deleteCategoryController,
+  updateCategoryController,
 } from "../../controllers/inventory/category.controller.js";
 import { createMeasureUnitController } from "../../controllers/inventory/measureUnit.controller.js";
+import {
+  createSubCategoryController,
+  getSubCategoriesController,
+  deleteSubCategoryController,
+  updateSubCategoryController,
+} from "../../controllers/inventory/subCategory.controller.js";
 const router = express.Router();
 
 // ====== Rutas de productos del inventario ======
@@ -39,6 +46,47 @@ router.delete(
   authenticateToken,
   authorizeRoles("admin"),
   deleteCategoryController
+);
+
+// Actualizar categoria
+router.put(
+  "/category",
+  authenticateToken,
+  authorizeRoles("admin"),
+  updateCategoryController
+);
+
+// ====== Rutas de Sub Categorias =======
+// Crear subcategoria
+router.post(
+  "/subCategory",
+  authenticateToken,
+  authorizeRoles("admin"),
+  createSubCategoryController
+);
+
+// Buscar subcategorias
+router.get(
+  "/subCategory",
+  authenticateToken,
+  authorizeRoles("admin"),
+  getSubCategoriesController
+);
+
+// Eliminar subcategoria
+router.delete(
+  "/subCategory",
+  authenticateToken,
+  authorizeRoles("admin"),
+  deleteSubCategoryController
+);
+
+// Actualizar subcategoria
+router.put(
+  "/subCategory",
+  authenticateToken,
+  authorizeRoles("admin"),
+  updateSubCategoryController
 );
 
 // ====== Rutas de unidad de medida ======
