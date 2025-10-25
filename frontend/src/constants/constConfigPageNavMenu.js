@@ -1,9 +1,16 @@
-import { HardHat, IdCardLanyard, Layers, Layers2, PencilRuler, Truck, User } from "lucide-react";
-import { CategorySection } from "../components/config/CategorySection";
+import {
+  HardHat,
+  IdCardLanyard,
+  Layers,
+  Layers2,
+  PencilRuler,
+  Truck,
+} from "lucide-react";
+import { CategorySection } from "../components/config/category/CategorySection";
+import { SubCategorySection } from "../components/config/sub-category/SubCategorySection";
 import { MeasureUnitSection } from "../components/config/MeasureUnitSection";
 import { SupplierSection } from "../components/config/SupplierSection";
 import { ContactSupplierSection } from "../components/config/ContactSupplierSection";
-import { SubCategorySection } from "../components/config/SubCategorySection";
 import { EmployeeSection } from "../components/config/EmployeeSection";
 
 export const configMenu = [
@@ -36,5 +43,5 @@ export const configMenu = [
     name: "Empleados",
     icon: IdCardLanyard,
     component: EmployeeSection,
-  }
+  },
 ];

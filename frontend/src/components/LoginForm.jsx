@@ -37,7 +37,11 @@ export const LoginForm = () => {
 
       <footer className="flex flex-col gap-2">
         {error && <p className="text-red-500 text-sm text-center">{error}</p>}
-        <MainButton text={"INICIAR SESION"} disabled={loading} type="submit" />
+        <MainButton
+          text={loading ? "Cargando..." : "Iniciar sesión"}
+          disabled={loading}
+          type="submit"
+        />
         <p className="text-center text-sm">
           Desarrollador por{" "}
           <span className="text-primary-color cursor-pointer hover:underline">

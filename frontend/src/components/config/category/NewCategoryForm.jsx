@@ -1,13 +1,29 @@
-import { useCategory } from "../../hooks/config/useCategory.js";
+import { useConfigContext } from "../../../contexts/config/useConfigContext";
+import { useEffect } from "react";
 
-export const NewCategory = ({ onClose }) => {
-  const { createCategory, dataNewCategory, setDataNewCategory, loading } =
-    useCategory();
+export const NewCategory = ({ onClose, currentCategory, isEdit }) => {
+  const {
+    createCategory,
+    updateCategory,
+    dataNewCategory,
+    setDataNewCategory,
+    loading,
+  } = useConfigContext();
+
+  useEffect(() => {
+    if (isEdit && currentCategory) {
+      setDataNewCategory({
+        name: currentCategory.name || "",
+        description: currentCategory.description || "",
+      });
+    }
+  }, [isEdit, currentCategory]);
+
   return (
     <div className="flex flex-col gap-4">
       <header>
         <h1 className="text-xl font-medium text-primary-color">
-          Nueva Categoria
+          {isEdit ? "Editar Categoria" : "Nueva Categoria"}
         </h1>
         <p className="text-sm text-gray-600">
           Los campos marcados con * son obligatorios
@@ -59,11 +75,17 @@ export const NewCategory = ({ onClose }) => {
           Cancelar
         </button>
         <button
-          onClick={() => createCategory(onClose)}
+          onClick={() => {
+            if (isEdit) {
+              updateCategory(currentCategory.id, onClose);
+            } else {
+              createCategory(onClose);
+            }
+          }}
           disabled={loading}
           className="bg-primary-color text-light-color rounded-md px-4 py-2 h-full w-fit cursor-pointer duration-150 disabled:opacity-50 disabled:cursor-default"
         >
-          {loading ? "Cargando..." : "Crear categoria"}
+          {loading ? "Cargando..." : isEdit ? "Actualizar" : "Crear"}
         </button>
       </footer>
     </div>

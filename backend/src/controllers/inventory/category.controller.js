@@ -13,13 +13,17 @@ export const createCategoryController = async (req, res) => {
       });
     }
 
-    const category = new Category({
+    const categoryBase = new Category({
       name: name.toLowerCase(),
       description,
       userCreator: req.user._id,
     });
 
-    await category.save();
+    await categoryBase.save();
+
+    const category = await Category.findById(categoryBase._id)
+      .populate("userCreator")
+      .sort({ createdAt: -1 });
 
     return res.status(201).json({
       success: true,
@@ -73,7 +77,6 @@ export const searchCategoriesController = async (req, res) => {
   }
 };
 
-
 // eliminar categoria
 export const deleteCategoryController = async (req, res) => {
   try {
@@ -89,6 +92,40 @@ export const deleteCategoryController = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Error al eliminar la categoría",
+      error: error.message,
+    });
+  }
+};
+
+// actualizar categoria
+export const updateCategoryController = async (req, res) => {
+  try {
+    const { id } = req.query;
+    const categoryBase = await Category.findByIdAndUpdate(id, req.body);
+
+    const categoryUpdated = await Category.findById(categoryBase._id).populate(
+      "userCreator"
+    );
+
+    const totalProducts = await Product.countDocuments({
+      category: categoryUpdated._id,
+    });
+
+    const category = {
+      ...categoryUpdated._doc,
+      totalProducts: totalProducts,
+    };
+
+    return res.status(200).json({
+      success: true,
+      message: "Categoría actualizada exitosamente",
+      data: category,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: "Error al actualizar la categoría",
       error: error.message,
     });
   }

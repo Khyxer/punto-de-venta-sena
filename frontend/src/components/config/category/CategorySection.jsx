@@ -1,11 +1,11 @@
-import { HeaderConfig } from "./HeaderConfig";
-import { LayoutModal } from "../general/LayoutModal";
+import { HeaderConfig } from "../HeaderConfig";
+import { LayoutModal } from "../../general/LayoutModal";
 import { useEffect, useState } from "react";
 import { NewCategory } from "./NewCategoryForm";
-import { useCategory } from "../../hooks/config/useCategory";
-import { SimpleTable } from "../general/SimpleTable";
-import { formatDate, formatText } from "../../utils/utilFormatFunctions";
-import { Pencil, Trash, Trash2 } from "lucide-react";
+import { useConfigContext } from "../../../contexts/config/useConfigContext";
+import { SimpleTable } from "../../general/SimpleTable";
+import { formatDate, formatText } from "../../../utils/utilFormatFunctions";
+import { Loader2, Pencil, Trash2 } from "lucide-react";
 
 export const CategorySection = () => {
   // manejar el estado de la modal
@@ -13,17 +13,32 @@ export const CategorySection = () => {
   const [showModalDelete, setShowModalDelete] = useState(false);
 
   // manejar el estado de la tabla
-  const { categories, getCategories, deleteCategory } = useCategory();
+  const {
+    categories,
+    getCategories,
+    deleteCategory,
+    loadingGetCategory,
+    setDataNewCategory,
+  } = useConfigContext();
 
   // buscar
   const [searchTerm, setSearchTerm] = useState("");
 
   // id actual
-  const [currentId, setCurrentId] = useState("");
+  const [currentCategory, setCurrentCategory] = useState(null);
+  const [isEdit, setIsEdit] = useState(false);
 
   useEffect(() => {
     getCategories();
-  }, [categories]);
+  }, []);
+
+  useEffect(() => {
+    if (!showModal) {
+      setDataNewCategory({ name: "", description: "" });
+      setCurrentCategory(null);
+      setIsEdit(false);
+    }
+  }, [showModal]);
 
   //columnas de la tabla
   const columnas = [
@@ -54,12 +69,19 @@ export const CategorySection = () => {
       label: "Acciones",
       render: (valor, row) => (
         <div className="flex items-center gap-2">
-          <button className="bg-primary-color/30 text-light-color rounded-md w-9 aspect-square flex items-center justify-center cursor-pointer">
+          <button
+            onClick={() => {
+              setCurrentCategory(row);
+              setIsEdit(true);
+              setShowModal(true);
+            }}
+            className="bg-primary-color/30 text-light-color rounded-md w-9 aspect-square flex items-center justify-center cursor-pointer"
+          >
             <Pencil size={19} className="text-primary-color" />
           </button>
           <button
             onClick={() => {
-              setCurrentId(row.id);
+              setCurrentCategory(row.id);
               setShowModalDelete(true);
             }}
             className="bg-error-color/30 text-light-color rounded-md w-9 aspect-square flex items-center justify-center cursor-pointer"
@@ -70,23 +92,6 @@ export const CategorySection = () => {
       ),
     },
   ];
-
-  //   console.log(categories);
-
-  // const data = categories.map((category) => ({
-  //   id: category?._id,
-  //   name: formatText(category?.name),
-  //   description:
-  //     category?.description === ""
-  //       ? "Sin descripción"
-  //       : formatText(category?.description),
-  //   nameCreator:
-  //     formatText(category?.userCreator?.name) +
-  //     " " +
-  //     formatText(category?.userCreator?.lastName),
-  //   createdAt: formatDate(category?.createdAt),
-  //   totalProducts: category?.totalProducts,
-  // }));
 
   const data = categories.map((category) => ({
     id: category?._id,
@@ -106,7 +111,7 @@ export const CategorySection = () => {
   //   console.log(data);
 
   return (
-    <section className="w-full mx-auto max-w-6xl">
+    <section className="w-full mx-auto max-w-6xl h-full flex flex-col">
       {/* modal con el formulario de nueva categoria */}
       <LayoutModal
         className="w-full !max-w-lg"
@@ -114,14 +119,21 @@ export const CategorySection = () => {
         onClose={() => setShowModal(false)}
       >
         {/* formulario de nueva categoria */}
-        <NewCategory onClose={() => setShowModal(false)} />
+        <NewCategory
+          onClose={() => setShowModal(false)}
+          currentCategory={currentCategory}
+          isEdit={isEdit}
+        />
       </LayoutModal>
 
       {/* header con el buscador y el boton de nueva categoria */}
       <HeaderConfig
         placeholderInput="Buscar categoria"
         buttonText="Nueva Categoria"
-        onClickButton={() => setShowModal(true)}
+        onClickButton={() => {
+          setIsEdit(false);
+          setShowModal(true);
+        }}
         valueInput={searchTerm}
         onChangeInput={(e) => setSearchTerm(e.target.value)}
       />
@@ -152,7 +164,7 @@ export const CategorySection = () => {
           </button>
           <button
             onClick={() => {
-              deleteCategory(currentId);
+              deleteCategory(currentCategory);
               setShowModalDelete(false);
             }}
             className="bg-error-color text-light-color rounded-md px-4 py-2 cursor-pointer select-none"
@@ -163,14 +175,21 @@ export const CategorySection = () => {
       </LayoutModal>
 
       {/* tabla de categorias */}
-      <div className="w-full pt-6">
-        <SimpleTable
-          columns={columnas}
-          data={data}
-          itemsPerPage={9}
-          sortable={true}
-          searchTerm={searchTerm}
-        />
+      <div className="w-full pt-6 flex-1">
+        {loadingGetCategory ? (
+          <div className="w-full h-full flex items-center justify-center flex-col gap-2">
+            <Loader2 className="w-14 h-14 animate-spin mx-auto text-primary-color" />
+            <p className="text-primary-color">Cargando categorias...</p>
+          </div>
+        ) : (
+          <SimpleTable
+            columns={columnas}
+            data={data}
+            itemsPerPage={9}
+            sortable={true}
+            searchTerm={searchTerm}
+          />
+        )}
       </div>
     </section>
   );
