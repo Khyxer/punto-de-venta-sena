@@ -1,8 +1,17 @@
 import { configMenu } from "../constants/constConfigPageNavMenu";
-import { Link, Outlet, useLocation } from "react-router-dom";
+import { Link, Outlet, Navigate, useLocation } from "react-router-dom";
+import { useAuthContext } from "../contexts/auth/useAuthContext";
 
 export const ConfigPage = () => {
   const { pathname } = useLocation();
+
+  const { currentUser } = useAuthContext();
+  console.log(currentUser);
+
+  //si el usuario no es admin, redirige a la pagina de inicio
+  if (currentUser.role !== "admin") {
+    return <Navigate to="/" />;
+  }
 
   const isActiveConfigItem = (itemPath) => {
     // Construye la ruta completa

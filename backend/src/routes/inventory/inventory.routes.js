@@ -22,6 +22,12 @@ import {
   deleteMeasureUnitController,
   updateMeasureUnitController,
 } from "../../controllers/inventory/measureUnit.controller.js";
+import {
+  createSupplierController,
+  getSuppliersController,
+  deleteSupplierController,
+  updateSupplierController,
+} from "../../controllers/inventory/supplier.controller.js";
 
 const router = express.Router();
 
@@ -126,6 +132,38 @@ router.put(
   authenticateToken,
   authorizeRoles("admin"),
   updateMeasureUnitController
+);
+
+// ===== Rutas de proveedores ======
+router.post(
+  "/supplier",
+  authenticateToken,
+  authorizeRoles("admin"),
+  createSupplierController
+);
+
+// Buscar proveedores
+router.get(
+  "/supplier",
+  authenticateToken,
+  authorizeRoles("admin"),
+  getSuppliersController
+);
+
+// Eliminar proveedor
+router.delete(
+  "/supplier",
+  authenticateToken,
+  authorizeRoles("admin"),
+  deleteSupplierController
+);
+
+// Actualizar proveedor
+router.put(
+  "/supplier",
+  authenticateToken,
+  authorizeRoles("admin"),
+  updateSupplierController
 );
 
 export default router;

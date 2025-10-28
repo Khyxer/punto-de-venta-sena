@@ -1,3 +1,5 @@
+// BORRAR ESTO SI NO LO TERMINO USANDP
+
 import SupplierContact from "../../models/supplierContact.model.js";
 
 export const createSupplierContactController = async (req, res) => {

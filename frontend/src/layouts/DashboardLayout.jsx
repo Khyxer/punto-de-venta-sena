@@ -22,7 +22,7 @@ export const DashboardLayout = () => {
   return (
     <main className="h-screen flex">
       <AsideDashboard />
-      <section className="flex flex-col w-full">
+      <section className="flex flex-col w-full overflow-hidden">
         <HeaderDashboard />
         <Outlet />
       </section>
