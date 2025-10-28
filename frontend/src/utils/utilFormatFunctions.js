@@ -1,4 +1,3 @@
-
 // formato de texto
 export const formatText = (text) => {
   if (!text) return "";
@@ -7,5 +6,6 @@ export const formatText = (text) => {
 
 // formato de fecha
 export const formatDate = (date) => {
+  if (!date) return "";
   return new Date(date).toLocaleDateString();
 };

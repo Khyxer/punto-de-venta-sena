@@ -6,6 +6,7 @@ import { useConfigContext } from "../../../contexts/config/useConfigContext";
 import { SimpleTable } from "../../general/SimpleTable";
 import { formatDate, formatText } from "../../../utils/utilFormatFunctions";
 import { Loader2, Pencil, Trash2 } from "lucide-react";
+import { DeleteModalContent } from "../../general/DeleteModalContent";
 
 export const CategorySection = () => {
   // manejar el estado de la modal
@@ -93,6 +94,7 @@ export const CategorySection = () => {
     },
   ];
 
+  //datos de la tabla
   const data = categories.map((category) => ({
     id: category?._id,
     name: formatText(category?.name),
@@ -111,7 +113,7 @@ export const CategorySection = () => {
   //   console.log(data);
 
   return (
-    <section className="w-full mx-auto max-w-6xl h-full flex flex-col">
+    <section className="w-full h-full flex flex-col">
       {/* modal con el formulario de nueva categoria */}
       <LayoutModal
         className="w-full !max-w-lg"
@@ -123,6 +125,20 @@ export const CategorySection = () => {
           onClose={() => setShowModal(false)}
           currentCategory={currentCategory}
           isEdit={isEdit}
+        />
+      </LayoutModal>
+
+      {/* modal confirmar eliminar */}
+      <LayoutModal
+        className="w-full !max-w-lg"
+        show={showModalDelete}
+        onClose={() => setShowModalDelete(false)}
+      >
+        <DeleteModalContent
+          title="Eliminar categoria"
+          message="¿Estas seguro de eliminar esta categoria?"
+          setShowModalDelete={setShowModalDelete}
+          onDelete={() => deleteCategory(currentCategory)}
         />
       </LayoutModal>
 
@@ -138,15 +154,7 @@ export const CategorySection = () => {
         onChangeInput={(e) => setSearchTerm(e.target.value)}
       />
 
-      {/* modal confirmar eliminar */}
-
-      <LayoutModal
-        className="w-full !max-w-lg"
-        show={showModalDelete}
-        onClose={() => setShowModalDelete(false)}
-      >
-        {/* formulario de nueva categoria */}
-        <h2 className="text-xl font-medium text-red-500 mb-4">
+      {/* <h2 className="text-xl font-medium text-red-500 mb-4">
           Eliminar categoria
         </h2>
         <p className="mb-3">
@@ -171,8 +179,7 @@ export const CategorySection = () => {
           >
             Eliminar
           </button>
-        </div>
-      </LayoutModal>
+        </div> */}
 
       {/* tabla de categorias */}
       <div className="w-full pt-6 flex-1">

@@ -5,6 +5,16 @@ export const AsideDashboard = () => {
   /* el pathname devuelve el / que se encuentra en la url
    * por ejemplo si la url es http://localhost:5173/dashboard el pathname sera "/dashboard" */
   const { pathname } = useLocation();
+
+  const isActive = (itemPath) => {
+    // Si es la ruta raíz, solo coincide exactamente
+    if (itemPath === "/") {
+      return pathname === "/";
+    }
+    // Para las demás rutas, verifica si el pathname comienza con el itemPath
+    return pathname.startsWith(itemPath);
+  };
+
   return (
     <aside className="max-w-54 w-full border-primary-color border-r select-none">
       {/* logo y nombre */}
@@ -26,7 +36,7 @@ export const AsideDashboard = () => {
             /* si el pathname es igual al path de la opcion se le agrega un color de fondo pq esta seleccionado */
             className={`flex items-center gap-3 px-4 py-3 duration-100
               ${
-                pathname === item.path
+                isActive(item.path)
                   ? " bg-primary-color text-light-color rounded-lg "
                   : " hover:bg-gray-200 text-gray-600 hover:text-black rounded-lg "
               }

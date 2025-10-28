@@ -1,4 +1,5 @@
 import { SubCategory } from "../../models/subCategory.model.js";
+import Product from "../../models/product.model.js";
 
 // Crear subcategoria
 export const createSubCategoryController = async (req, res) => {
@@ -20,12 +21,21 @@ export const createSubCategoryController = async (req, res) => {
       });
     }
 
-    const subCategory = await SubCategory.create({
+    const subCategoryBase = new SubCategory({
       name: name.toLowerCase().trim(),
       description,
       mainCategory,
       userCreator: req.user.id,
     });
+
+    await subCategoryBase.save();
+
+    const subCategory = await SubCategory.findById(subCategoryBase._id)
+      .populate("userCreator mainCategory")
+      .sort({ createdAt: -1 });
+
+    // console.log("subCategory", subCategory);
+
     return res.status(201).json({
       message: "Subcategoria creada exitosamente",
       success: true,
@@ -39,7 +49,22 @@ export const createSubCategoryController = async (req, res) => {
 // Obtener subcategorias
 export const getSubCategoriesController = async (req, res) => {
   try {
-    const subCategories = await SubCategory.find();
+    // const subCategoriesBase = await SubCategory.find();
+    const subCategoriesBase = await SubCategory.find()
+      .populate("userCreator mainCategory")
+      .sort({ createdAt: -1 });
+
+    const totalProducts = await Product.countDocuments({
+      subCategory: {
+        $in: subCategoriesBase.map((subCategory) => subCategory._id),
+      },
+    });
+
+    const subCategories = subCategoriesBase.map((subCategory) => ({
+      ...subCategory._doc,
+      totalProducts: totalProducts,
+    }));
+
     return res.status(200).json({
       message: "Subcategorias obtenidas exitosamente",
       success: true,
@@ -53,17 +78,35 @@ export const getSubCategoriesController = async (req, res) => {
 // Actualizar subcategoria
 export const updateSubCategoryController = async (req, res) => {
   try {
-    const subCategory = await SubCategory.findByIdAndUpdate(
-      req.params.id,
+    const subCategoryBase = await SubCategory.findByIdAndUpdate(
+      req.query.id,
       req.body,
       { new: true }
     );
-    if (!subCategory) {
+
+    if (!subCategoryBase) {
       return res.status(404).json({
         error: "Subcategoria no encontrada",
         success: false,
       });
     }
+
+    //totalProducts
+    const totalProducts = await Product.countDocuments({
+      subCategory: {
+        $in: subCategoryBase._id,
+      },
+    });
+
+    const subCategoryFind = await SubCategory.findById(subCategoryBase._id)
+      .populate("userCreator mainCategory")
+      .sort({ createdAt: -1 });
+
+    const subCategory = {
+      ...subCategoryFind._doc,
+      totalProducts: totalProducts,
+    };
+
     return res.status(200).json({
       message: "Subcategoria actualizada exitosamente",
       success: true,
@@ -77,7 +120,7 @@ export const updateSubCategoryController = async (req, res) => {
 // Eliminar subcategoria
 export const deleteSubCategoryController = async (req, res) => {
   try {
-    const subCategory = await SubCategory.findByIdAndDelete(req.params.id);
+    const subCategory = await SubCategory.findByIdAndDelete(req.query.id);
     if (!subCategory) {
       return res.status(404).json({
         error: "Subcategoria no encontrada",

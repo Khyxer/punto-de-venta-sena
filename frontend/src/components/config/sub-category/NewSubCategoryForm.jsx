@@ -1,29 +1,34 @@
-import { useSubCategory } from "../../../hooks/config/useSubCategory.js";
 import { useEffect } from "react";
 import { formatText } from "../../../utils/utilFormatFunctions.js";
+import { useConfigContext } from "../../../contexts/config/useConfigContext";
+
 export const NewSubCategory = ({ onClose, currentCategory, isEdit }) => {
   const {
     createSubCategory,
     updateSubCategory,
     dataNewSubCategory,
     setDataNewSubCategory,
-    loading,
-    getCategories,
-    availableCategories,
-  } = useSubCategory();
+    loadingSubCategory,
+  } = useConfigContext();
+
+  const { getCategories, categories, loadingGetCategory } = useConfigContext();
 
   useEffect(() => {
     if (isEdit && currentCategory) {
       setDataNewSubCategory({
         name: currentCategory.name || "",
         description: currentCategory.description || "",
+        mainCategory: currentCategory.mainCategory?._id || "",
       });
     }
   }, [isEdit, currentCategory]);
 
   useEffect(() => {
-    getCategories();
-  }, []);
+    //solo obtener las categorias si no hay categorias ya guardadas
+    if (!categories.length) {
+      getCategories();
+    }
+  }, [categories.length]);
 
   return (
     <div className="flex flex-col gap-4">
@@ -44,7 +49,7 @@ export const NewSubCategory = ({ onClose, currentCategory, isEdit }) => {
         <select
           id="category"
           autoFocus
-          value={dataNewSubCategory.mainCategory || ""}
+          value={dataNewSubCategory?.mainCategory || ""}
           onChange={(e) =>
             setDataNewSubCategory({
               ...dataNewSubCategory,
@@ -54,9 +59,11 @@ export const NewSubCategory = ({ onClose, currentCategory, isEdit }) => {
           className="border border-gray-600 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-primary-color focus:ring-offset-2 duration-150"
         >
           <option value="" disabled>
-            Seleccionar categoria
+            {loadingGetCategory
+              ? "Obteniendo categorias..."
+              : "Seleccionar categoria"}
           </option>
-          {availableCategories.map((category, index) => (
+          {categories.map((category, index) => (
             <option key={`${category}-${index}`} value={category._id}>
               {formatText(category.name)}
             </option>
@@ -118,10 +125,10 @@ export const NewSubCategory = ({ onClose, currentCategory, isEdit }) => {
               createSubCategory(onClose);
             }
           }}
-          disabled={loading}
+          disabled={loadingSubCategory}
           className="bg-primary-color text-light-color rounded-md px-4 py-2 h-full w-fit cursor-pointer duration-150 disabled:opacity-50 disabled:cursor-default"
         >
-          {loading ? "Cargando..." : isEdit ? "Actualizar" : "Crear"}
+          {loadingSubCategory ? "Cargando..." : isEdit ? "Actualizar" : "Crear"}
         </button>
       </footer>
     </div>
