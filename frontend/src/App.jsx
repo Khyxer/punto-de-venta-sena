@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 // paginas principales y layout
 import { LoginPage } from "./pages/LoginPage";
 import { DashboardLayout } from "./layouts/DashboardLayout";
@@ -7,6 +7,14 @@ import { VentasPage } from "./pages/VentasPage";
 import { InventarioPage } from "./pages/InventarioPage";
 import { DashboardPage } from "./pages/DashboardPage";
 import { ConfigPage } from "./pages/ConfigPage";
+// paginas del config
+import { CategorySection } from "./components/config/category/CategorySection";
+import { SubCategorySection } from "./components/config/sub-category/SubCategorySection";
+import { MeasureUnitSection } from "./components/config/MeasureUnitSection";
+import { SupplierSection } from "./components/config/SupplierSection";
+import { ContactSupplierSection } from "./components/config/ContactSupplierSection";
+import { EmployeeSection } from "./components/config/EmployeeSection";
+
 // contextos
 import { AuthProvider } from "./contexts/auth/AuthContext";
 import { InventarioProvider } from "./contexts/inventario/InventarioContext";
@@ -34,7 +42,24 @@ function App() {
                 <Route index element={<DashboardPage />} />
                 <Route path="venta" element={<VentasPage />} />
                 <Route path="inventario" element={<InventarioPage />} />
-                <Route path="config" element={<ConfigPage />} />
+                <Route path="config" element={<ConfigPage />}>
+                  <Route index element={<Navigate to="categorias" replace />} />
+                  <Route path="categorias" element={<CategorySection />} />
+                  <Route
+                    path="subcategorias"
+                    element={<SubCategorySection />}
+                  />
+                  <Route
+                    path="unidades-medida"
+                    element={<MeasureUnitSection />}
+                  />
+                  <Route path="proveedores" element={<SupplierSection />} />
+                  <Route
+                    path="contactos-proveedores"
+                    element={<ContactSupplierSection />}
+                  />
+                  <Route path="empleados" element={<EmployeeSection />} />
+                </Route>
               </Route>
             </Routes>
           </ConfigProvider>

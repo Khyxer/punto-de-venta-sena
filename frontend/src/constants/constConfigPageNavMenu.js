@@ -17,31 +17,37 @@ export const configMenu = [
   {
     name: "Categorias",
     icon: Layers2,
-    component: CategorySection,
+    // component: CategorySection,
+    path: "categorias",
   },
   {
     name: "Sub Categorias",
     icon: Layers,
-    component: SubCategorySection,
+    // component: SubCategorySection,
+    path: "subcategorias",
   },
   {
     name: "Unidades Medida",
     icon: PencilRuler,
-    component: MeasureUnitSection,
+    // component: MeasureUnitSection,
+    path: "unidades-medida",
   },
   {
     name: "Proveedores",
     icon: Truck,
-    component: SupplierSection,
+    // component: SupplierSection,
+    path: "proveedores",
   },
   {
     name: "Contactos Proveedores",
     icon: HardHat,
-    component: ContactSupplierSection,
+    // component: ContactSupplierSection,
+    path: "contactos-proveedores",
   },
   {
     name: "Empleados",
     icon: IdCardLanyard,
-    component: EmployeeSection,
+    // component: EmployeeSection,
+    path: "/empleados",
   },
 ];

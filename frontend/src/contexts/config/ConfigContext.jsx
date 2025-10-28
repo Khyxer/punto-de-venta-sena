@@ -1,5 +1,6 @@
 import { createContext } from "react";
 import { useCategory } from "../../hooks/config/useCategory";
+import { useSubCategory } from "../../hooks/config/useSubCategory";
 
 const ConfigContext = createContext();
 
@@ -17,6 +18,19 @@ export const ConfigProvider = ({ children }) => {
     loading,
   } = useCategory();
 
+  // subcategoria
+  const {
+    subCategories,
+    getSubCategories,
+    deleteSubCategory,
+    loadingGetSubCategory,
+    createSubCategory,
+    updateSubCategory,
+    dataNewSubCategory,
+    setDataNewSubCategory,
+    loading: loadingSubCategory,
+  } = useSubCategory();
+
   return (
     <ConfigContext.Provider
       value={{
@@ -29,6 +43,15 @@ export const ConfigProvider = ({ children }) => {
         dataNewCategory,
         setDataNewCategory,
         loading,
+        subCategories,
+        getSubCategories,
+        deleteSubCategory,
+        loadingGetSubCategory,
+        createSubCategory,
+        updateSubCategory,
+        dataNewSubCategory,
+        setDataNewSubCategory,
+        loadingSubCategory,
       }}
     >
       {children}
