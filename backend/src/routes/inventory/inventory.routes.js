@@ -10,13 +10,19 @@ import {
   deleteCategoryController,
   updateCategoryController,
 } from "../../controllers/inventory/category.controller.js";
-import { createMeasureUnitController } from "../../controllers/inventory/measureUnit.controller.js";
 import {
   createSubCategoryController,
   getSubCategoriesController,
   deleteSubCategoryController,
   updateSubCategoryController,
 } from "../../controllers/inventory/subCategory.controller.js";
+import {
+  createMeasureUnitController,
+  getMeasureUnitsController,
+  deleteMeasureUnitController,
+  updateMeasureUnitController,
+} from "../../controllers/inventory/measureUnit.controller.js";
+
 const router = express.Router();
 
 // ====== Rutas de productos del inventario ======
@@ -92,10 +98,34 @@ router.put(
 // ====== Rutas de unidad de medida ======
 // Crear unidad de medida
 router.post(
-  "/unit",
+  "/measureUnit",
   authenticateToken,
   authorizeRoles("admin"),
   createMeasureUnitController
+);
+
+// Buscar unidad de medida
+router.get(
+  "/measureUnit",
+  authenticateToken,
+  authorizeRoles("admin"),
+  getMeasureUnitsController
+);
+
+// Eliminar unidad de medida
+router.delete(
+  "/measureUnit",
+  authenticateToken,
+  authorizeRoles("admin"),
+  deleteMeasureUnitController
+);
+
+// Actualizar unidad de medida
+router.put(
+  "/measureUnit",
+  authenticateToken,
+  authorizeRoles("admin"),
+  updateMeasureUnitController
 );
 
 export default router;

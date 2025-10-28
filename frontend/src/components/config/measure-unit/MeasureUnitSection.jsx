@@ -1,62 +1,56 @@
 import { HeaderConfig } from "../HeaderConfig";
+import { NewMeasureUnitForm } from "./NewMeasureUnitForm";
 import { LayoutModal } from "../../general/LayoutModal";
-import { useEffect, useState } from "react";
-import { NewSubCategory } from "./NewSubCategoryForm";
+import { useState } from "react";
+import { useEffect } from "react";
 import { useConfigContext } from "../../../contexts/config/useConfigContext";
 import { SimpleTable } from "../../general/SimpleTable";
 import { formatDate, formatText } from "../../../utils/utilFormatFunctions";
-import { Loader2, Pencil, Trash2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { DeleteModalContent } from "../../general/DeleteModalContent";
+import { Pencil, Trash2 } from "lucide-react";
 
-export const SubCategorySection = () => {
-  // manejar el estado de la modal
+export const MeasureUnitSection = () => {
   const [showModal, setShowModal] = useState(false);
-
-  // context
-  const {
-    subCategories,
-    getSubCategories,
-    loadingGetSubCategory,
-    deleteSubCategory,
-    setDataNewSubCategory,
-  } = useConfigContext();
-
-  // manejar el estado de la modal de eliminar
   const [showModalDelete, setShowModalDelete] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
-  // id actual
-  const [currentCategory, setCurrentCategory] = useState(null);
+  const [currentMeasureUnit, setCurrentMeasureUnit] = useState(null);
   const [isEdit, setIsEdit] = useState(false);
 
+  const {
+    setDataNewMeasureUnit,
+    loadingGetMeasureUnit,
+    getMeasureUnits,
+    measureUnits,
+    deleteMeasureUnit,
+  } = useConfigContext();
+
   useEffect(() => {
-    getSubCategories();
+    getMeasureUnits();
   }, []);
 
   // limpiar modal
   useEffect(() => {
     if (!showModal) {
-      setDataNewSubCategory({ name: "", description: "" });
-      setCurrentCategory(null);
+      setDataNewMeasureUnit({ name: "", description: "" });
+      setCurrentMeasureUnit(null);
       setIsEdit(false);
     }
   }, [showModal]);
-
-  // buscar
-  const [searchTerm, setSearchTerm] = useState("");
 
   // columnas
   const columnas = [
     { key: "name", label: "Nombre" },
     {
-      key: "mainCategory",
-      label: "Categoria padre",
-      render: (valor) => <p>{formatText(valor.name)}</p>,
+      key: "abbreviation",
+      label: "Abreviatura",
     },
     {
       key: "description",
       label: "Descripción",
       render: (valor) => (
-        <p className="text-sm line-clamp-2 max-w-[290px] text-wrap">{valor}</p>
+        <p className="text-sm line-clamp-2 max-w-[320px] text-wrap">{valor}</p>
       ),
     },
     {
@@ -66,13 +60,9 @@ export const SubCategorySection = () => {
 
     {
       key: "createdAt",
-      label: "Fecha de creación",
+      label: "Fecha creación",
     },
 
-    {
-      key: "totalProducts",
-      label: "Productos",
-    },
     {
       key: "actions",
       label: "Acciones",
@@ -80,8 +70,7 @@ export const SubCategorySection = () => {
         <div className="flex items-center gap-2">
           <button
             onClick={() => {
-              setCurrentCategory(row);
-              // console.log("ROW", row.mainCategory._id);
+              setCurrentMeasureUnit(row);
               setIsEdit(true);
               setShowModal(true);
             }}
@@ -91,7 +80,8 @@ export const SubCategorySection = () => {
           </button>
           <button
             onClick={() => {
-              setCurrentCategory(row.id);
+              setCurrentMeasureUnit(row.id);
+              console.log(row.id);
               setShowModalDelete(true);
             }}
             className="bg-error-color/30 text-light-color rounded-md w-9 aspect-square flex items-center justify-center cursor-pointer"
@@ -103,70 +93,65 @@ export const SubCategorySection = () => {
     },
   ];
 
-  // console.log("subCategori", subCategories);
-
-  //data
-  const data = subCategories.map((subCategory) => ({
-    id: subCategory?._id,
-    name: formatText(subCategory?.name),
-    mainCategory: subCategory?.mainCategory,
+  // data
+  const data = measureUnits.map((measureUnit) => ({
+    id: measureUnit._id,
+    name: formatText(measureUnit?.name),
+    abbreviation: measureUnit?.abbreviation,
     description:
-      subCategory?.description === ""
+      measureUnit?.description === ""
         ? "Sin descripción"
-        : formatText(subCategory?.description),
+        : formatText(measureUnit?.description),
     nameCreator:
-      formatText(subCategory?.userCreator?.name) +
+      formatText(measureUnit?.userCreator?.name) +
       " " +
-      formatText(subCategory?.userCreator?.lastName),
-    createdAt: formatDate(subCategory?.createdAt),
-    totalProducts: subCategory?.totalProducts,
+      formatText(measureUnit?.userCreator?.lastName),
+    createdAt: formatDate(measureUnit?.createdAt),
   }));
 
   return (
-    <section className="w-full mx-auto  h-full flex flex-col">
-      {/* modal con el formulario de nueva subcategoria */}
+    <section className="w-full flex flex-col h-full">
+      <HeaderConfig
+        placeholderInput="Buscar unidad de medida"
+        buttonText="Nueva Unidad de Medida"
+        onClickButton={() => setShowModal(true)}
+        valueInput={searchTerm}
+        onChangeInput={(e) => setSearchTerm(e.target.value)}
+      />
+
+      {/** Modal crear o editar unidad de medida */}
       <LayoutModal
         className="w-full !max-w-lg"
         show={showModal}
         onClose={() => setShowModal(false)}
       >
-        {/* formulario de nueva categoria */}
-        <NewSubCategory
+        <NewMeasureUnitForm
           onClose={() => setShowModal(false)}
-          currentCategory={currentCategory}
+          currentMeasureUnit={currentMeasureUnit}
           isEdit={isEdit}
         />
       </LayoutModal>
 
-      {/* modal confirmar eliminar */}
+      {/** Modal confirmar eliminar */}
       <LayoutModal
         className="w-full !max-w-lg"
         show={showModalDelete}
         onClose={() => setShowModalDelete(false)}
       >
         <DeleteModalContent
-          title="Eliminar subcategoria"
-          message="¿Estas seguro de eliminar esta subcategoria?"
+          title="Eliminar unidad de medida"
+          message="¿Estas seguro de eliminar esta unidad de medida?"
           setShowModalDelete={setShowModalDelete}
-          onDelete={() => deleteSubCategory(currentCategory)}
+          onDelete={() => deleteMeasureUnit(currentMeasureUnit)}
         />
       </LayoutModal>
 
-      {/* header con el buscador y el boton de nueva categoria */}
-      <HeaderConfig
-        placeholderInput="Buscar subcategoria"
-        buttonText="Nueva Subcategoria"
-        onClickButton={() => setShowModal(true)}
-        valueInput={searchTerm}
-        onChangeInput={(e) => setSearchTerm(e.target.value)}
-      />
-
       {/** tabla */}
       <div className="w-full pt-6 flex-1">
-        {loadingGetSubCategory ? (
+        {loadingGetMeasureUnit ? (
           <div className="w-full h-full flex items-center justify-center flex-col gap-2">
             <Loader2 className="w-14 h-14 animate-spin mx-auto text-primary-color" />
-            <p className="text-primary-color">Cargando subcategorias...</p>
+            <p className="text-primary-color">Cargando unidades de medida...</p>
           </div>
         ) : (
           <SimpleTable

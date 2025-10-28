@@ -9,9 +9,10 @@ export const NewSubCategory = ({ onClose, currentCategory, isEdit }) => {
     dataNewSubCategory,
     setDataNewSubCategory,
     loadingSubCategory,
+    getCategories,
+    categories,
+    loadingGetCategory,
   } = useConfigContext();
-
-  const { getCategories, categories, loadingGetCategory } = useConfigContext();
 
   useEffect(() => {
     if (isEdit && currentCategory) {

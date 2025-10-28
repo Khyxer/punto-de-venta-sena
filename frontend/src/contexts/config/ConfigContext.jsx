@@ -1,6 +1,7 @@
 import { createContext } from "react";
 import { useCategory } from "../../hooks/config/useCategory";
 import { useSubCategory } from "../../hooks/config/useSubCategory";
+import { useMeasureUnit } from "../../hooks/config/useMeasureUnit";
 
 const ConfigContext = createContext();
 
@@ -31,6 +32,19 @@ export const ConfigProvider = ({ children }) => {
     loading: loadingSubCategory,
   } = useSubCategory();
 
+  // unidad de medida
+  const {
+    measureUnits,
+    createMeasureUnit,
+    getMeasureUnits,
+    updateMeasureUnit,
+    deleteMeasureUnit,
+    dataNewMeasureUnit,
+    setDataNewMeasureUnit,
+    loading: loadingMeasureUnit,
+    loadingGet: loadingGetMeasureUnit,
+  } = useMeasureUnit();
+
   return (
     <ConfigContext.Provider
       value={{
@@ -52,6 +66,15 @@ export const ConfigProvider = ({ children }) => {
         dataNewSubCategory,
         setDataNewSubCategory,
         loadingSubCategory,
+        measureUnits,
+        createMeasureUnit,
+        getMeasureUnits,
+        updateMeasureUnit,
+        deleteMeasureUnit,
+        dataNewMeasureUnit,
+        setDataNewMeasureUnit,
+        loadingMeasureUnit,
+        loadingGetMeasureUnit,
       }}
     >
       {children}
