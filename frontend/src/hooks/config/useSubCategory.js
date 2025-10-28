@@ -16,7 +16,10 @@ export const useSubCategory = () => {
   //crear subcategoria
   const createSubCategory = async (onClose) => {
     try {
-      if (!dataNewSubCategory.name || !dataNewSubCategory.mainCategory) {
+      if (
+        dataNewSubCategory.name.trim() === "" ||
+        dataNewSubCategory.mainCategory.trim() === ""
+      ) {
         toast.error("Completa los campos obligatorios");
         return;
       }

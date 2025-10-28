@@ -10,7 +10,7 @@ import { ConfigPage } from "./pages/ConfigPage";
 // paginas del config
 import { CategorySection } from "./components/config/category/CategorySection";
 import { SubCategorySection } from "./components/config/sub-category/SubCategorySection";
-import { MeasureUnitSection } from "./components/config/MeasureUnitSection";
+import { MeasureUnitSection } from "./components/config/measure-unit/MeasureUnitSection";
 import { SupplierSection } from "./components/config/SupplierSection";
 import { ContactSupplierSection } from "./components/config/ContactSupplierSection";
 import { EmployeeSection } from "./components/config/EmployeeSection";
