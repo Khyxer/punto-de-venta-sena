@@ -10,6 +10,7 @@ const userSchema = new mongoose.Schema(
     },
     lastName: {
       type: String,
+      required: true,
     },
     userName: {
       type: String,
@@ -27,12 +28,12 @@ const userSchema = new mongoose.Schema(
       enum: ["cashier", "employee", "admin"],
       default: "employee",
     },
-    email: {
-      type: String,
-      unique: true,
-    },
     telephone: {
       type: Number,
+      required: true,
+    },
+    email: {
+      type: String,
     },
     profilePicture: {
       type: String,
@@ -44,6 +45,10 @@ const userSchema = new mongoose.Schema(
     deleted: {
       type: Boolean,
       default: false,
+    },
+    userCreator: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
     },
   },
   {

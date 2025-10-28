@@ -1,10 +1,13 @@
 import { Link, useLocation } from "react-router-dom";
 import { dashboardNavMenu } from "../constants/constDashboardNavMenu";
+import { useAuthContext } from "../contexts/auth/useAuthContext";
 
 export const AsideDashboard = () => {
   /* el pathname devuelve el / que se encuentra en la url
    * por ejemplo si la url es http://localhost:5173/dashboard el pathname sera "/dashboard" */
   const { pathname } = useLocation();
+
+  const { currentUser } = useAuthContext();
 
   const isActive = (itemPath) => {
     // Si es la ruta raíz, solo coincide exactamente
@@ -13,6 +16,15 @@ export const AsideDashboard = () => {
     }
     // Para las demás rutas, verifica si el pathname comienza con el itemPath
     return pathname.startsWith(itemPath);
+  };
+
+  //si no es admin no se muestra la opcion de configuracion
+  const configMenu = () => {
+    if (currentUser.role === "admin") {
+      return dashboardNavMenu;
+    } else {
+      return dashboardNavMenu.filter((item) => item.name !== "Configuración");
+    }
   };
 
   return (
@@ -29,7 +41,7 @@ export const AsideDashboard = () => {
       </header>
 
       <nav className="p-2">
-        {dashboardNavMenu.map((item, index) => (
+        {configMenu().map((item, index) => (
           <Link
             key={index}
             to={item.path}

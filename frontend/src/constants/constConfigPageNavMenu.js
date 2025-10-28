@@ -36,6 +36,6 @@ export const configMenu = [
   {
     name: "Empleados",
     icon: IdCardLanyard,
-    path: "/empleados",
+    path: "empleados",
   },
 ];

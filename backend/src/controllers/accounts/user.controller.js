@@ -4,27 +4,43 @@ import User from "../../models/user.model.js";
 // Controlador para registrar un usuario
 export const registerUserController = async (req, res) => {
   try {
-    const { name, lastName, userName, password, role } = req.body;
+    const {
+      name,
+      lastName,
+      userName,
+      password,
+      role,
+      email,
+      telephone,
+      profilePicture,
+    } = req.body;
 
     // validar datos
     if (
+      !name ||
+      !lastName ||
       !userName ||
       !password ||
+      !role ||
+      !telephone ||
+      name.trim() === "" ||
+      lastName.trim() === "" ||
       userName.trim() === "" ||
-      password.trim() === ""
+      password.trim() === "" ||
+      role.trim() === "" ||
+      telephone.trim() === ""
     ) {
       return res.status(400).json({
         success: false,
-        message: "Usuario y contraseña requeridos.",
+        message: "Faltan campos obligatorios.",
       });
     }
 
     // validar caracteres permitidos
-    if (!/^[a-zA-Z0-9_-]+$/.test(userName)) {
+    if (!/^[a-zA-Z0-9]+$/.test(userName)) {
       return res.status(400).json({
         success: false,
-        message:
-          "El nombre de usuario solo puede tener letras, números, guiones y guiones bajos.",
+        message: "El nombre de usuario solo puede tener letras y números.",
       });
     }
 
@@ -38,13 +54,16 @@ export const registerUserController = async (req, res) => {
     }
 
     // crear usuario
-    // el usuario debe ser en minusculas y sin espacios en ningun lado
     const user = new User({
-      name,
-      lastName,
+      name: name.trim().toLowerCase(),
+      lastName: lastName.trim().toLowerCase(),
       userName: userName.trim().toLowerCase().replace(/\s/g, ""),
       password,
       role,
+      email,
+      telephone,
+      profilePicture,
+      userCreator: req.user._id,
     });
 
     // guardar usuario

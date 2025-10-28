@@ -12,8 +12,7 @@ import { CategorySection } from "./components/config/category/CategorySection";
 import { SubCategorySection } from "./components/config/sub-category/SubCategorySection";
 import { MeasureUnitSection } from "./components/config/measure-unit/MeasureUnitSection";
 import { SupplierSection } from "./components/config/supplier/SupplierSection";
-// import { ContactSupplierSection } from "./components/config/ContactSupplierSection";
-import { EmployeeSection } from "./components/config/EmployeeSection";
+import { EmployeeSection } from "./components/config/employee/EmployeeSection";
 
 // contextos
 import { AuthProvider } from "./contexts/auth/AuthContext";
