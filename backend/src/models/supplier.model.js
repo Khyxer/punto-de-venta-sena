@@ -13,6 +13,7 @@ const supplierSchema = new mongoose.Schema(
     },
     telephone: {
       type: Number,
+      required: true,
     },
     email: {
       type: String,
@@ -44,10 +45,10 @@ const supplierSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
-    contactsPerson: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "SupplierContact",
-    },
+    // contactsPerson: {
+    //   type: mongoose.Schema.Types.ObjectId,
+    //   ref: "SupplierContact",
+    // },
   },
   {
     timestamps: true,

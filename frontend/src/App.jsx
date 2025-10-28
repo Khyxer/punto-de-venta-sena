@@ -11,8 +11,8 @@ import { ConfigPage } from "./pages/ConfigPage";
 import { CategorySection } from "./components/config/category/CategorySection";
 import { SubCategorySection } from "./components/config/sub-category/SubCategorySection";
 import { MeasureUnitSection } from "./components/config/measure-unit/MeasureUnitSection";
-import { SupplierSection } from "./components/config/SupplierSection";
-import { ContactSupplierSection } from "./components/config/ContactSupplierSection";
+import { SupplierSection } from "./components/config/supplier/SupplierSection";
+// import { ContactSupplierSection } from "./components/config/ContactSupplierSection";
 import { EmployeeSection } from "./components/config/EmployeeSection";
 
 // contextos
@@ -54,10 +54,10 @@ function App() {
                     element={<MeasureUnitSection />}
                   />
                   <Route path="proveedores" element={<SupplierSection />} />
-                  <Route
+                  {/* <Route
                     path="contactos-proveedores"
                     element={<ContactSupplierSection />}
-                  />
+                  /> */}
                   <Route path="empleados" element={<EmployeeSection />} />
                 </Route>
               </Route>

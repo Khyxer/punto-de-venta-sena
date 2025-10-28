@@ -123,7 +123,7 @@ export const SubCategorySection = () => {
   }));
 
   return (
-    <section className="w-full mx-auto  h-full flex flex-col">
+    <section className="w-full mx-auto h-full flex flex-col">
       {/* modal con el formulario de nueva subcategoria */}
       <LayoutModal
         className="w-full !max-w-lg"

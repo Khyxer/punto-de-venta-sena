@@ -1,3 +1,5 @@
+// BORRAR ESTO SI NO LO TERMINO USANDO
+
 import { HeaderConfig } from "./HeaderConfig";
 
 export const ContactSupplierSection = () => {

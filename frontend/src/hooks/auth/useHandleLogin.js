@@ -34,10 +34,11 @@ export const useHandleLogin = () => {
       );
 
       const data = await response.json();
+      console.log(data);
       if (!response.ok) {
         throw new Error(data.message);
       }
-    //   console.log(data.data.token);
+      //   console.log(data.data.token);
       localStorage.setItem("token", data.data.token);
       window.location.href = "/";
     } catch (error) {

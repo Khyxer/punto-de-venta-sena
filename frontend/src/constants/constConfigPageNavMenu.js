@@ -28,11 +28,11 @@ export const configMenu = [
     icon: Truck,
     path: "proveedores",
   },
-  {
-    name: "Contactos Proveedores",
-    icon: HardHat,
-    path: "contactos-proveedores",
-  },
+  // {
+  //   name: "Contactos Proveedores",
+  //   icon: HardHat,
+  //   path: "contactos-proveedores",
+  // },
   {
     name: "Empleados",
     icon: IdCardLanyard,

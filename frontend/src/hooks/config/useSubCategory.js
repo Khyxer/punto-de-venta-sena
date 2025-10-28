@@ -39,10 +39,10 @@ export const useSubCategory = () => {
 
       const data = await response.json();
 
-      console.log("data", data);
+      // console.log("data", data);
 
       if (!response.ok) {
-        toast.error(data.error);
+        toast.error(data.message);
         return;
       }
 
@@ -179,7 +179,7 @@ export const useSubCategory = () => {
         return subCategory;
       });
 
-      console.log("updatedSubCategories", updatedSubCategories);
+      // console.log("updatedSubCategories", updatedSubCategories);
 
       setSubCategories(updatedSubCategories);
 

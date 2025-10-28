@@ -95,7 +95,7 @@ export const MeasureUnitSection = () => {
 
   // data
   const data = measureUnits.map((measureUnit) => ({
-    id: measureUnit._id,
+    id: measureUnit?._id,
     name: formatText(measureUnit?.name),
     abbreviation: measureUnit?.abbreviation,
     description:

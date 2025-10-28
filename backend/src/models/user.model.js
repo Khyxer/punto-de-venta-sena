@@ -21,7 +21,6 @@ const userSchema = new mongoose.Schema(
     password: {
       type: String,
       required: true,
-      select: false,
     },
     role: {
       type: String,
@@ -76,7 +75,7 @@ userSchema.methods.generateAuthToken = function () {
 
   const payload = {
     userId: this._id,
-    username: this.username,
+    userName: this.userName,
     role: this.role,
   };
 
