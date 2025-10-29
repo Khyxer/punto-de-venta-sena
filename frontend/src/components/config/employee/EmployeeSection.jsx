@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { HeaderConfig } from "../HeaderConfig";
 import { LayoutModal } from "../../general/LayoutModal";
 import { NewEmployeeForm } from "./NewEmployeeForm";
+import { useConfigContext } from "../../../contexts/config/useConfigContext";
 
 export const EmployeeSection = () => {
   //modales
@@ -20,6 +21,21 @@ export const EmployeeSection = () => {
   // id actual
   const [currentEmployee, setCurrentEmployee] = useState(null);
   const [isEdit, setIsEdit] = useState(false);
+
+  //context
+  const {
+    deleteEmployee,
+    loadingGetEmployee,
+    employees,
+    setDataNewEmployee,
+    getEmployees,
+  } = useConfigContext();
+
+  useEffect(() => {
+    getEmployees();
+  }, []);
+
+  console.log(employees, "EMPLOYEES");
 
   return (
     <section className="w-full flex flex-col h-full">

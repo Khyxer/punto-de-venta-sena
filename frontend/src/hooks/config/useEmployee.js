@@ -98,7 +98,28 @@ export const useEmployee = () => {
   };
 
   //get employees
-  const getEmployees = () => {};
+  const getEmployees = async () => {
+    try {
+      setLoadingGet(true);
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/accounts/employees`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      const data = await response.json();
+      console.log(data);
+      setEmployees(data.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoadingGet(false);
+    }
+  };
 
   //delete employee
   const deleteEmployee = () => {};

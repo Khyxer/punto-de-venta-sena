@@ -6,7 +6,7 @@ export const ConfigPage = () => {
   const { pathname } = useLocation();
 
   const { currentUser } = useAuthContext();
-  console.log(currentUser);
+  // console.log(currentUser);
 
   //si el usuario no es admin, redirige a la pagina de inicio
   if (currentUser.role !== "admin") {

@@ -38,7 +38,7 @@ export const useMeasureUnit = () => {
 
       const data = await response.json();
 
-      console.log("data", data);
+      // console.log("data", data);
 
       if (!response.ok) {
         toast.error(data.message);
@@ -78,7 +78,7 @@ export const useMeasureUnit = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("data", data.data);
+        // console.log("data", data.data);
         setMeasureUnits(data.data);
       })
       .catch((error) => {
@@ -107,7 +107,7 @@ export const useMeasureUnit = () => {
 
       const data = await response.json();
 
-      console.log("data", data);
+      // console.log("data", data);
 
       if (!response.ok) {
         toast.error(data.message);
@@ -153,7 +153,7 @@ export const useMeasureUnit = () => {
 
       const data = await response.json();
 
-      console.log("data", data);
+      // console.log("data", data);
 
       if (!response.ok) {
         toast.error(data.message);

@@ -4,7 +4,10 @@ import {
   loginUserController,
   getProfileController,
 } from "../../controllers/accounts/user.controller.js";
-import { authenticateToken, authorizeRoles } from "../../middlewares/auth.middleware.js";
+import {
+  authenticateToken,
+  authorizeRoles,
+} from "../../middlewares/auth.middleware.js";
 const router = express.Router();
 
 // rutas
