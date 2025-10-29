@@ -72,6 +72,9 @@ export const registerUserController = async (req, res) => {
     // Generar token JWT
     const token = savedUser.generateAuthToken();
 
+    //buscar usuario
+    // const findUser = 
+
     // No devolver la contraseña en la respuesta
     const { password: _, ...userWithoutPassword } = savedUser.toObject();
 

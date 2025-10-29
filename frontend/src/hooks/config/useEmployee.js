@@ -112,7 +112,6 @@ export const useEmployee = () => {
         }
       );
       const data = await response.json();
-      console.log(data);
       setEmployees(data.data);
     } catch (error) {
       console.log(error);
@@ -136,5 +135,7 @@ export const useEmployee = () => {
     setDataNewEmployee,
     loading,
     loadingGet,
+    employees,
+    setEmployees,
   };
 };

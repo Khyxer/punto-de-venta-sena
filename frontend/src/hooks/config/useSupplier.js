@@ -88,7 +88,6 @@ export const useSupplier = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        // console.log(data);
         setSuppliers(data.data);
       })
       .catch((error) => console.log(error))
