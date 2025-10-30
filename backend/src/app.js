@@ -7,6 +7,7 @@ import cors from "cors";
 // rutas
 import inventoryRoutes from "./routes/inventory/inventory.routes.js";
 import accountsRoutes from "./routes/accounts/user.routes.js";
+import generalAccountsRoutes from "./routes/accounts/employee.routes.js";
 
 // variables de entorno
 dotenv.config();
@@ -34,8 +35,11 @@ mongoose
 // rutas de inventario
 app.use("/api/inventory", inventoryRoutes);
 
-// rutas de cuentas
+// rutas de cuentas autenticadas
 app.use("/api/auth", accountsRoutes);
+
+// rutas de cuentas generales (empleados y clientes)
+app.use("/api/accounts", generalAccountsRoutes);
 
 // ====== servidor ======
 

@@ -3,6 +3,7 @@ import { useCategory } from "../../hooks/config/useCategory";
 import { useSubCategory } from "../../hooks/config/useSubCategory";
 import { useMeasureUnit } from "../../hooks/config/useMeasureUnit";
 import { useSupplier } from "../../hooks/config/useSupplier";
+import { useEmployee } from "../../hooks/config/useEmployee";
 
 const ConfigContext = createContext();
 
@@ -59,6 +60,19 @@ export const ConfigProvider = ({ children }) => {
     loading: loadingSupplier,
   } = useSupplier();
 
+  // empleado
+  const {
+    employees,
+    getEmployees,
+    deleteEmployee,
+    loadingGet: loadingGetEmployee,
+    createEmployee,
+    updateEmployee,
+    dataNewEmployee,
+    setDataNewEmployee,
+    loading: loadingEmployee,
+  } = useEmployee();
+
   return (
     <ConfigContext.Provider
       value={{
@@ -98,6 +112,15 @@ export const ConfigProvider = ({ children }) => {
         dataNewSupplier,
         setDataNewSupplier,
         loadingSupplier,
+        employees,
+        getEmployees,
+        deleteEmployee,
+        loadingGetEmployee,
+        createEmployee,
+        updateEmployee,
+        dataNewEmployee,
+        setDataNewEmployee,
+        loadingEmployee,
       }}
     >
       {children}

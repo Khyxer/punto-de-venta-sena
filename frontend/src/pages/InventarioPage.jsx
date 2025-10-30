@@ -1,5 +1,7 @@
 import { ChevronDown, Filter, Plus } from "lucide-react";
 import { BuscarProducto } from "../components/inventario/BuscarProducto";
+import { CardProducto } from "../components/inventario/CardProducto";
+
 export const InventarioPage = () => {
   return (
     <section className="p-6">
@@ -15,6 +17,8 @@ export const InventarioPage = () => {
           Nuevo Producto
         </button>
       </header>
+
+      <CardProducto />
     </section>
   );
 };

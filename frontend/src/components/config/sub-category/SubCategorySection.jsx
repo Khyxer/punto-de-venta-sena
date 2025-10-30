@@ -50,7 +50,7 @@ export const SubCategorySection = () => {
     {
       key: "mainCategory",
       label: "Categoria padre",
-      render: (valor) => <p>{formatText(valor.name)}</p>,
+      render: (valor) => <p>{formatText(valor?.name)}</p>,
     },
     {
       key: "description",
