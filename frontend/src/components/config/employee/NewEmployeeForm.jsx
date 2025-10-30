@@ -13,14 +13,15 @@ export const NewEmployeeForm = ({ onClose, currentEmployee, isEdit }) => {
   useEffect(() => {
     if (isEdit && currentEmployee) {
       setDataNewEmployee({
-        name: currentEmployee.name || "",
-        lastName: currentEmployee.lastName || "",
-        telephone: currentEmployee.telephone || "",
-        email: currentEmployee.email || "",
-        role: currentEmployee.role || "",
-        userName: currentEmployee.userName || "",
-        password: currentEmployee.password || "",
-        confirmPassword: currentEmployee.confirmPassword || "",
+        name: currentEmployee.information.name || "",
+        lastName: currentEmployee.information.lastName || "",
+        profilePicture: currentEmployee.information.profilePicture || "",
+        telephone: currentEmployee.information.telephone || "",
+        email: currentEmployee.information.email || "",
+        role: currentEmployee.information.role || "",
+        userName: currentEmployee.information.userName || "",
+        password: "",
+        confirmPassword: "",
       });
     }
   }, [isEdit, currentEmployee]);
@@ -52,6 +53,14 @@ export const NewEmployeeForm = ({ onClose, currentEmployee, isEdit }) => {
               id="profilePicture"
               className="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer"
             />
+            {isEdit && (
+              <img
+                src={dataNewEmployee?.profilePicture || "NULL"}
+                alt="Perfil"
+                className="aspect-square h-full object-cover rounded-full ring-2 ring-primary-color select-none"
+                draggable={false}
+              />
+            )}
           </div>
         </div>
 
@@ -165,32 +174,34 @@ export const NewEmployeeForm = ({ onClose, currentEmployee, isEdit }) => {
         </div>
 
         {/* Contraseña y confirmar contraseña */}
-        <div className="grid grid-cols-2 gap-3">
-          <InputModal
-            label="Contraseña"
-            name="password"
-            value={dataNewEmployee?.password || ""}
-            onChange={(e) =>
-              setDataNewEmployee({
-                ...dataNewEmployee,
-                password: e.target.value,
-              })
-            }
-            required
-          />
-          <InputModal
-            label="Confirmar contraseña"
-            name="confirmPassword"
-            value={dataNewEmployee?.confirmPassword || ""}
-            onChange={(e) =>
-              setDataNewEmployee({
-                ...dataNewEmployee,
-                confirmPassword: e.target.value,
-              })
-            }
-            required
-          />
-        </div>
+        {!isEdit && (
+          <div className="grid grid-cols-2 gap-3">
+            <InputModal
+              label="Contraseña"
+              name="password"
+              value={dataNewEmployee?.password || ""}
+              onChange={(e) =>
+                setDataNewEmployee({
+                  ...dataNewEmployee,
+                  password: e.target.value,
+                })
+              }
+              required
+            />
+            <InputModal
+              label="Confirmar contraseña"
+              name="confirmPassword"
+              value={dataNewEmployee?.confirmPassword || ""}
+              onChange={(e) =>
+                setDataNewEmployee({
+                  ...dataNewEmployee,
+                  confirmPassword: e.target.value,
+                })
+              }
+              required
+            />
+          </div>
+        )}
       </div>
 
       <footer className="flex justify-between">

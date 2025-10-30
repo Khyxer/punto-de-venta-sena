@@ -45,9 +45,13 @@ export const useEmployee = () => {
         return;
       }
 
+      if (!dataNewEmployee.profilePicture)
+        delete dataNewEmployee.profilePicture;
+
       setLoading(true);
 
       // enviar sin el confirmPassword
+      // esto no es un error es solo que no supe como sacar la contraseña
       const { confirmPassword, ...employeeDataToSend } = dataNewEmployee;
 
       const response = await fetch(
@@ -85,7 +89,7 @@ export const useEmployee = () => {
       });
 
       // actualizar localmente
-      const updatedEmployees = [data.data, ...employees];
+      const updatedEmployees = [data.data.user, ...employees];
       setEmployees(updatedEmployees);
 
       toast.success(data.message);
@@ -121,7 +125,41 @@ export const useEmployee = () => {
   };
 
   //delete employee
-  const deleteEmployee = () => {};
+  const deleteEmployee = async (currentEmployee, setShowModalDelete) => {
+    try {
+      setLoading(true);
+      const response = await fetch(
+        `${
+          import.meta.env.VITE_API_URL
+        }/accounts/employee?id=${currentEmployee}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      const data = await response.json();
+      if (!response.ok) {
+        toast.error(data.message);
+        return;
+      }
+      toast.success(data.message);
+
+      // actualizar localmente
+      const updatedEmployees = employees.filter(
+        (employee) => employee._id !== currentEmployee
+      );
+      setEmployees(updatedEmployees);
+
+      setShowModalDelete(false);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   //update employee
   const updateEmployee = () => {};

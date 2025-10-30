@@ -37,6 +37,7 @@ const userSchema = new mongoose.Schema(
     },
     profilePicture: {
       type: String,
+      default: "https://i.ibb.co/5fj8PqK/a.jpg",
     },
     active: {
       type: Boolean,

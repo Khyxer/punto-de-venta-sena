@@ -27,8 +27,7 @@ export const registerUserController = async (req, res) => {
       lastName.trim() === "" ||
       userName.trim() === "" ||
       password.trim() === "" ||
-      role.trim() === "" ||
-      telephone.trim() === ""
+      role.trim() === ""
     ) {
       return res.status(400).json({
         success: false,
@@ -45,11 +44,22 @@ export const registerUserController = async (req, res) => {
     }
 
     // usuario en uso
+
     const userExist = await User.findOne({ userName });
+
     if (userExist) {
+      // Si existe pero está eliminado
+      if (userExist.deleted === true) {
+        return res.status(403).json({
+          success: false,
+          message: "Este usuario está eliminado, no puede ser utilizado.",
+        });
+      }
+
+      // Si existe y no está eliminado
       return res.status(400).json({
         success: false,
-        message: "El usuario ya esta en uso.",
+        message: "El nombre de usuario ya está en uso.",
       });
     }
 
@@ -73,7 +83,7 @@ export const registerUserController = async (req, res) => {
     const token = savedUser.generateAuthToken();
 
     //buscar usuario
-    // const findUser = 
+    // const findUser =
 
     // No devolver la contraseña en la respuesta
     const { password: _, ...userWithoutPassword } = savedUser.toObject();

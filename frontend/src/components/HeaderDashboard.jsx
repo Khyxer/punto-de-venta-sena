@@ -29,13 +29,6 @@ export const HeaderDashboard = () => {
           </p>
         </div>
 
-        {/* Botón de configuración
-        <Link to="/config">
-          <button className="bg-accent-color/30 text-light-color rounded-md w-9 aspect-square flex items-center justify-center cursor-pointer">
-            <Settings className="text-accent-color" />
-          </button>
-        </Link> */}
-        {/* Botón de cerrar sesión */}
         <button
           onClick={() => {
             localStorage.removeItem("token");

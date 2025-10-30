@@ -7,6 +7,8 @@ import { SimpleTable } from "../../general/SimpleTable";
 import { Info, Loader2, Pencil, Trash2 } from "lucide-react";
 import { formatText, formatDate } from "../../../utils/utilFormatFunctions";
 import { BagdeRole } from "../../../UI/BagdeRole";
+import { CompleteInfoEmployee } from "./CompleteInfoEmployee";
+import { DeleteModalContent } from "../../general/DeleteModalContent";
 
 export const EmployeeSection = () => {
   //modales
@@ -64,7 +66,38 @@ export const EmployeeSection = () => {
 
   // columnas
   const columnas = [
-    { key: "name", label: "Nombre" },
+    // {
+    //   key: "profilePicture",
+    //   label: "Foto",
+    //   render: (valor) => (
+    //     <img
+    //       src={valor || "https://i.ibb.co/5fj8PqK/a.jpg"}
+    //       alt="Perfil"
+    //       className="aspect-square h-full object-cover rounded-full ring-2 ring-primary-color select-none max-w-12"
+    //       draggable={false}
+    //       onError={(e) => {
+    //         e.currentTarget.onerror = null;
+    //         e.currentTarget.src = "https://i.ibb.co/5fj8PqK/a.jpg";
+    //       }}
+    //     />
+    //   ),
+    // },
+    // { key: "name", label: "Nombre" },
+    {
+      key: "information",
+      label: "Información",
+      render: (valor) => (
+        <div className="flex items-center gap-2">
+          <img
+            src={valor?.profilePicture}
+            alt="Perfil"
+            className="aspect-square h-full object-cover rounded-full ring-2 ring-primary-color select-none max-w-9"
+            draggable={false}
+          />
+          <p>{formatText(valor?.name) + " " + formatText(valor?.lastName)}</p>
+        </div>
+      ),
+    },
     { key: "userName", label: "Usuario" },
     {
       key: "role",
@@ -90,7 +123,7 @@ export const EmployeeSection = () => {
         <div className="flex items-center gap-2">
           <button
             onClick={() => {
-              setCurrentEmployee(row);
+              setCurrentEmployee(row.information);
               setShowModalCompleteInfo(true);
             }}
             className="bg-green-500/20 text-light-color rounded-md w-9 aspect-square flex items-center justify-center cursor-pointer"
@@ -100,6 +133,7 @@ export const EmployeeSection = () => {
           <button
             onClick={() => {
               setCurrentEmployee(row);
+              // console.log(row);
               setIsEdit(true);
               setShowModal(true);
             }}
@@ -124,6 +158,8 @@ export const EmployeeSection = () => {
   //data
   const data = employees.map((employee) => ({
     id: employee?._id,
+    information: employee,
+    profilePicture: employee?.profilePicture,
     name: formatText(employee?.name) + " " + formatText(employee?.lastName),
     userName: employee?.userName,
     role: employee?.role,
@@ -157,6 +193,33 @@ export const EmployeeSection = () => {
           onClose={() => setShowModal(false)}
           currentEmployee={currentEmployee}
           isEdit={isEdit}
+        />
+      </LayoutModal>
+
+      {/* modal confirmar eliminar */}
+      <LayoutModal
+        className="w-full !max-w-lg"
+        show={showModalDelete}
+        onClose={() => setShowModalDelete(false)}
+      >
+        <DeleteModalContent
+          title="Eliminar empleado"
+          message="¿Estas seguro de eliminar este empleado?"
+          setShowModalDelete={setShowModalDelete}
+          onDelete={() => deleteEmployee(currentEmployee, setShowModalDelete)}
+        />
+      </LayoutModal>
+
+      {/* modal de la informacion completa del proveedor */}
+      <LayoutModal
+        className="w-full !max-w-3xl"
+        show={showModalCompleteInfo}
+        onClose={() => setShowModalCompleteInfo(false)}
+      >
+        {/* formulario de nueva categoria */}
+        <CompleteInfoEmployee
+          onClose={() => setShowModalCompleteInfo(false)}
+          currentEmployee={currentEmployee}
         />
       </LayoutModal>
 

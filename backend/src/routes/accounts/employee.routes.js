@@ -3,7 +3,7 @@ import {
   authenticateToken,
   authorizeRoles,
 } from "../../middlewares/auth.middleware.js";
-import { getEmployeesController } from "../../controllers/accounts/employee.controller.js";
+import { getEmployeesController, deleteEmployeeController } from "../../controllers/accounts/employee.controller.js";
 const router = express.Router();
 
 // rutas
@@ -13,6 +13,14 @@ router.get(
   authenticateToken,
   authorizeRoles("admin"),
   getEmployeesController
+);
+
+// eliminar empleado
+router.delete(
+  "/employee",
+  authenticateToken,
+  authorizeRoles("admin"),
+  deleteEmployeeController
 );
 
 export default router;
