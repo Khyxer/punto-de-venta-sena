@@ -18,6 +18,11 @@ export const useEmployee = () => {
     profilePicture: "",
   });
 
+  const [newChangePassword, setNewChangePassword] = useState({
+    password: "",
+    confirmPassword: "",
+  });
+
   const [employees, setEmployees] = useState([]);
 
   //create employee
@@ -117,6 +122,7 @@ export const useEmployee = () => {
       );
       const data = await response.json();
       setEmployees(data.data);
+      console.log(data.data, "DATA GET");
     } catch (error) {
       console.log(error);
     } finally {
@@ -162,7 +168,93 @@ export const useEmployee = () => {
   };
 
   //update employee
-  const updateEmployee = () => {};
+  const updateEmployee = async (onClose, id) => {
+    try {
+      setLoading(true);
+      // console.log(id, "ID");
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/accounts/employee?id=${id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: JSON.stringify(dataNewEmployee),
+        }
+      );
+      const data = await response.json();
+
+      // console.log(data, "DATA UPDATE");
+
+      if (!response.ok) {
+        toast.error(data.message);
+        return;
+      }
+      toast.success(data.message);
+
+      // actualizar localmente
+      const updatedEmployees = employees.map((employee) => {
+        if (employee._id === id) {
+          return data.data;
+        }
+        return employee;
+      });
+      setEmployees(updatedEmployees);
+      onClose();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // cambiar contraseña
+  const changePassword = async (onClose, id) => {
+    try {
+      if (
+        !newChangePassword.password.trim() ||
+        !newChangePassword.confirmPassword.trim()
+      ) {
+        toast.error("Faltan campos obligatorios");
+        return;
+      }
+      if (
+        newChangePassword.password.trim() !==
+        newChangePassword.confirmPassword.trim()
+      ) {
+        toast.error("Las contraseñas no coinciden");
+        return;
+      }
+      setLoading(true);
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/accounts/employee-password?id=${id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: JSON.stringify({ password: newChangePassword.password }),
+        }
+      );
+      const data = await response.json();
+
+      // console.log(data, "DATA PASSWORD");
+      // console.log({ password: newChangePassword.password }, "DATA PASSWORD");
+
+      if (!response.ok) {
+        toast.error(data.message);
+        return;
+      }
+      toast.success(data.message);
+      onClose();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return {
     createEmployee,
@@ -175,5 +267,8 @@ export const useEmployee = () => {
     loadingGet,
     employees,
     setEmployees,
+    changePassword,
+    newChangePassword,
+    setNewChangePassword,
   };
 };
