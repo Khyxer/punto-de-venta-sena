@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { toast } from "react-hot-toast";
 
 export const useHandleLogin = () => {
   const [loginFormData, setLoginFormData] = useState({
@@ -7,19 +8,20 @@ export const useHandleLogin = () => {
   });
 
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  // const [error, setError] = useState(null);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     // console.log(loginFormData);
     try {
       setLoading(true);
-      setError(null);
+      // setError(null);
 
       const { userName, password } = loginFormData;
 
       if (!userName || !password) {
-        throw new Error("Todos los campos son obligatorios");
+        toast.error("Todos los campos son obligatorios");
+        return;
       }
 
       const response = await fetch(
@@ -36,14 +38,15 @@ export const useHandleLogin = () => {
       const data = await response.json();
       console.log(data);
       if (!response.ok) {
-        throw new Error(data.message);
+        toast.error(data.message);
+        return;
       }
       //   console.log(data.data.token);
       localStorage.setItem("token", data.data.token);
       window.location.href = "/";
     } catch (error) {
       console.log(error);
-      setError(error.message);
+      toast.error(error.message);
     } finally {
       setLoading(false);
     }
@@ -53,7 +56,6 @@ export const useHandleLogin = () => {
     loginFormData,
     setLoginFormData,
     loading,
-    error,
     handleLogin,
   };
 };
