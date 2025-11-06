@@ -22,7 +22,7 @@ export const FormInput = ({
       />
 
       {/* placeholder interactivo que cambiara si el usuario tiene el input activado o si el input tiene contenido */}
-      <span className="absolute top-3 left-3 bg-white group-focus-within:-translate-y-6 group-focus-within:-translate-x-3 pointer-events-none group-focus-within:px-2 group-focus-within:scale-85 group-focus-within:text-second-color duration-100 peer-valid:-translate-y-6 peer-valid:-translate-x-3 peer-valid:scale-85 peer-valid:px-2">
+      <span className="absolute top-3 left-3 bg-white group-focus-within:-translate-y-6 group-focus-within:-translate-x-3 pointer-events-none group-focus-within:px-2 group-focus-within:scale-85 group-focus-within:text-second-color duration-100 peer-valid:-translate-y-6 peer-valid:-translate-x-3 peer-valid:scale-85 peer-valid:px-2 select-none">
         {placeholderCustom}
       </span>
 

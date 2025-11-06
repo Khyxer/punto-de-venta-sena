@@ -8,6 +8,7 @@ export const NewEmployeeForm = ({ onClose, currentEmployee, isEdit }) => {
     dataNewEmployee,
     setDataNewEmployee,
     loadingEmployee,
+    updateEmployee,
   } = useConfigContext();
 
   useEffect(() => {
@@ -115,6 +116,7 @@ export const NewEmployeeForm = ({ onClose, currentEmployee, isEdit }) => {
           <InputModal
             label="Correo electrónico"
             name="email"
+            type="email"
             value={dataNewEmployee?.email || ""}
             onChange={(e) =>
               setDataNewEmployee({
@@ -214,7 +216,7 @@ export const NewEmployeeForm = ({ onClose, currentEmployee, isEdit }) => {
         <button
           onClick={() => {
             if (isEdit) {
-              updateEmployee(currentEmployee.id, onClose);
+              updateEmployee(onClose, currentEmployee.id);
             } else {
               createEmployee(onClose);
             }

@@ -4,11 +4,12 @@ import { LayoutModal } from "../../general/LayoutModal";
 import { NewEmployeeForm } from "./NewEmployeeForm";
 import { useConfigContext } from "../../../contexts/config/useConfigContext";
 import { SimpleTable } from "../../general/SimpleTable";
-import { Info, Loader2, Pencil, Trash2 } from "lucide-react";
+import { Info, KeyRound, Loader2, Pencil, Trash2 } from "lucide-react";
 import { formatText, formatDate } from "../../../utils/utilFormatFunctions";
 import { BagdeRole } from "../../../UI/BagdeRole";
 import { CompleteInfoEmployee } from "./CompleteInfoEmployee";
 import { DeleteModalContent } from "../../general/DeleteModalContent";
+import { InputModal } from "../../../UI/UiInputs";
 
 export const EmployeeSection = () => {
   //modales
@@ -21,6 +22,9 @@ export const EmployeeSection = () => {
   //modal de la informacion completa del proveedor
   const [showModalCompleteInfo, setShowModalCompleteInfo] = useState();
 
+  //modal de reestablecer contraseña
+  const [showModalChangePassword, setShowModalChangePassword] = useState();
+
   //buscar
   const [searchTerm, setSearchTerm] = useState();
 
@@ -32,9 +36,13 @@ export const EmployeeSection = () => {
   const {
     deleteEmployee,
     loadingGetEmployee,
+    loadingEmployee,
     employees,
     setDataNewEmployee,
     getEmployees,
+    changePassword,
+    newChangePassword,
+    setNewChangePassword,
   } = useConfigContext();
 
   useEffect(() => {
@@ -42,6 +50,16 @@ export const EmployeeSection = () => {
   }, []);
 
   // console.log(employees, "EMPLOYEES");
+
+  // limpiar modal
+  useEffect(() => {
+    if (!showModalChangePassword) {
+      setNewChangePassword({
+        password: "",
+        confirmPassword: "",
+      });
+    }
+  }, [showModalChangePassword]);
 
   // limpiar modal
   useEffect(() => {
@@ -133,7 +151,15 @@ export const EmployeeSection = () => {
           <button
             onClick={() => {
               setCurrentEmployee(row);
-              // console.log(row);
+              setShowModalChangePassword(true);
+            }}
+            className="bg-yellow-500/20 text-light-color rounded-md w-9 aspect-square flex items-center justify-center cursor-pointer"
+          >
+            <KeyRound size={22} className="text-yellow-500" />
+          </button>
+          <button
+            onClick={() => {
+              setCurrentEmployee(row);
               setIsEdit(true);
               setShowModal(true);
             }}
@@ -221,6 +247,65 @@ export const EmployeeSection = () => {
           onClose={() => setShowModalCompleteInfo(false)}
           currentEmployee={currentEmployee}
         />
+      </LayoutModal>
+
+      {/* modal de cambiar contraseña */}
+      <LayoutModal
+        className="w-full !max-w-lg"
+        show={showModalChangePassword}
+        onClose={() => setShowModalChangePassword(false)}
+      >
+        <div className="flex flex-col gap-2">
+          <h1 className="text-xl font-medium text-primary-color mb-2">
+            Cambiar contraseña
+          </h1>
+          <p>
+            Ingresa la nueva contraseña para el empleado{" "}
+            <span className="font-semibold">
+              {formatText(currentEmployee?.name)}{" "}
+              {formatText(currentEmployee?.lastName)}
+            </span>
+          </p>
+          <InputModal
+            label="Nueva contraseña"
+            required
+            value={newChangePassword.password}
+            onChange={(e) =>
+              setNewChangePassword({
+                ...newChangePassword,
+                password: e.target.value,
+              })
+            }
+          />
+          <InputModal
+            label="Confirmar contraseña"
+            required
+            value={newChangePassword.confirmPassword}
+            onChange={(e) =>
+              setNewChangePassword({
+                ...newChangePassword,
+                confirmPassword: e.target.value,
+              })
+            }
+          />
+          <footer className="flex justify-between pt-4">
+            <button
+              onClick={() => setShowModalChangePassword(false)}
+              className="border border-gray-500 hover:border-black text-gray-600 hover:text-black rounded-md px-4 py-2 h-full w-fit cursor-pointer duration-150"
+            >
+              Cancelar
+            </button>
+            <button
+              onClick={() =>
+                changePassword(setShowModalChangePassword, currentEmployee?.id)
+              }
+              disabled={loadingEmployee}
+              className="bg-primary-color text-light-color rounded-md px-4 py-2 h-full w-fit cursor-pointer duration-150 disabled:opacity-50 disabled:cursor-default"
+            >
+              {loadingEmployee ? "Cargando..." : "Cambiar"}
+            </button>
+          </footer>
+        </div>
       </LayoutModal>
 
       {/** tabla */}

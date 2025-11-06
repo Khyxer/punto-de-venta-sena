@@ -8,12 +8,12 @@ export const LoginPage = () => {
       </section>
 
       {/* Sección derecha donde estará la publicidad o lo que sea */}
-      {/* esta imagen url es un placeholder toca poner la imagen ya cargada en el proyecto o si se va a agregar con un back toca hacer algo mientras carga */}
-      <section className="xl:flex items-center hidden justify-center overflow-hidden bg-cover bg-center bg-[url('https://i.ibb.co/359GZPZy/bg-q.webp')]">
+      <section className="xl:flex items-center hidden justify-center overflow-hidden bg-cover bg-center bg-[url('./bg-login.webp')]">
         {/* logo y texto */}
         <div className="w-full h-full bg-black/60 backdrop-blur-xs flex flex-col items-center justify-center gap-2 text-3xl font-bold text-gray-100">
           <img src="/LogoMain.png" alt="Logo login page" className="w-32" />
           <h1 className="text-[40px] text-[#2598EB] font-bold">NOVA 348</h1>
+          {/* eslogan todo generico jeje */}
           <h2 className="mb-12">SOLUCIONES INNOVADORAS Y EFICIENTES</h2>
           <h3>SISTEMA DE PUNTO DE VENTA</h3>
         </div>

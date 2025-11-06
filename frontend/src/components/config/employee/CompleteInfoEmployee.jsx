@@ -27,7 +27,7 @@ export const CompleteInfoEmployee = ({ onClose, currentEmployee }) => {
             <img
               src={currentEmployee.profilePicture}
               alt="perfil"
-              className="w-18 h-18 rounded-full object-cover border border-gray-300 select-none"
+              className="w-24 h-24 rounded-full object-cover ring-2 ring-primary-color select-none"
               draggable={false}
             />
           )}

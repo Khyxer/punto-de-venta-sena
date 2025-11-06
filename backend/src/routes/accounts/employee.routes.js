@@ -3,7 +3,12 @@ import {
   authenticateToken,
   authorizeRoles,
 } from "../../middlewares/auth.middleware.js";
-import { getEmployeesController, deleteEmployeeController } from "../../controllers/accounts/employee.controller.js";
+import {
+  getEmployeesController,
+  deleteEmployeeController,
+  updateEmployeeController,
+  changePasswordController,
+} from "../../controllers/accounts/employee.controller.js";
 const router = express.Router();
 
 // rutas
@@ -11,7 +16,7 @@ const router = express.Router();
 router.get(
   "/employees",
   authenticateToken,
-  authorizeRoles("admin"),
+  // authorizeRoles("admin"),
   getEmployeesController
 );
 
@@ -21,6 +26,22 @@ router.delete(
   authenticateToken,
   authorizeRoles("admin"),
   deleteEmployeeController
+);
+
+// actualizar empleado
+router.put(
+  "/employee",
+  authenticateToken,
+  authorizeRoles("admin"),
+  updateEmployeeController
+);
+
+// cambiar contraseña
+router.put(
+  "/employee-password",
+  authenticateToken,
+  authorizeRoles("admin"),
+  changePasswordController
 );
 
 export default router;

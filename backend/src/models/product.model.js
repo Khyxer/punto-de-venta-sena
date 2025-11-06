@@ -16,8 +16,6 @@ const productSchema = new mongoose.Schema(
     },
     barCode: {
       type: String,
-      required: [true, "El código de barras es requerido"],
-      unique: true,
     },
     description: {
       type: String,

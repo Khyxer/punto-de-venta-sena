@@ -71,6 +71,9 @@ export const ConfigProvider = ({ children }) => {
     dataNewEmployee,
     setDataNewEmployee,
     loading: loadingEmployee,
+    changePassword,
+    newChangePassword,
+    setNewChangePassword,
   } = useEmployee();
 
   return (
@@ -121,6 +124,9 @@ export const ConfigProvider = ({ children }) => {
         dataNewEmployee,
         setDataNewEmployee,
         loadingEmployee,
+        changePassword,
+        newChangePassword,
+        setNewChangePassword,
       }}
     >
       {children}

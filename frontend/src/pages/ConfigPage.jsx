@@ -1,9 +1,9 @@
-import { configMenu } from "../constants/constConfigPageNavMenu";
-import { Link, Outlet, Navigate, useLocation } from "react-router-dom";
+// import { configMenu } from "../constants/constConfigPageNavMenu";
+import { Link, Outlet, Navigate } from "react-router-dom";
 import { useAuthContext } from "../contexts/auth/useAuthContext";
 
 export const ConfigPage = () => {
-  const { pathname } = useLocation();
+  // const { pathname } = useLocation();
 
   const { currentUser } = useAuthContext();
   // console.log(currentUser);
@@ -13,16 +13,16 @@ export const ConfigPage = () => {
     return <Navigate to="/" />;
   }
 
-  const isActiveConfigItem = (itemPath) => {
-    // Construye la ruta completa
-    const fullPath = `/config/${itemPath}`;
-    // Verifica si el pathname actual comienza con esta ruta
-    return pathname.startsWith(fullPath);
-  };
+  // const isActiveConfigItem = (itemPath) => {
+  //   // Construye la ruta completa
+  //   const fullPath = `/config/${itemPath}`;
+  //   // Verifica si el pathname actual comienza con esta ruta
+  //   return pathname.startsWith(fullPath);
+  // };
 
   return (
     <section className="h-full flex">
-      {/* menu de navegación */}
+      {/* menu de navegación (ya no es necesario ya que ahora esta en modo dropmenu en el dash principal)
       <aside className="border-primary-color border-r h-full p-4 select-none">
         <nav>
           {configMenu.map((item, index) => (
@@ -42,7 +42,7 @@ export const ConfigPage = () => {
             </Link>
           ))}
         </nav>
-      </aside>
+      </aside> */}
 
       <main className="p-4 flex-1">
         <Outlet />

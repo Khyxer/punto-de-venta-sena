@@ -1,24 +1,21 @@
+import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { ChevronDown, ChevronRight } from "lucide-react";
 import { dashboardNavMenu } from "../constants/constDashboardNavMenu";
 import { useAuthContext } from "../contexts/auth/useAuthContext";
 
 export const AsideDashboard = () => {
-  /* el pathname devuelve el / que se encuentra en la url
-   * por ejemplo si la url es http://localhost:5173/dashboard el pathname sera "/dashboard" */
   const { pathname } = useLocation();
-
   const { currentUser } = useAuthContext();
+  const [openDropdowns, setOpenDropdowns] = useState({});
 
   const isActive = (itemPath) => {
-    // Si es la ruta raíz, solo coincide exactamente
     if (itemPath === "/") {
       return pathname === "/";
     }
-    // Para las demás rutas, verifica si el pathname comienza con el itemPath
     return pathname.startsWith(itemPath);
   };
 
-  //si no es admin no se muestra la opcion de configuracion
   const configMenu = () => {
     if (currentUser.role === "admin") {
       return dashboardNavMenu;
@@ -27,9 +24,15 @@ export const AsideDashboard = () => {
     }
   };
 
+  const toggleDropdown = (itemName) => {
+    setOpenDropdowns((prev) => ({
+      ...prev,
+      [itemName]: !prev[itemName],
+    }));
+  };
+
   return (
-    <aside className="max-w-54 w-full border-primary-color border-r select-none">
-      {/* logo y nombre */}
+    <aside className="max-w-60 w-full border-primary-color border-r select-none">
       <header className="h-16 border-primary-color border-b p-1 gap-2 flex items-center justify-center select-none">
         <img
           src="/LogoMain.png"
@@ -42,21 +45,70 @@ export const AsideDashboard = () => {
 
       <nav className="p-2">
         {configMenu().map((item, index) => (
-          <Link
-            key={index}
-            to={item.path}
-            /* si el pathname es igual al path de la opcion se le agrega un color de fondo pq esta seleccionado */
-            className={`flex items-center gap-3 px-4 py-3 duration-100
-              ${
-                isActive(item.path)
-                  ? " bg-primary-color text-light-color rounded-lg "
-                  : " hover:bg-gray-200 text-gray-600 hover:text-black rounded-lg "
-              }
-            `}
-          >
-            <item.icon />
-            {item.name}
-          </Link>
+          <div key={index}>
+            {item.dropMenu ? (
+              <>
+                {/* Botón de Configuración colapsable */}
+                <button
+                  onClick={() => toggleDropdown(item.name)}
+                  className={`w-full flex items-center justify-between gap-3 px-4 py-3 duration-100
+                    ${
+                      isActive(item.path)
+                        ? "bg-primary-color text-light-color rounded-lg"
+                        : "hover:bg-gray-200 text-gray-600 hover:text-black rounded-lg"
+                    }
+                  `}
+                >
+                  <div className="flex items-center gap-3">
+                    <item.icon />
+                    {item.name}
+                  </div>
+                  {openDropdowns[item.name] ? (
+                    <ChevronDown size={18} />
+                  ) : (
+                    <ChevronRight size={18} />
+                  )}
+                </button>
+
+                {/* Sub-items del dropdown (más pequeños) */}
+                {openDropdowns[item.name] && (
+                  <div className="mt-1">
+                    {item.dropMenu.map((subItem, subIndex) => (
+                      <Link
+                        key={subIndex}
+                        to={subItem.path}
+                        className={`flex items-center gap-3 px-3 py-2 rounded-lg duration-100 ml-5
+                          ${
+                            isActive(subItem.path)
+                              ? "bg-primary-color text-light-color"
+                              : "hover:bg-gray-200 text-gray-600 hover:text-black"
+                          }
+                        `}
+                      >
+                        <subItem.icon size={16} />
+                        {subItem.name}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </>
+            ) : (
+              /* Items normales sin dropdown */
+              <Link
+                to={item.path}
+                className={`flex items-center gap-3 px-4 py-3 duration-100
+                  ${
+                    isActive(item.path)
+                      ? "bg-primary-color text-light-color rounded-lg"
+                      : "hover:bg-gray-200 text-gray-600 hover:text-black rounded-lg"
+                  }
+                `}
+              >
+                <item.icon />
+                {item.name}
+              </Link>
+            )}
+          </div>
         ))}
       </nav>
     </aside>
