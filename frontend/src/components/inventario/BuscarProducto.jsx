@@ -1,3 +1,5 @@
+// borrar este componente
+
 import { Search } from "lucide-react";
 
 export const BuscarProducto = () => {
