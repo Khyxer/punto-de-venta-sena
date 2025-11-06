@@ -3,7 +3,7 @@ import { FormInput } from "../UI/UiInputs";
 import { useHandleLogin } from "../hooks/auth/useHandleLogin";
 
 export const LoginForm = () => {
-  const { handleLogin, loginFormData, setLoginFormData, loading, error } =
+  const { handleLogin, loginFormData, setLoginFormData, loading } =
     useHandleLogin();
   return (
     <form
@@ -36,7 +36,7 @@ export const LoginForm = () => {
       </div>
 
       <footer className="flex flex-col gap-2">
-        {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+        {/* {error && <p className="text-red-500 text-sm text-center">{error}</p>} */}
         <MainButton
           text={loading ? "Cargando..." : "Iniciar sesión"}
           disabled={loading}
