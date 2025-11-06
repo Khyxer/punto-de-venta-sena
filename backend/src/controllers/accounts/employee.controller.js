@@ -44,3 +44,68 @@ export const deleteEmployeeController = async (req, res) => {
     });
   }
 };
+
+// actualizar empleado
+export const updateEmployeeController = async (req, res) => {
+  try {
+    await User.findByIdAndUpdate(req.query.id, {
+      ...req.body,
+    });
+    const employee = await User.findById(req.query.id).populate("userCreator");
+    return res.status(200).json({
+      success: true,
+      message: "Empleado actualizado exitosamente",
+      data: employee,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: "Error al actualizar el empleado",
+      error: error.message,
+    });
+  }
+};
+
+// cambiar contraseña
+export const changePasswordController = async (req, res) => {
+  try {
+    const { password } = req.body;
+    const { id } = req.query;
+
+    if (!password || !password.trim()) {
+      return res.status(400).json({
+        success: false,
+        message: "La contraseña es requerida",
+      });
+    }
+
+    const employee = await User.findById(id);
+
+    if (!employee) {
+      return res.status(404).json({
+        success: false,
+        message: "Usuario no encontrado",
+      });
+    }
+
+    employee.password = password;
+    await employee.save();
+
+    const employeeResponse = employee.toObject();
+    delete employeeResponse.password;
+
+    return res.status(200).json({
+      success: true,
+      message: "Contraseña cambiada exitosamente",
+      data: employeeResponse,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: "Error al cambiar la contraseña",
+      error: error.message,
+    });
+  }
+};
