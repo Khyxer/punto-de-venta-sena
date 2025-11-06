@@ -48,7 +48,7 @@ router.post(
 router.get(
   "/category",
   authenticateToken,
-  authorizeRoles("admin"),
+  // authorizeRoles("admin"),
   searchCategoriesController
 );
 
@@ -81,7 +81,7 @@ router.post(
 router.get(
   "/subCategory",
   authenticateToken,
-  authorizeRoles("admin"),
+  // authorizeRoles("admin"),
   getSubCategoriesController
 );
 
@@ -114,7 +114,7 @@ router.post(
 router.get(
   "/measureUnit",
   authenticateToken,
-  authorizeRoles("admin"),
+  // authorizeRoles("admin"),
   getMeasureUnitsController
 );
 
@@ -146,7 +146,7 @@ router.post(
 router.get(
   "/supplier",
   authenticateToken,
-  authorizeRoles("admin"),
+  // authorizeRoles("admin"),
   getSuppliersController
 );
 
