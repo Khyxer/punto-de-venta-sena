@@ -7,6 +7,7 @@ import { SimpleTable } from "../../general/SimpleTable";
 import { formatDate, formatText } from "../../../utils/utilFormatFunctions";
 import { Loader2, Pencil, Trash2 } from "lucide-react";
 import { DeleteModalContent } from "../../general/DeleteModalContent";
+import { CategoriesPDF } from "../../pdf/CategoriesPDF";
 
 export const CategorySection = () => {
   // manejar el estado de la modal
@@ -31,6 +32,7 @@ export const CategorySection = () => {
 
   useEffect(() => {
     getCategories();
+    // console.log(categories[0]);
   }, []);
 
   useEffect(() => {
@@ -152,34 +154,8 @@ export const CategorySection = () => {
         }}
         valueInput={searchTerm}
         onChangeInput={(e) => setSearchTerm(e.target.value)}
+        documentToRender={<CategoriesPDF categories={categories} />}
       />
-
-      {/* <h2 className="text-xl font-medium text-red-500 mb-4">
-          Eliminar categoria
-        </h2>
-        <p className="mb-3">
-          ¿Estas seguro de eliminar esta categoria?{" "}
-          <strong className="font-medium">
-            Esta acción NO se puede deshacer
-          </strong>
-        </p>
-        <div className="flex items-center justify-between">
-          <button
-            onClick={() => setShowModalDelete(false)}
-            className="bg-gray-200 text-gray-600 rounded-md px-4 py-2 cursor-pointer select-none"
-          >
-            Cancelar
-          </button>
-          <button
-            onClick={() => {
-              deleteCategory(currentCategory);
-              setShowModalDelete(false);
-            }}
-            className="bg-error-color text-light-color rounded-md px-4 py-2 cursor-pointer select-none"
-          >
-            Eliminar
-          </button>
-        </div> */}
 
       {/* tabla de categorias */}
       <div className="w-full pt-6 flex-1">

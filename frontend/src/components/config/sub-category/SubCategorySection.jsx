@@ -7,6 +7,7 @@ import { SimpleTable } from "../../general/SimpleTable";
 import { formatDate, formatText } from "../../../utils/utilFormatFunctions";
 import { Loader2, Pencil, Trash2 } from "lucide-react";
 import { DeleteModalContent } from "../../general/DeleteModalContent";
+import { SubCategoriesPDF } from "../../pdf/SubCategoriesPDF";
 
 export const SubCategorySection = () => {
   // manejar el estado de la modal
@@ -159,6 +160,7 @@ export const SubCategorySection = () => {
         onClickButton={() => setShowModal(true)}
         valueInput={searchTerm}
         onChangeInput={(e) => setSearchTerm(e.target.value)}
+        documentToRender={<SubCategoriesPDF subCategories={subCategories} />}
       />
 
       {/** tabla */}

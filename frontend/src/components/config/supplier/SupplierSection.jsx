@@ -9,6 +9,7 @@ import { formatText, formatDate } from "../../../utils/utilFormatFunctions";
 import { SimpleTable } from "../../general/SimpleTable";
 import { Info, Loader2, Pencil, Trash2 } from "lucide-react";
 import { CompleteInfoSupplier } from "./CompleteInfoSupplier";
+import { SuppliersPDF } from "../../pdf/SuppliersPDF";
 
 export const SupplierSection = () => {
   // manejar el estado de la modal
@@ -153,6 +154,7 @@ export const SupplierSection = () => {
         onClickButton={() => setShowModal(true)}
         valueInput={searchTerm}
         onChangeInput={(e) => setSearchTerm(e.target.value)}
+        documentToRender={<SuppliersPDF suppliers={suppliers} />}
       />
 
       {/* modal con el formulario de nueva categoria */}

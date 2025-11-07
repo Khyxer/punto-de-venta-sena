@@ -9,6 +9,7 @@ import { formatDate, formatText } from "../../../utils/utilFormatFunctions";
 import { Loader2 } from "lucide-react";
 import { DeleteModalContent } from "../../general/DeleteModalContent";
 import { Pencil, Trash2 } from "lucide-react";
+import { MeasuresUnitsPDF } from "../../pdf/MeasuresUnitsPDF";
 
 export const MeasureUnitSection = () => {
   const [showModal, setShowModal] = useState(false);
@@ -117,6 +118,7 @@ export const MeasureUnitSection = () => {
         onClickButton={() => setShowModal(true)}
         valueInput={searchTerm}
         onChangeInput={(e) => setSearchTerm(e.target.value)}
+        documentToRender={<MeasuresUnitsPDF measuresUnits={measureUnits} />}
       />
 
       {/** Modal crear o editar unidad de medida */}
