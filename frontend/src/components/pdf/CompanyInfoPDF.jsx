@@ -1,22 +1,23 @@
 import { Image, Text, View } from "@react-pdf/renderer";
-import { styles } from "../../constants/constStylesPDF";
+// import { styles } from "../../constants/constStylesPDF";
+import { baseStyles } from "../../styles/pdfStyles";
 import logo from "../../assets/LogoMain.png";
 
 export const PDFHeader = ({ reportTitle }) => (
-  <View style={styles.header}>
+  <View style={baseStyles.header}>
     <View style={{ flexDirection: "row", alignItems: "center", flex: 1 }}>
-      <Image style={styles.logo} src={logo} />
-      <View style={styles.companyInfo}>
-        <Text style={styles.companyName}>NOVA POS</Text>
-        <Text style={styles.companyDetails}>Dirección: kra 99 # 99 - 99</Text>
-        <Text style={styles.companyDetails}>
+      <Image style={baseStyles.logo} src={logo} />
+      <View style={baseStyles.companyInfo}>
+        <Text style={baseStyles.companyName}>NOVA POS</Text>
+        <Text style={baseStyles.companyDetails}>Dirección: kra 99 # 99 - 99</Text>
+        <Text style={baseStyles.companyDetails}>
           Tel: 00000000 | Email: novasolutions@gmail.com
         </Text>
       </View>
     </View>
-    <View style={styles.reportInfo}>
-      <Text style={styles.reportTitle}>{reportTitle}</Text>
-      <Text style={styles.reportDate}>
+    <View style={baseStyles.reportInfo}>
+      <Text style={baseStyles.reportTitle}>{reportTitle}</Text>
+      <Text style={baseStyles.reportDate}>
         {new Date().toLocaleDateString("es-ES", {
           year: "numeric",
           month: "long",
@@ -31,11 +32,11 @@ export const PDFHeader = ({ reportTitle }) => (
 
 export const PDFFooter = () => (
   <>
-    <Text style={styles.footer}>
+    <Text style={baseStyles.footer}>
       NOVA POS | Documento generado automáticamente
     </Text>
     <Text
-      style={styles.pageNumber}
+      style={baseStyles.pageNumber}
       render={({ pageNumber, totalPages }) =>
         `Página ${pageNumber} de ${totalPages}`
       }
