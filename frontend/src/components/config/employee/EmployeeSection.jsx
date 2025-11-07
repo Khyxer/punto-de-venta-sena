@@ -10,6 +10,7 @@ import { BagdeRole } from "../../../UI/BagdeRole";
 import { CompleteInfoEmployee } from "./CompleteInfoEmployee";
 import { DeleteModalContent } from "../../general/DeleteModalContent";
 import { InputModal } from "../../../UI/UiInputs";
+import { EmployeesPDF } from "../../pdf/employeesPDF";
 
 export const EmployeeSection = () => {
   //modales
@@ -206,6 +207,7 @@ export const EmployeeSection = () => {
         onClickButton={() => setShowModal(true)}
         valueInput={searchTerm}
         onChangeInput={(e) => setSearchTerm(e.target.value)}
+        documentToRender={<EmployeesPDF employees={employees} />}
       />
 
       {/* modal con el formulario de nueva categoria */}
