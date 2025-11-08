@@ -70,7 +70,7 @@ export const EmployeesPDF = ({ employees }) => {
                       color: employee?.active ? "#10b981" : "#ef4444",
                     }}
                   >
-                    {employee.active ? "Activo" : "Inactivo"}
+                    {employee?.active ? "Activo" : "Inactivo"}
                   </Text>
                 </Text>
               </View>
@@ -102,7 +102,7 @@ export const EmployeesPDF = ({ employees }) => {
               </View>
               <View style={employeesColumns.col7}>
                 <Text style={baseStyles.tableCell}>
-                  {new Date(employee.createdAt).toLocaleDateString("es-ES", {
+                  {new Date(employee?.createdAt).toLocaleDateString("es-ES", {
                     year: "numeric",
                     month: "2-digit",
                     day: "2-digit",

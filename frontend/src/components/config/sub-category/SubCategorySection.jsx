@@ -149,7 +149,9 @@ export const SubCategorySection = () => {
           title="Eliminar subcategoria"
           message="¿Estas seguro de eliminar esta subcategoria?"
           setShowModalDelete={setShowModalDelete}
-          onDelete={() => deleteSubCategory(currentCategory)}
+          onDelete={() =>
+            deleteSubCategory(currentCategory, setShowModalDelete)
+          }
         />
       </LayoutModal>
 

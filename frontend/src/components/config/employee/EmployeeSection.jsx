@@ -10,7 +10,7 @@ import { BagdeRole } from "../../../UI/BagdeRole";
 import { CompleteInfoEmployee } from "./CompleteInfoEmployee";
 import { DeleteModalContent } from "../../general/DeleteModalContent";
 import { InputModal } from "../../../UI/UiInputs";
-import { EmployeesPDF } from "../../pdf/employeesPDF";
+import { EmployeesPDF } from "../../pdf/EmployeesPDF";
 
 export const EmployeeSection = () => {
   //modales

@@ -9,7 +9,9 @@ export const PDFHeader = ({ reportTitle }) => (
       <Image style={baseStyles.logo} src={logo} />
       <View style={baseStyles.companyInfo}>
         <Text style={baseStyles.companyName}>NOVA POS</Text>
-        <Text style={baseStyles.companyDetails}>Dirección: kra 99 # 99 - 99</Text>
+        <Text style={baseStyles.companyDetails}>
+          Dirección: kra 99 # 99 - 99
+        </Text>
         <Text style={baseStyles.companyDetails}>
           Tel: 00000000 | Email: novasolutions@gmail.com
         </Text>

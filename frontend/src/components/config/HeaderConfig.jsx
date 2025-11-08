@@ -27,7 +27,7 @@ export const HeaderConfig = ({
          * Solo se genera si hay un documento PDF disponible
          */}
         {documentToRender && (
-          <BlobProvider document={documentToRender}>
+          <BlobProvider document={documentToRender} key={Date.now()}>
             {({ url, loading }) => (
               <a
                 href={url || "#"}

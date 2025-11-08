@@ -55,32 +55,32 @@ export const CategoriesPDF = ({ categories }) => {
               </View>
               <View style={categoriesColumns.col1}>
                 <Text style={baseStyles.tableCell}>
-                  {formatText(category.name)}
+                  {formatText(category?.name)}
                 </Text>
               </View>
               <View style={categoriesColumns.col2}>
                 <Text style={baseStyles.tableCell}>
-                  {category.description || "Sin descripción"}
+                  {category?.description || "Sin descripción"}
                 </Text>
               </View>
               <View style={categoriesColumns.col3}>
                 <Text style={baseStyles.tableCell}>
-                  {formatDate(category.createdAt)}
+                  {formatDate(category?.createdAt)}
                 </Text>
               </View>
               <View style={categoriesColumns.col4}>
                 <Text style={baseStyles.tableCell}>
-                  {category.totalProducts}
+                  {category?.totalProducts}
                 </Text>
               </View>
               <View style={categoriesColumns.col5}>
                 <Text style={baseStyles.tableCell}>
-                  {formatText(category.userCreator.name)}{" "}
-                  {formatText(category.userCreator.lastName)}
+                  {formatText(category?.userCreator.name)}{" "}
+                  {formatText(category?.userCreator.lastName)}
                   {"\n"}
                   <Text style={{ fontSize: 7, color: "#6b7280" }}>
-                    @{category.userCreator.userName} •{" "}
-                    {category.userCreator.role}
+                    @{category?.userCreator.userName} •{" "}
+                    {category?.userCreator.role}
                   </Text>
                 </Text>
               </View>

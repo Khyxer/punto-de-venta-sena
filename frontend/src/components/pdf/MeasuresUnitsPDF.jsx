@@ -51,32 +51,32 @@ export const MeasuresUnitsPDF = ({ measuresUnits }) => {
               </View>
               <View style={measuresUnitsColumns.col1}>
                 <Text style={baseStyles.tableCell}>
-                  {formatText(measureUnit.name)}
+                  {formatText(measureUnit?.name)}
                 </Text>
               </View>
               <View style={measuresUnitsColumns.col2}>
                 <Text style={baseStyles.tableCell}>
-                  {measureUnit.abbreviation}
+                  {measureUnit?.abbreviation}
                 </Text>
               </View>
               <View style={measuresUnitsColumns.col3}>
                 <Text style={baseStyles.tableCell}>
-                  {measureUnit.description || "Sin descripción"}
+                  {measureUnit?.description || "Sin descripción"}
                 </Text>
               </View>
               <View style={measuresUnitsColumns.col4}>
                 <Text style={baseStyles.tableCell}>
-                  {formatDate(measureUnit.createdAt)}
+                  {formatDate(measureUnit?.createdAt)}
                 </Text>
               </View>
               <View style={measuresUnitsColumns.col5}>
                 <Text style={baseStyles.tableCell}>
-                  {formatText(measureUnit.userCreator.name)}{" "}
-                  {formatText(measureUnit.userCreator.lastName)}
+                  {formatText(measureUnit?.userCreator?.name)}{" "}
+                  {formatText(measureUnit?.userCreator?.lastName)}
                   {"\n"}
                   <Text style={{ fontSize: 7, color: "#6b7280" }}>
-                    @{measureUnit.userCreator.userName} •{" "}
-                    {measureUnit.userCreator.role}
+                    @{measureUnit?.userCreator?.userName} •{" "}
+                    {measureUnit?.userCreator?.role}
                   </Text>
                 </Text>
               </View>

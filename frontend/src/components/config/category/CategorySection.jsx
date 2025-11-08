@@ -140,7 +140,7 @@ export const CategorySection = () => {
           title="Eliminar categoria"
           message="¿Estas seguro de eliminar esta categoria?"
           setShowModalDelete={setShowModalDelete}
-          onDelete={() => deleteCategory(currentCategory)}
+          onDelete={() => deleteCategory(currentCategory, setShowModalDelete)}
         />
       </LayoutModal>
 
