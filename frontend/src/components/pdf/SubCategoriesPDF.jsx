@@ -59,37 +59,37 @@ export const SubCategoriesPDF = ({ subCategories }) => {
               </View>
               <View style={subCategoriesColumns.col1}>
                 <Text style={baseStyles.tableCell}>
-                  {formatText(category.name)}
+                  {formatText(category?.name)}
                 </Text>
               </View>
               <View style={subCategoriesColumns.col2}>
                 <Text style={baseStyles.tableCell}>
-                  {formatText(category.mainCategory.name)}
+                  {formatText(category?.mainCategory?.name)}
                 </Text>
               </View>
               <View style={subCategoriesColumns.col3}>
                 <Text style={baseStyles.tableCell}>
-                  {category.description || "Sin descripción"}
+                  {category?.description || "Sin descripción"}
                 </Text>
               </View>
               <View style={subCategoriesColumns.col4}>
                 <Text style={baseStyles.tableCell}>
-                  {formatDate(category.createdAt)}
+                  {formatDate(category?.createdAt)}
                 </Text>
               </View>
               <View style={subCategoriesColumns.col5}>
                 <Text style={baseStyles.tableCell}>
-                  {category.totalProducts}
+                  {category?.totalProducts}
                 </Text>
               </View>
               <View style={subCategoriesColumns.col6}>
                 <Text style={baseStyles.tableCell}>
-                  {formatText(category.userCreator.name)}{" "}
-                  {formatText(category.userCreator.lastName)}
+                  {formatText(category?.userCreator?.name)}{" "}
+                  {formatText(category?.userCreator?.lastName)}
                   {"\n"}
                   <Text style={{ fontSize: 7, color: "#6b7280" }}>
-                    @{category.userCreator.userName} •{" "}
-                    {category.userCreator.role}
+                    @{category?.userCreator?.userName} •{" "}
+                    {category?.userCreator?.role}
                   </Text>
                 </Text>
               </View>

@@ -3,9 +3,9 @@ import { StyleSheet } from "@react-pdf/renderer";
 export const baseStyles = StyleSheet.create({
   // Layout general
   page: {
-    paddingTop: 35,
-    paddingBottom: 65,
-    paddingHorizontal: 35,
+    paddingTop: 25,
+    paddingBottom: 55,
+    paddingHorizontal: 25,
   },
 
   // Header
@@ -19,20 +19,21 @@ export const baseStyles = StyleSheet.create({
     borderBottomColor: "#2563eb",
   },
   logo: {
-    width: 60,
+    width: 50,
     height: 60,
+    objectFit: "contain",
   },
   companyInfo: {
     flex: 1,
     marginLeft: 15,
   },
   companyName: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "bold",
-    color: "#1f2937",
+    color: "#2563eb",
   },
   companyDetails: {
-    fontSize: 8,
+    fontSize: 10,
     color: "#6b7280",
     marginTop: 2,
   },
@@ -42,10 +43,10 @@ export const baseStyles = StyleSheet.create({
   reportTitle: {
     fontSize: 14,
     fontWeight: "bold",
-    color: "#1f2937",
+    color: "#2563eb",
   },
   reportDate: {
-    fontSize: 8,
+    fontSize: 10,
     color: "#6b7280",
     marginTop: 2,
   },

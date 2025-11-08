@@ -56,37 +56,37 @@ export const SuppliersPDF = ({ suppliers, companyInfo }) => {
                 <Text style={baseStyles.tableCell}>{index + 1}</Text>
               </View>
               <View style={suppliersColumns.col1}>
-                <Text style={baseStyles.tableCell}>{supplier.name}</Text>
+                <Text style={baseStyles.tableCell}>{supplier?.name}</Text>
               </View>
               <View style={suppliersColumns.col2}>
-                <Text style={baseStyles.tableCell}>{supplier.telephone}</Text>
+                <Text style={baseStyles.tableCell}>{supplier?.telephone}</Text>
               </View>
               <View style={suppliersColumns.col3}>
-                <Text style={baseStyles.tableCell}>{supplier.email}</Text>
+                <Text style={baseStyles.tableCell}>{supplier?.email}</Text>
               </View>
               <View style={suppliersColumns.col4}>
                 <Text style={baseStyles.tableCell}>
-                  {supplier.address || "-"}
+                  {supplier?.address || "-"}
                 </Text>
               </View>
               <View style={suppliersColumns.col5}>
                 <Text style={baseStyles.tableCell}>
-                  {supplier.typeProduct || "-"}
+                  {supplier?.typeProduct || "-"}
                 </Text>
               </View>
               <View style={suppliersColumns.col6}>
                 <Text style={baseStyles.tableCell}>
-                  {supplier.userCreator.name} {supplier.userCreator.lastName}
+                  {supplier?.userCreator?.name} {supplier?.userCreator?.lastName}
                   {"\n"}
                   <Text style={{ fontSize: 7, color: "#6b7280" }}>
-                    @{supplier.userCreator.userName} •{" "}
-                    {supplier.userCreator.role}
+                    @{supplier?.userCreator?.userName} •{" "}
+                    {supplier?.userCreator?.role}
                   </Text>
                 </Text>
               </View>
               <View style={suppliersColumns.col7}>
                 <Text style={baseStyles.tableCell}>
-                  {new Date(supplier.createdAt).toLocaleDateString("es-ES", {
+                  {new Date(supplier?.createdAt).toLocaleDateString("es-ES", {
                     year: "numeric",
                     month: "2-digit",
                     day: "2-digit",

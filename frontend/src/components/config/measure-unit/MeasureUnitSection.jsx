@@ -144,7 +144,9 @@ export const MeasureUnitSection = () => {
           title="Eliminar unidad de medida"
           message="¿Estas seguro de eliminar esta unidad de medida?"
           setShowModalDelete={setShowModalDelete}
-          onDelete={() => deleteMeasureUnit(currentMeasureUnit)}
+          onDelete={() =>
+            deleteMeasureUnit(currentMeasureUnit, setShowModalDelete)
+          }
         />
       </LayoutModal>
 
