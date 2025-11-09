@@ -44,10 +44,10 @@ export const createCategoryController = async (req, res) => {
 
 export const searchCategoriesController = async (req, res) => {
   try {
-    const { name } = req.query;
-    const filter = name ? { name: { $regex: name, $options: "i" } } : {};
+    // const { name } = req.query;
+    // const filter = name ? { name: { $regex: name, $options: "i" } } : {};
 
-    const categoriesBase = await Category.find(filter)
+    const categoriesBase = await Category.find({ deleted: false })
       .populate("userCreator")
       .sort({ createdAt: -1 });
 
@@ -81,7 +81,15 @@ export const searchCategoriesController = async (req, res) => {
 export const deleteCategoryController = async (req, res) => {
   try {
     const { id } = req.query;
-    const category = await Category.findByIdAndDelete(id);
+    const category = await Category.findByIdAndUpdate(
+      id,
+      {
+        deleted: true,
+      },
+      {
+        new: true,
+      }
+    );
     return res.status(200).json({
       success: true,
       message: "Categoría eliminada exitosamente",
@@ -101,7 +109,9 @@ export const deleteCategoryController = async (req, res) => {
 export const updateCategoryController = async (req, res) => {
   try {
     const { id } = req.query;
-    const categoryBase = await Category.findByIdAndUpdate(id, req.body);
+    const categoryBase = await Category.findByIdAndUpdate(id, req.body, {
+      new: true,
+    });
 
     const categoryUpdated = await Category.findById(categoryBase._id).populate(
       "userCreator"

@@ -27,9 +27,15 @@ export const getEmployeesController = async (req, res) => {
 // eliminar empleado
 export const deleteEmployeeController = async (req, res) => {
   try {
-    const employee = await User.findByIdAndUpdate(req.query.id, {
-      deleted: true,
-    });
+    const employee = await User.findByIdAndUpdate(
+      req.query.id,
+      {
+        deleted: true,
+      },
+      {
+        new: true,
+      }
+    );
     return res.status(200).json({
       success: true,
       message: "Empleado eliminado exitosamente",
@@ -48,9 +54,15 @@ export const deleteEmployeeController = async (req, res) => {
 // actualizar empleado
 export const updateEmployeeController = async (req, res) => {
   try {
-    await User.findByIdAndUpdate(req.query.id, {
-      ...req.body,
-    });
+    await User.findByIdAndUpdate(
+      req.query.id,
+      {
+        ...req.body,
+      },
+      {
+        new: true,
+      }
+    );
     const employee = await User.findById(req.query.id).populate("userCreator");
     return res.status(200).json({
       success: true,
@@ -90,7 +102,9 @@ export const changePasswordController = async (req, res) => {
     }
 
     employee.password = password;
-    await employee.save();
+    await employee.save({
+      new: true,
+    });
 
     const employeeResponse = employee.toObject();
     delete employeeResponse.password;

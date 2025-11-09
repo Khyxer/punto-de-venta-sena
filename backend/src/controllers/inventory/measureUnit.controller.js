@@ -56,9 +56,11 @@ export const createMeasureUnitController = async (req, res) => {
 //obtener unidades de medida
 export const getMeasureUnitsController = async (req, res) => {
   try {
-    const measureUnits = await MeasureUnit.find().populate("userCreator").sort({
-      createdAt: -1,
-    });
+    const measureUnits = await MeasureUnit.find({ deleted: false })
+      .populate("userCreator")
+      .sort({
+        createdAt: -1,
+      });
     return res.status(200).json({
       success: true,
       message: "Unidades de medida obtenidas",
@@ -107,7 +109,15 @@ export const updateMeasureUnitController = async (req, res) => {
 //eliminar unidad de medida
 export const deleteMeasureUnitController = async (req, res) => {
   try {
-    const measureUnit = await MeasureUnit.findByIdAndDelete(req.query.id);
+    const measureUnit = await MeasureUnit.findByIdAndUpdate(
+      req.query.id,
+      {
+        deleted: true,
+      },
+      {
+        new: true,
+      }
+    );
     // console.log("measureUnit", measureUnit);
     if (!measureUnit) {
       return res.status(404).json({

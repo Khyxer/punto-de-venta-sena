@@ -3,8 +3,13 @@ import { useClientContext } from "../../contexts/client/useClientContext";
 import { useEffect } from "react";
 
 export const NewClientForm = ({ onClose, currentClient, isEdit }) => {
-  const { createClient, dataNewClient, setDataNewClient, updateClient } =
-    useClientContext();
+  const {
+    createClient,
+    dataNewClient,
+    setDataNewClient,
+    updateClient,
+    loading,
+  } = useClientContext();
 
   useEffect(() => {
     if (isEdit && currentClient?.birthDate) {
@@ -285,9 +290,10 @@ export const NewClientForm = ({ onClose, currentClient, isEdit }) => {
         </button>
         <button
           type="submit"
+          disabled={loading}
           className="bg-primary-color text-light-color rounded-md px-4 py-2 h-full w-fit cursor-pointer duration-150 disabled:opacity-50 disabled:cursor-default"
         >
-          Guardar
+          {loading ? "Cargando..." : "Guardar"}
         </button>
       </footer>
     </form>

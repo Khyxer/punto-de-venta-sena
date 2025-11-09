@@ -14,6 +14,7 @@ import { SubCategorySection } from "./components/config/sub-category/SubCategory
 import { MeasureUnitSection } from "./components/config/measure-unit/MeasureUnitSection";
 import { SupplierSection } from "./components/config/supplier/SupplierSection";
 import { EmployeeSection } from "./components/config/employee/EmployeeSection";
+import { PapeleraSection } from "./components/config/papelera/PapeleraSection";
 
 // contextos
 import { AuthProvider } from "./contexts/auth/AuthContext";
@@ -61,6 +62,7 @@ function App() {
                     />
                     <Route path="proveedores" element={<SupplierSection />} />
                     <Route path="empleados" element={<EmployeeSection />} />
+                    <Route path="papelera" element={<PapeleraSection />} />
                   </Route>
                   {/* clientes */}
                   <Route path="clientes" element={<ClientesPage />} />
