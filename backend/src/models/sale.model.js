@@ -91,13 +91,6 @@ const saleSchema = new mongoose.Schema(
       default: "Efectivo",
       required: true,
     },
-    status: {
-      type: String,
-      enum: ["Pendiente", "Completada", "Cancelada"],
-      default: "Completada",
-      required: true,
-      index: true,
-    },
     note: {
       type: String,
       trim: true,

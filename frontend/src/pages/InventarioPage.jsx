@@ -25,7 +25,7 @@ export const InventarioPage = () => {
   };
 
   return (
-    <section className="p-6 flex flex-col gap-6">
+    <section className="p-4 flex flex-col gap-6">
       {/** Modal de nuevo producto */}
       <LayoutModal
         show={showModal}

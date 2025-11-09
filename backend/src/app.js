@@ -8,6 +8,7 @@ import cors from "cors";
 import inventoryRoutes from "./routes/inventory/inventory.routes.js";
 import accountsRoutes from "./routes/accounts/user.routes.js";
 import generalAccountsRoutes from "./routes/accounts/employee.routes.js";
+import clientRoutes from "./routes/client.routes.js";
 
 // variables de entorno
 dotenv.config();
@@ -40,6 +41,9 @@ app.use("/api/auth", accountsRoutes);
 
 // rutas de cuentas generales (empleados y clientes)
 app.use("/api/accounts", generalAccountsRoutes);
+
+// rutas de clientes
+app.use("/api", clientRoutes);
 
 // ====== servidor ======
 

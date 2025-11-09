@@ -180,6 +180,17 @@ export const employeesColumns = createTableColumns([
   "14%", // Fecha de creación
 ]);
 
+// Columnas de clientes
+export const clientsColumns = createTableColumns([
+  "5%", // #
+  "14%", // Nombre
+  "13%", // Usuario
+  "16%", // Rol
+  "13%", // Telefono
+  "13%", // Creado por
+  "14%", // Fecha de creación
+]);
+
 export const combineStyles = (...stylesheets) => {
   return Object.assign({}, ...stylesheets);
 };

@@ -164,7 +164,7 @@ export const useSubCategory = () => {
 
       const data = await response.json();
 
-      console.log("data update SubCategory", data.subCategory);
+      // console.log("data update SubCategory", data.subCategory);
 
       if (!response.ok) {
         toast.error(data.error);
