@@ -92,7 +92,7 @@ export const createClientController = async (req, res) => {
       documentNumber,
     }).populate("userCreator");
 
-    console.log(client);
+    // console.log(client);
 
     res.status(201).json({
       success: true,

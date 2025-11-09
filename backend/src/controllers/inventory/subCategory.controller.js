@@ -1,4 +1,4 @@
-import { SubCategory } from "../../models/subCategory.model.js";
+import SubCategory from "../../models/subCategory.model.js";
 import Product from "../../models/product.model.js";
 
 // Crear subcategoria
@@ -50,7 +50,7 @@ export const createSubCategoryController = async (req, res) => {
 export const getSubCategoriesController = async (req, res) => {
   try {
     // const subCategoriesBase = await SubCategory.find();
-    const subCategoriesBase = await SubCategory.find()
+    const subCategoriesBase = await SubCategory.find({ deleted: false })
       .populate("userCreator mainCategory")
       .sort({ createdAt: -1 });
 
@@ -120,7 +120,15 @@ export const updateSubCategoryController = async (req, res) => {
 // Eliminar subcategoria
 export const deleteSubCategoryController = async (req, res) => {
   try {
-    const subCategory = await SubCategory.findByIdAndDelete(req.query.id);
+    const subCategory = await SubCategory.findByIdAndUpdate(
+      req.query.id,
+      {
+        deleted: true,
+      },
+      {
+        new: true,
+      }
+    );
     if (!subCategory) {
       return res.status(404).json({
         error: "Subcategoria no encontrada",

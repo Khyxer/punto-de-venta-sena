@@ -1,5 +1,4 @@
 import {
-  Home,
   ShoppingCart,
   Box,
   User,
@@ -11,6 +10,7 @@ import {
   PencilRuler,
   Truck,
   IdCardLanyard,
+  Trash2,
 } from "lucide-react";
 
 export const dashboardNavMenu = [
@@ -68,6 +68,11 @@ export const dashboardNavMenu = [
         name: "Empleados",
         icon: IdCardLanyard,
         path: "/config/empleados",
+      },
+      {
+        name: "Papelera",
+        icon: Trash2,
+        path: "/config/papelera",
       },
     ],
   },

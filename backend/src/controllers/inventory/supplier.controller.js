@@ -68,7 +68,9 @@ export const createSupplierController = async (req, res) => {
 // buscar proveedores
 export const getSuppliersController = async (req, res) => {
   try {
-    const suppliers = await Supplier.find().populate("userCreator");
+    const suppliers = await Supplier.find({ deleted: false }).populate(
+      "userCreator"
+    );
     return res.status(200).json({
       success: true,
       message: "Proveedores obtenidos exitosamente",
@@ -87,7 +89,15 @@ export const getSuppliersController = async (req, res) => {
 // eliminar proveedor
 export const deleteSupplierController = async (req, res) => {
   try {
-    const supplier = await Supplier.findByIdAndDelete(req.query.id);
+    const supplier = await Supplier.findByIdAndUpdate(
+      req.query.id,
+      {
+        deleted: true,
+      },
+      {
+        new: true,
+      }
+    );
     return res.status(200).json({
       success: true,
       message: "Proveedor eliminado exitosamente",

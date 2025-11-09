@@ -9,6 +9,7 @@ import inventoryRoutes from "./routes/inventory/inventory.routes.js";
 import accountsRoutes from "./routes/accounts/user.routes.js";
 import generalAccountsRoutes from "./routes/accounts/employee.routes.js";
 import clientRoutes from "./routes/client.routes.js";
+import trashRoutes from "./routes/trash.routes.js";
 
 // variables de entorno
 dotenv.config();
@@ -44,6 +45,9 @@ app.use("/api/accounts", generalAccountsRoutes);
 
 // rutas de clientes
 app.use("/api", clientRoutes);
+
+// rutas de papelera
+app.use("/api/trash", trashRoutes);
 
 // ====== servidor ======
 
