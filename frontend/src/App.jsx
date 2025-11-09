@@ -7,6 +7,7 @@ import { VentasPage } from "./pages/VentasPage";
 import { InventarioPage } from "./pages/InventarioPage";
 import { DashboardPage } from "./pages/DashboardPage";
 import { ConfigPage } from "./pages/ConfigPage";
+import { ClientesPage } from "./pages/ClientesPage";
 // paginas del config
 import { CategorySection } from "./components/config/category/CategorySection";
 import { SubCategorySection } from "./components/config/sub-category/SubCategorySection";
@@ -18,6 +19,7 @@ import { EmployeeSection } from "./components/config/employee/EmployeeSection";
 import { AuthProvider } from "./contexts/auth/AuthContext";
 import { InventarioProvider } from "./contexts/inventario/InventarioContext";
 import { ConfigProvider } from "./contexts/config/ConfigContext";
+import { ClientProvider } from "./contexts/client/ClientContext";
 
 // toast
 import { Toaster } from "react-hot-toast";
@@ -30,38 +32,42 @@ function App() {
       <AuthProvider>
         {/* Contexto para el inventario */}
         <InventarioProvider>
-          {/* Contexto para la configuración */}
-          <ConfigProvider>
-            <Routes>
-              {/* autenticación */}
-              <Route path="/auth" element={<LoginPage />} />
+          {/* Contexto para los clientes */}
+          <ClientProvider>
+            {/* Contexto para la configuración */}
+            <ConfigProvider>
+              <Routes>
+                {/* autenticación */}
+                <Route path="/auth" element={<LoginPage />} />
 
-              {/* dashboard */}
-              <Route path="/" element={<DashboardLayout />}>
-                <Route index element={<DashboardPage />} />
-                <Route path="venta" element={<VentasPage />} />
-                <Route path="inventario" element={<InventarioPage />} />
-                <Route path="config" element={<ConfigPage />}>
-                  <Route index element={<Navigate to="categorias" replace />} />
-                  <Route path="categorias" element={<CategorySection />} />
-                  <Route
-                    path="subcategorias"
-                    element={<SubCategorySection />}
-                  />
-                  <Route
-                    path="unidades-medida"
-                    element={<MeasureUnitSection />}
-                  />
-                  <Route path="proveedores" element={<SupplierSection />} />
-                  {/* <Route
-                    path="contactos-proveedores"
-                    element={<ContactSupplierSection />}
-                  /> */}
-                  <Route path="empleados" element={<EmployeeSection />} />
+                {/* dashboard */}
+                <Route path="/" element={<DashboardLayout />}>
+                  <Route index element={<DashboardPage />} />
+                  <Route path="venta" element={<VentasPage />} />
+                  <Route path="inventario" element={<InventarioPage />} />
+                  <Route path="config" element={<ConfigPage />}>
+                    <Route
+                      index
+                      element={<Navigate to="categorias" replace />}
+                    />
+                    <Route path="categorias" element={<CategorySection />} />
+                    <Route
+                      path="subcategorias"
+                      element={<SubCategorySection />}
+                    />
+                    <Route
+                      path="unidades-medida"
+                      element={<MeasureUnitSection />}
+                    />
+                    <Route path="proveedores" element={<SupplierSection />} />
+                    <Route path="empleados" element={<EmployeeSection />} />
+                  </Route>
+                  {/* clientes */}
+                  <Route path="clientes" element={<ClientesPage />} />
                 </Route>
-              </Route>
-            </Routes>
-          </ConfigProvider>
+              </Routes>
+            </ConfigProvider>
+          </ClientProvider>
         </InventarioProvider>
       </AuthProvider>
     </BrowserRouter>
