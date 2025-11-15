@@ -6,7 +6,7 @@ const productSchema = new mongoose.Schema(
       type: String,
       required: [true, "El nombre es requerido"],
     },
-    image: {
+    imageProduct: {
       type: String,
     },
     productCode: {
