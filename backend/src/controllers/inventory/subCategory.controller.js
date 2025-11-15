@@ -6,7 +6,7 @@ export const createSubCategoryController = async (req, res) => {
   try {
     const { name, description, mainCategory } = req.body;
     if (!name.toLowerCase().trim() || !mainCategory) {
-      return res.status(400).json({ error: "Faltan datos", success: false });
+      return res.status(400).json({ message: "Faltan datos", success: false });
     }
 
     //buscar subcategoria
@@ -14,10 +14,21 @@ export const createSubCategoryController = async (req, res) => {
     const subCategoryExist = await SubCategory.findOne({
       name: name.toLowerCase().trim(),
     });
+
     if (subCategoryExist) {
+      // Si existe pero está eliminado
+      if (subCategoryExist.deleted === true) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "El nombre de la Subcategoria ya existe, pero se encuentra eliminada.",
+        });
+      }
+
+      // Si existe y no está eliminado
       return res.status(400).json({
-        error: `La Subcategoria "${name}" ya existe`,
         success: false,
+        message: `La Subcategoria "${name}" ya existe`,
       });
     }
 
@@ -42,7 +53,7 @@ export const createSubCategoryController = async (req, res) => {
       data: subCategory,
     });
   } catch (error) {
-    return res.status(500).json({ error: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
 

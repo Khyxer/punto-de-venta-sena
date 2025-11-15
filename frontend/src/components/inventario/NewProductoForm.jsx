@@ -2,8 +2,9 @@ import { InputModal } from "../../UI/UiInputs";
 import { useEffect, useState } from "react";
 import { useConfigContext } from "../../contexts/config/useConfigContext";
 import { formatText } from "../../utils/utilFormatFunctions";
+import { useInventarioContext } from "../../contexts/inventario/useInventarioContext";
 
-export const NewProductoForm = ({ onClose, isEdit, currentProduct }) => {
+export const NewProductoForm = ({ onClose }) => {
   const [canExpired, setCanExpired] = useState(false);
 
   // datos para seleccionar
@@ -22,6 +23,13 @@ export const NewProductoForm = ({ onClose, isEdit, currentProduct }) => {
     loadingGetMeasureUnit,
   } = useConfigContext();
 
+  const {
+    createProduct,
+    loading,
+    newFormDataInventory,
+    setNewFormDataInventory,
+  } = useInventarioContext();
+
   useEffect(() => {
     if (!categories.length) {
       getCategories();
@@ -37,11 +45,23 @@ export const NewProductoForm = ({ onClose, isEdit, currentProduct }) => {
     }
   }, []);
 
+  useEffect(() => {
+    if (canExpired) {
+      setNewFormDataInventory({
+        ...newFormDataInventory,
+        expirationDate: "",
+      });
+    }
+  }, [canExpired]);
+
   return (
-    <form className="flex flex-col gap-4">
+    <form
+      className="flex flex-col gap-4"
+      onSubmit={(e) => createProduct(e, onClose)}
+    >
       <header>
         <h1 className="text-xl font-medium text-primary-color">
-          {isEdit ? "Editar Producto" : "Nuevo Producto"}
+          Nuevo Producto
         </h1>
         <p className="text-sm text-gray-600">
           Los campos marcados con * son obligatorios
@@ -65,14 +85,12 @@ export const NewProductoForm = ({ onClose, isEdit, currentProduct }) => {
               id="profilePicture"
               className="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer"
             />
-            {isEdit && (
-              <img
-                src={currentProduct?.imageProduct || "NULL"}
-                alt="Perfil"
-                className="aspect-square h-full object-cover rounded-lg ring-2 ring-primary-color select-none"
-                draggable={false}
-              />
-            )}
+            {/* <img
+              src={"NULL"}
+              alt="Perfil"
+              className="aspect-square h-full object-cover rounded-lg ring-2 ring-primary-color select-none"
+              draggable={false}
+            /> */}
           </div>
         </div>
 
@@ -83,14 +101,26 @@ export const NewProductoForm = ({ onClose, isEdit, currentProduct }) => {
             name="name"
             placeholder="Ej: Leche deslactosada"
             autoFocus
-            value={currentProduct?.name || ""}
+            value={newFormDataInventory.name || ""}
+            onChange={(e) =>
+              setNewFormDataInventory({
+                ...newFormDataInventory,
+                name: e.target.value,
+              })
+            }
             required
           />
           <InputModal
             label="Código"
             placeholder="Ej: PROD-2024-001"
             name="productCode"
-            value={currentProduct?.productCode || ""}
+            value={newFormDataInventory.productCode || ""}
+            onChange={(e) =>
+              setNewFormDataInventory({
+                ...newFormDataInventory,
+                productCode: e.target.value,
+              })
+            }
             required
           />
         </div>
@@ -104,7 +134,13 @@ export const NewProductoForm = ({ onClose, isEdit, currentProduct }) => {
           placeholder="Ej: Leche deslactosada, en presentacion megalitro en oferta."
           rows="2"
           className="w-full border border-gray-600 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-primary-color focus:ring-offset-2 duration-150 resize-none"
-          value={currentProduct?.description || ""}
+          value={newFormDataInventory.description || ""}
+          onChange={(e) =>
+            setNewFormDataInventory({
+              ...newFormDataInventory,
+              description: e.target.value,
+            })
+          }
         ></textarea>
       </div>
 
@@ -116,7 +152,13 @@ export const NewProductoForm = ({ onClose, isEdit, currentProduct }) => {
           </label>
           <select
             id="category"
-            value={currentProduct?.mainCategory || ""}
+            value={newFormDataInventory.category || ""}
+            onChange={(e) =>
+              setNewFormDataInventory({
+                ...newFormDataInventory,
+                category: e.target.value,
+              })
+            }
             className="border border-gray-600 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-primary-color focus:ring-offset-2 duration-150"
           >
             <option value="" disabled>
@@ -138,7 +180,13 @@ export const NewProductoForm = ({ onClose, isEdit, currentProduct }) => {
           </label>
           <select
             id="subCategory"
-            value={currentProduct?.subCategory || ""}
+            value={newFormDataInventory.subCategory || ""}
+            onChange={(e) =>
+              setNewFormDataInventory({
+                ...newFormDataInventory,
+                subCategory: e.target.value,
+              })
+            }
             className="border border-gray-600 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-primary-color focus:ring-offset-2 duration-150"
           >
             <option value="" disabled>
@@ -161,7 +209,13 @@ export const NewProductoForm = ({ onClose, isEdit, currentProduct }) => {
           label="Codigo de barras"
           placeholder="Ej: 1234567890"
           name="barcode"
-          value={currentProduct?.barcode || ""}
+          value={newFormDataInventory.barCode || ""}
+          onChange={(e) =>
+            setNewFormDataInventory({
+              ...newFormDataInventory,
+              barCode: e.target.value,
+            })
+          }
         />
         <div className="flex flex-col gap-1 w-full">
           <label className="text-sm" htmlFor="supplier">
@@ -169,7 +223,13 @@ export const NewProductoForm = ({ onClose, isEdit, currentProduct }) => {
           </label>
           <select
             id="supplier"
-            value={currentProduct?.supplier || ""}
+            value={newFormDataInventory.supplier || ""}
+            onChange={(e) =>
+              setNewFormDataInventory({
+                ...newFormDataInventory,
+                supplier: e.target.value,
+              })
+            }
             className="border border-gray-600 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-primary-color focus:ring-offset-2 duration-150"
           >
             <option value="" disabled>
@@ -193,7 +253,13 @@ export const NewProductoForm = ({ onClose, isEdit, currentProduct }) => {
           name="cost"
           type="number"
           placeholder="Ej: 32000"
-          value={currentProduct?.cost || ""}
+          value={newFormDataInventory.costPrice || ""}
+          onChange={(e) =>
+            setNewFormDataInventory({
+              ...newFormDataInventory,
+              costPrice: e.target.value,
+            })
+          }
           required
         />
         <InputModal
@@ -201,7 +267,13 @@ export const NewProductoForm = ({ onClose, isEdit, currentProduct }) => {
           placeholder="Ej: 35000"
           name="price"
           type="number"
-          value={currentProduct?.price || ""}
+          value={newFormDataInventory.sellPrice || ""}
+          onChange={(e) =>
+            setNewFormDataInventory({
+              ...newFormDataInventory,
+              sellPrice: e.target.value,
+            })
+          }
           required
         />
       </div>
@@ -213,14 +285,27 @@ export const NewProductoForm = ({ onClose, isEdit, currentProduct }) => {
           name="stockMin"
           type="number"
           placeholder="Ej: 32000"
-          value={currentProduct?.stockMin || ""}
+          required
+          value={newFormDataInventory.minStock || ""}
+          onChange={(e) =>
+            setNewFormDataInventory({
+              ...newFormDataInventory,
+              minStock: e.target.value,
+            })
+          }
         />
         <InputModal
           label="Stock actual"
           placeholder="Ej: 35000"
           name="stockActual"
           type="number"
-          value={currentProduct?.stockActual || ""}
+          value={newFormDataInventory.stock || ""}
+          onChange={(e) =>
+            setNewFormDataInventory({
+              ...newFormDataInventory,
+              stock: e.target.value,
+            })
+          }
           required
         />
         <div className="flex flex-col gap-1">
@@ -229,7 +314,13 @@ export const NewProductoForm = ({ onClose, isEdit, currentProduct }) => {
           </label>
           <select
             id="unitMeasure"
-            value={currentProduct?.unitMeasure || ""}
+            value={newFormDataInventory.measureUnit || ""}
+            onChange={(e) =>
+              setNewFormDataInventory({
+                ...newFormDataInventory,
+                measureUnit: e.target.value,
+              })
+            }
             className="border border-gray-600 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-primary-color focus:ring-offset-2 duration-150"
           >
             <option value="" disabled>
@@ -272,14 +363,20 @@ export const NewProductoForm = ({ onClose, isEdit, currentProduct }) => {
             label="Fecha de expiración"
             name="expirationDate"
             type="date"
-            value={currentProduct?.expirationDate || ""}
+            value={newFormDataInventory.expirationDate || ""}
+            onChange={(e) =>
+              setNewFormDataInventory({
+                ...newFormDataInventory,
+                expirationDate: e.target.value,
+              })
+            }
             required
           />
         )}
       </div>
 
       {/* Boton de crear */}
-      <footer className="flex justify-between">
+      <footer className="flex justify-between select-none">
         <button
           onClick={onClose}
           type="button"
@@ -288,17 +385,11 @@ export const NewProductoForm = ({ onClose, isEdit, currentProduct }) => {
           Cancelar
         </button>
         <button
-          // onClick={() => {
-          //   if (isEdit) {
-          //     updateProduct(currentProduct.id, onClose);
-          //   } else {
-          //     createProduct(onClose);
-          //   }
-          // }}
-          // disabled={loadingProduct}
+          type="submit"
           className="bg-primary-color text-light-color rounded-md px-4 py-2 h-full w-fit cursor-pointer duration-150 disabled:opacity-50 disabled:cursor-default"
+          disabled={loading}
         >
-          {isEdit ? "Actualizar" : "Crear Producto"}
+          {loading ? "Creando..." : "Crear Producto"}
         </button>
       </footer>
     </form>

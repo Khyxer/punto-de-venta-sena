@@ -54,8 +54,17 @@ export const authenticateToken = async (req, res, next) => {
   }
 };
 
-// verificar roles
-export const authorizeRoles = (...roles) => {
+// Verificar roles
+
+// escala de roles
+const roleLevels = {
+  cashier: 1,
+  employee: 2,
+  admin: 3,
+  superAdmin: 4,
+};
+
+export const authorizeRoles = (minRole) => {
   return (req, res, next) => {
     if (!req.user) {
       return res.status(401).json({
@@ -64,7 +73,16 @@ export const authorizeRoles = (...roles) => {
       });
     }
 
-    if (!roles.includes(req.user.role)) {
+    const userRole = req.user.role;
+
+    if (!roleLevels[userRole]) {
+      return res.status(400).json({
+        success: false,
+        message: "Rol de usuario inválido.",
+      });
+    }
+
+    if (roleLevels[userRole] < roleLevels[minRole]) {
       return res.status(403).json({
         success: false,
         message: "No tienes permisos para acceder a este recurso.",

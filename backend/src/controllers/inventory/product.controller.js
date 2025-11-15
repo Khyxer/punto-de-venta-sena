@@ -3,6 +3,13 @@ import Product from "../../models/product.model.js";
 //crear producto
 export const createProductController = async (req, res) => {
   try {
+    const cleanBody = Object.fromEntries(
+      Object.entries(req.body).map(([key, value]) => [
+        key,
+        value === "" ? undefined : value,
+      ])
+    );
+
     const {
       name,
       image,
@@ -10,41 +17,30 @@ export const createProductController = async (req, res) => {
       barCode,
       description,
       category,
+      subCategory,
       supplier,
       costPrice,
       sellPrice,
       stock,
       minStock,
-      unitOfMeasure,
+      measureUnit,
       expirationDate,
       userCreator,
-    } = req.body;
+    } = cleanBody;
 
     // Validación de campos requeridos
     if (
-      !name ||
-      !productCode ||
-      !barCode ||
+      !name.trim() ||
+      !productCode.trim() ||
       !costPrice ||
       !sellPrice ||
-      stock === undefined ||
-      minStock === undefined
+      !minStock ||
+      !stock ||
+      !measureUnit.trim()
     ) {
       return res.status(400).json({
         success: false,
         message: "Faltan campos obligatorios",
-        errors: {
-          name: !name ? "El nombre es requerido" : null,
-          productCode: !productCode
-            ? "El código de producto es requerido"
-            : null,
-          barCode: !barCode ? "El código de barras es requerido" : null,
-          costPrice: !costPrice ? "El precio de costo es requerido" : null,
-          sellPrice: !sellPrice ? "El precio de venta es requerido" : null,
-          stock: stock === undefined ? "El stock es requerido" : null,
-          minStock:
-            minStock === undefined ? "El stock mínimo es requerido" : null,
-        },
       });
     }
 
@@ -52,51 +48,42 @@ export const createProductController = async (req, res) => {
     if (isNaN(costPrice) || costPrice < 0) {
       return res.status(400).json({
         success: false,
-        message: "El precio de costo debe ser un número positivo",
+        message: "El precio de costo debe ser mayor o igual a 0",
       });
     }
 
     if (isNaN(sellPrice) || sellPrice < 0) {
       return res.status(400).json({
         success: false,
-        message: "El precio de venta debe ser un número positivo",
+        message: "El precio de venta debe ser mayor o igual a 0",
       });
     }
 
     if (isNaN(stock) || stock < 0) {
       return res.status(400).json({
         success: false,
-        message: "El stock debe ser un número mayor o igual a 0",
+        message: "El stock debe ser mayor o igual a 0",
       });
     }
 
     if (isNaN(minStock) || minStock < 0) {
       return res.status(400).json({
         success: false,
-        message: "El stock mínimo debe ser un número mayor o igual a 0",
+        message: "El stock mínimo debe ser mayor o igual a 0",
       });
     }
 
     // Verificar duplicados antes de intentar guardar
     const existingProduct = await Product.findOne({
-      $or: [{ productCode }, { barCode }],
+      $or: [{ productCode }],
     });
 
     if (existingProduct) {
-      if (existingProduct.productCode === productCode) {
-        return res.status(409).json({
-          success: false,
-          message: "Ya existe un producto con ese código de producto",
-          field: "productCode",
-        });
-      }
-      if (existingProduct.barCode === barCode) {
-        return res.status(409).json({
-          success: false,
-          message: "Ya existe un producto con ese código de barras",
-          field: "barCode",
-        });
-      }
+      return res.status(409).json({
+        success: false,
+        message: "Ya existe un producto con ese código de producto",
+        field: "productCode",
+      });
     }
 
     // Crear el producto
@@ -107,12 +94,13 @@ export const createProductController = async (req, res) => {
       barCode,
       description,
       category,
+      subCategory,
       supplier,
       costPrice,
       sellPrice,
       stock,
       minStock,
-      unitOfMeasure,
+      measureUnit,
       expirationDate,
       userCreator,
     });
