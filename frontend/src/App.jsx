@@ -21,6 +21,7 @@ import { AuthProvider } from "./contexts/auth/AuthContext";
 import { InventarioProvider } from "./contexts/inventario/InventarioContext";
 import { ConfigProvider } from "./contexts/config/ConfigContext";
 import { ClientProvider } from "./contexts/client/ClientContext";
+import { VentasProvider } from "./contexts/ventas/VentasContext";
 
 // toast
 import { Toaster } from "react-hot-toast";
@@ -33,43 +34,46 @@ function App() {
       <AuthProvider>
         {/* Contexto para el inventario */}
         <InventarioProvider>
-          {/* Contexto para los clientes */}
-          <ClientProvider>
-            {/* Contexto para la configuración */}
-            <ConfigProvider>
-              <Routes>
-                {/* autenticación */}
-                <Route path="/auth" element={<LoginPage />} />
+          {/* Contexto para las ventas */}
+          <VentasProvider>
+            {/* Contexto para los clientes */}
+            <ClientProvider>
+              {/* Contexto para la configuración */}
+              <ConfigProvider>
+                <Routes>
+                  {/* autenticación */}
+                  <Route path="/auth" element={<LoginPage />} />
 
-                {/* dashboard */}
-                <Route path="/" element={<DashboardLayout />}>
-                  <Route index element={<DashboardPage />} />
-                  <Route path="venta" element={<VentasPage />} />
-                  <Route path="inventario" element={<InventarioPage />} />
-                  <Route path="config" element={<ConfigPage />}>
-                    <Route
-                      index
-                      element={<Navigate to="categorias" replace />}
-                    />
-                    <Route path="categorias" element={<CategorySection />} />
-                    <Route
-                      path="subcategorias"
-                      element={<SubCategorySection />}
-                    />
-                    <Route
-                      path="unidades-medida"
-                      element={<MeasureUnitSection />}
-                    />
-                    <Route path="proveedores" element={<SupplierSection />} />
-                    <Route path="empleados" element={<EmployeeSection />} />
-                    <Route path="papelera" element={<PapeleraSection />} />
+                  {/* dashboard */}
+                  <Route path="/" element={<DashboardLayout />}>
+                    <Route index element={<DashboardPage />} />
+                    <Route path="venta" element={<VentasPage />} />
+                    <Route path="inventario" element={<InventarioPage />} />
+                    <Route path="config" element={<ConfigPage />}>
+                      <Route
+                        index
+                        element={<Navigate to="categorias" replace />}
+                      />
+                      <Route path="categorias" element={<CategorySection />} />
+                      <Route
+                        path="subcategorias"
+                        element={<SubCategorySection />}
+                      />
+                      <Route
+                        path="unidades-medida"
+                        element={<MeasureUnitSection />}
+                      />
+                      <Route path="proveedores" element={<SupplierSection />} />
+                      <Route path="empleados" element={<EmployeeSection />} />
+                      <Route path="papelera" element={<PapeleraSection />} />
+                    </Route>
+                    {/* clientes */}
+                    <Route path="clientes" element={<ClientesPage />} />
                   </Route>
-                  {/* clientes */}
-                  <Route path="clientes" element={<ClientesPage />} />
-                </Route>
-              </Routes>
-            </ConfigProvider>
-          </ClientProvider>
+                </Routes>
+              </ConfigProvider>
+            </ClientProvider>
+          </VentasProvider>
         </InventarioProvider>
       </AuthProvider>
     </BrowserRouter>

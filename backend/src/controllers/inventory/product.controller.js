@@ -164,3 +164,32 @@ export const createProductController = async (req, res) => {
     });
   }
 };
+
+// Obtener productos
+export const getProductsController = async (req, res) => {
+  try {
+    const products = await Product.find({ deleted: false }).populate(
+      "category subCategory supplier measureUnit"
+    );
+    // console.log("hola backend", Date.now());
+    return res.status(200).json({
+      success: true,
+      message: "Productos obtenidos exitosamente",
+      data: products,
+    });
+  } catch (error) {
+    console.error("Error en getProductsController:", error);
+    console.error("Código de error:", error.code);
+    console.error("Nombre del error:", error.name);
+
+    return res.status(500).json({
+      success: false,
+      message: "Error interno del servidor al obtener los productos",
+      ...(process.env.NODE_ENV === "development" && {
+        error: error.message,
+        errorName: error.name,
+        errorCode: error.code,
+      }),
+    });
+  }
+};

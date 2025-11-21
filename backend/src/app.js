@@ -8,6 +8,7 @@ import cors from "cors";
 import inventoryRoutes from "./routes/inventory/inventory.routes.js";
 import accountsRoutes from "./routes/accounts/user.routes.js";
 import generalAccountsRoutes from "./routes/accounts/employee.routes.js";
+import saleRoutes from "./routes/sale.routes.js";
 import clientRoutes from "./routes/client.routes.js";
 import trashRoutes from "./routes/trash.routes.js";
 import productRoutes from "./routes/inventory/product.routes.js";
@@ -52,6 +53,9 @@ app.use("/api/trash", trashRoutes);
 
 // rutas de productos
 app.use("/api/inventory/product", productRoutes);
+
+// rutas de ventas
+app.use("/api/sale", saleRoutes);
 
 // ====== servidor ======
 

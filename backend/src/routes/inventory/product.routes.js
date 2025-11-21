@@ -1,6 +1,6 @@
 import express from "express";
 
-import { createProductController } from "../../controllers/inventory/product.controller.js";
+import { createProductController, getProductsController } from "../../controllers/inventory/product.controller.js";
 import {
   authenticateToken,
   authorizeRoles,
@@ -18,5 +18,11 @@ router.post(
   authorizeRoles("employee"),
   createProductController
 );
+
+/*
+ * Obtener productos
+ * Rol minimo: cashier
+ */
+router.get("/", authenticateToken, authorizeRoles("cashier"), getProductsController);
 
 export default router;

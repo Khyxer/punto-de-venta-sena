@@ -34,7 +34,7 @@ export const HeaderDashboard = () => {
             localStorage.removeItem("token");
             window.location.href = "/auth";
           }}
-          className="bg-error-color/30 text-light-color rounded-md w-9 aspect-square flex items-center justify-center cursor-pointer"
+          className="bg-error-color/10 hover:bg-error-color/20 duration-150 text-light-color rounded-md w-9 aspect-square flex items-center justify-center cursor-pointer"
         >
           <LogOut className="text-error-color" />
         </button>
