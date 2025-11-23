@@ -10,6 +10,8 @@ export const createProductController = async (req, res) => {
       ])
     );
 
+    // console.log("req.user", req.user);
+
     const {
       name,
       image,
@@ -25,18 +27,17 @@ export const createProductController = async (req, res) => {
       minStock,
       measureUnit,
       expirationDate,
-      userCreator,
     } = cleanBody;
 
     // Validación de campos requeridos
     if (
-      !name.trim() ||
-      !productCode.trim() ||
-      !costPrice ||
-      !sellPrice ||
-      !minStock ||
-      !stock ||
-      !measureUnit.trim()
+      !name?.trim() ||
+      !productCode?.trim() ||
+      (!costPrice && costPrice !== 0) ||
+      (!sellPrice && sellPrice !== 0) ||
+      minStock == null ||
+      stock == null ||
+      !measureUnit
     ) {
       return res.status(400).json({
         success: false,
@@ -102,7 +103,7 @@ export const createProductController = async (req, res) => {
       minStock,
       measureUnit,
       expirationDate,
-      userCreator,
+      userCreator: req.user._id,
     });
 
     await product.save();

@@ -18,7 +18,7 @@ export const AddProducts = () => {
     getProducts();
   }, []);
 
-  console.log("products", products);
+  // console.log("products", products);
 
   // Cerrar dropdown al hacer clic fuera
   useEffect(() => {
@@ -122,7 +122,6 @@ export const AddProducts = () => {
                         <Box className="text-primary-color/60" />
                       </div>
                     </div>
-
 
                     <div className="flex-1">
                       {product?.name}{" "}

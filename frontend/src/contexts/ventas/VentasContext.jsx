@@ -1,13 +1,13 @@
 // Contexto para manejar el inventario
-import { createContext, useEffect } from "react";
-import { useInventory } from "../../hooks/useInventory";
+import { createContext } from "react";
+// import { useInventory } from "../../hooks/useInventory";
 import { useVenta } from "../../hooks/useVenta";
 import { useClient } from "../../hooks/useClient";
 
 const VentasContext = createContext();
 
 export const VentasProvider = ({ children }) => {
-  const { products, getProducts } = useInventory();
+  // const { products, getProducts } = useInventory();
   const { clients, getClients } = useClient();
 
   const {
@@ -27,16 +27,16 @@ export const VentasProvider = ({ children }) => {
     lastSaleCreated,
   } = useVenta();
 
-  useEffect(() => {
-    getProducts();
-    getClients();
-  }, []);
+  // useEffect(() => {
+  //   getProducts();
+  //   getClients();
+  // }, []);
 
   return (
     <VentasContext.Provider
       value={{
-        products,
-        getProducts,
+        // products,
+        // getProducts,
         selectedProducts,
         setSelectedProducts,
         clients,

@@ -20,11 +20,11 @@ export const HeaderClientes = ({
             onChange={onChangeInput}
           />
         </div>
-        <button className="rounded-md border border-gray-500 hover:border-dark-color px-4 py-2 h-full w-fit cursor-pointer duration-150 flex items-center gap-2">
+        {/* <button className="rounded-md border border-gray-500 hover:border-dark-color px-4 py-2 h-full w-fit cursor-pointer duration-150 flex items-center gap-2">
           <Filter />
           Filtros
           <ChevronDown />
-        </button>
+        </button> */}
       </div>
       <div className="flex items-center gap-4">
         {/** Boton para ver un reporte en formato pdf

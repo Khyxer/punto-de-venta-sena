@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRef } from "react";
 import { Search, Trash2 } from "lucide-react";
 import { useVentasContext } from "../../contexts/ventas/useVentasContext";
@@ -8,7 +8,12 @@ export const AddClient = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
-  const { clients, selectedClient, setSelectedClient } = useVentasContext();
+  const { clients, getClients, selectedClient, setSelectedClient } =
+    useVentasContext();
+
+  useEffect(() => {
+    getClients();
+  }, []);
 
   const handleInputChange = (e) => {
     const value = e.target.value;
