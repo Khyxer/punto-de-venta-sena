@@ -63,12 +63,31 @@ export const DashboardPage = () => {
     ],
   };
 
+  //opciones de la grafica en general
   const chartOptions = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
       legend: {
         position: "bottom",
+      },
+    },
+  };
+
+  // opciones de la grafica de lineas
+  // Opciones específicas para el gráfico de línea
+  const lineChartOptions = {
+    ...chartOptions, // copia las opciones base
+    interaction: {
+      mode: "index",
+      intersect: false,
+      axis: "x",
+    },
+    elements: {
+      point: {
+        radius: 3,
+        hitRadius: 20,
+        hoverRadius: 6,
       },
     },
   };
@@ -164,12 +183,12 @@ export const DashboardPage = () => {
               />
               <h3>días</h3>{" "}
               <span className="text-xs text-gray-500 font-normal">
-                (minimo 5, maximo 30)
+                (mínimo 5, máximo 30)
               </span>
             </div>
           </div>
           <div className="h-64">
-            <Line data={salesLineData} options={chartOptions} />
+            <Line data={salesLineData} options={lineChartOptions} />
           </div>
         </div>
 
