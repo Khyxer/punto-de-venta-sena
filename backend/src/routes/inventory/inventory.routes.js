@@ -33,7 +33,12 @@ const router = express.Router();
 
 // ====== Rutas de productos del inventario ======
 // Crear producto
-router.post("/product", createProductController);
+router.post(
+  "/product",
+  authenticateToken,
+  authorizeRoles("admin"),
+  createProductController
+);
 
 // ====== Rutas de categorias del inventario ======
 // Crear categoria
