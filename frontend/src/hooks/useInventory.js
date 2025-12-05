@@ -2,6 +2,8 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 
 export const useInventory = () => {
+
+  console.log("PRUEBA BIENN 1 ");
   const [newFormDataInventory, setNewFormDataInventory] = useState({
     imageProduct: "",
     name: "",
