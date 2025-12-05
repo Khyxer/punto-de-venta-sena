@@ -194,3 +194,107 @@ export const getProductsController = async (req, res) => {
     });
   }
 };
+
+// Eliminar producto (soft delete)
+export const deleteProductController = async (req, res) => {
+  try {
+    const { id } = req.query;
+
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: "ID del producto es requerido",
+      });
+    }
+
+    const product = await Product.findById(id);
+
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        message: "Producto no encontrado",
+      });
+    }
+
+    // Soft delete: marcar como eliminado
+    product.deleted = true;
+    await product.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Producto eliminado exitosamente",
+      data: product,
+    });
+  } catch (error) {
+    console.error("Error en deleteProductController:", error);
+    console.error("Código de error:", error.code);
+    console.error("Nombre del error:", error.name);
+
+    return res.status(500).json({
+      success: false,
+      message: "Error interno del servidor al eliminar el producto",
+      ...(process.env.NODE_ENV === "development" && {
+        error: error.message,
+        errorName: error.name,
+        errorCode: error.code,
+      }),
+    });
+  }
+};
+
+// Actualizar producto
+export const updateProductController = async (req, res) => {
+  try {
+    const { id } = req.query;
+
+    if (!id) {
+      return res.status(400).json({ success: false, message: "ID del producto es requerido" });
+    }
+
+    const cleanBody = Object.fromEntries(
+      Object.entries(req.body).map(([key, value]) => [key, value === "" ? undefined : value])
+    );
+
+    const product = await Product.findById(id);
+    if (!product) {
+      return res.status(404).json({ success: false, message: "Producto no encontrado" });
+    }
+
+    // actualizar campos permitidos
+    const updatableFields = [
+      "name",
+      "imageProduct",
+      "image",
+      "productCode",
+      "barCode",
+      "description",
+      "category",
+      "subCategory",
+      "supplier",
+      "costPrice",
+      "sellPrice",
+      "stock",
+      "minStock",
+      "measureUnit",
+      "expirationDate",
+      "active",
+    ];
+
+    updatableFields.forEach((field) => {
+      if (Object.prototype.hasOwnProperty.call(cleanBody, field) && cleanBody[field] !== undefined) {
+        product[field] = cleanBody[field];
+      }
+    });
+
+    await product.save();
+
+    return res.status(200).json({ success: true, message: "Producto actualizado exitosamente", data: product });
+  } catch (error) {
+    console.error("Error en updateProductController:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Error interno del servidor al actualizar el producto",
+      ...(process.env.NODE_ENV === "development" && { error: error.message }),
+    });
+  }
+};

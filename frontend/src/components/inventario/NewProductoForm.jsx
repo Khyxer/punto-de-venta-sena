@@ -25,6 +25,7 @@ export const NewProductoForm = ({ onClose }) => {
 
   const {
     createProduct,
+    updateProduct,
     loading,
     newFormDataInventory,
     setNewFormDataInventory,
@@ -54,14 +55,26 @@ export const NewProductoForm = ({ onClose }) => {
     }
   }, [canExpired]);
 
+  const handleSubmit = (e) => {
+    // prevenir comportamiento por defecto del formulario lo antes posible
+    if (e && typeof e.preventDefault === "function") e.preventDefault();
+    // log temporal para depuración
+    console.log("NewProductoForm submit, isEdit:", !!(newFormDataInventory && newFormDataInventory._id));
+
+    if (newFormDataInventory && newFormDataInventory._id) {
+      return updateProduct(e, onClose, newFormDataInventory._id);
+    }
+    return createProduct(e, onClose);
+  };
+
   return (
     <form
       className="flex flex-col gap-4"
-      onSubmit={(e) => createProduct(e, onClose)}
+      onSubmit={handleSubmit}
     >
       <header>
         <h1 className="text-xl font-medium text-primary-color">
-          Nuevo Producto
+          {newFormDataInventory && newFormDataInventory._id ? "Editar Producto" : "Nuevo Producto"}
         </h1>
         <p className="text-sm text-gray-600">
           Los campos marcados con * son obligatorios
@@ -389,7 +402,7 @@ export const NewProductoForm = ({ onClose }) => {
           className="bg-primary-color text-light-color rounded-md px-4 py-2 h-full w-fit cursor-pointer duration-150 disabled:opacity-50 disabled:cursor-default"
           disabled={loading}
         >
-          {loading ? "Creando..." : "Crear Producto"}
+          {loading ? (newFormDataInventory && newFormDataInventory._id ? "Guardando..." : "Creando...") : (newFormDataInventory && newFormDataInventory._id ? "Guardar" : "Crear Producto")}
         </button>
       </footer>
     </form>

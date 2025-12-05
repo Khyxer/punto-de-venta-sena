@@ -1,6 +1,6 @@
 import express from "express";
 
-import { createProductController, getProductsController } from "../../controllers/inventory/product.controller.js";
+import { createProductController, getProductsController, deleteProductController, updateProductController } from "../../controllers/inventory/product.controller.js";
 import {
   authenticateToken,
   authorizeRoles,
@@ -24,5 +24,17 @@ router.post(
  * Rol minimo: cashier
  */
 router.get("/", authenticateToken, authorizeRoles("cashier"), getProductsController);
+
+/*
+ * Eliminar producto
+ * Rol minimo: admin
+ */
+router.delete("/", authenticateToken, authorizeRoles("admin"), deleteProductController);
+
+/*
+ * Actualizar producto
+ * Rol minimo: employee
+ */
+router.put("/", authenticateToken, authorizeRoles("employee"), updateProductController);
 
 export default router;

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { ChevronDown, Filter, Plus, Search, Info, Pencil, Trash2 } from "lucide-react";
+import toast from "react-hot-toast";
 import { LayoutModal } from "../components/general/LayoutModal";
 import { NewProductoForm } from "../components/inventario/NewProductoForm";
 import { SimpleTable } from "../components/general/SimpleTable";
@@ -12,13 +13,35 @@ export const InventarioPage = () => {
   const [showModalDelete, setShowModalDelete] = useState(false);
   const [showModalInfo, setShowModalInfo] = useState(false);
   const [currentProduct, setCurrentProduct] = useState(null);
-  const [isEdit, setIsEdit] = useState(false);
 
   const { products, getProducts, setProducts, setNewFormDataInventory } = useInventarioContext();
 
-  // Cargar productos al montar (se ejecuta cuando el usuario navega al submenu Inventario)
+  // Abrir modal en modo editar y precargar formulario
+  const openEditProduct = (p) => {
+    setNewFormDataInventory({
+      _id: p._id,
+      imageProduct: p.imageProduct || "",
+      name: p.name || "",
+      productCode: p.productCode || "",
+      description: p.description || "",
+      category: p.category?._id || "",
+      subCategory: p.subCategory?._id || "",
+      barCode: p.barCode || "",
+      supplier: p.supplier?._id || "",
+      costPrice: p.costPrice || "",
+      sellPrice: p.sellPrice || "",
+      stock: p.stock || "",
+      minStock: p.minStock || "",
+      measureUnit: p.measureUnit?._id || "",
+      expirationDate: p.expirationDate ? new Date(p.expirationDate).toISOString().slice(0,10) : "",
+    });
+    setShowModalCreate(true);
+  };
+
+  // Cargar productos al montar (se ejecuta una sola vez cuando el usuario navega al submenu Inventario)
   useEffect(() => {
     getProducts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Columnas de la tabla (similar a ClientesPage)
@@ -47,26 +70,7 @@ export const InventarioPage = () => {
           <button
             onClick={() => {
               setCurrentProduct(row.information);
-              setIsEdit(true);
-              // rellenar el formulario del contexto para editar
-              const p = row.information;
-              setNewFormDataInventory({
-                imageProduct: p.imageProduct || "",
-                name: p.name || "",
-                productCode: p.productCode || "",
-                description: p.description || "",
-                category: p.category?._id || "",
-                subCategory: p.subCategory?._id || "",
-                barCode: p.barCode || "",
-                supplier: p.supplier?._id || "",
-                costPrice: p.costPrice || "",
-                sellPrice: p.sellPrice || "",
-                stock: p.stock || "",
-                minStock: p.minStock || "",
-                measureUnit: p.measureUnit?._id || "",
-                expirationDate: p.expirationDate ? new Date(p.expirationDate).toISOString().slice(0,10) : "",
-              });
-              setShowModalCreate(true);
+              openEditProduct(row.information);
             }}
             className="bg-primary-color/30 text-light-color rounded-md w-9 aspect-square flex items-center justify-center cursor-pointer"
           >
@@ -109,16 +113,27 @@ export const InventarioPage = () => {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
-      const data = await response.json();
-      if (!data.success) {
-        console.error(data.message || data);
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        toast.error(errorData.message || "Error al eliminar el producto");
         return;
       }
+
+      const data = await response.json();
+
+      if (!data.success) {
+        toast.error(data.message || "Error al eliminar el producto");
+        return;
+      }
+
       // actualizar lista local
       setProducts((prev) => prev.filter((item) => item._id !== id));
       setShowModalDelete(false);
+      toast.success(data.message || "Producto eliminado exitosamente");
     } catch (error) {
       console.error(error);
+      toast.error("Error al eliminar el producto");
     }
   };
 
@@ -129,7 +144,6 @@ export const InventarioPage = () => {
         show={showModalCreate}
         onClose={() => {
           setShowModalCreate(false);
-          setIsEdit(false);
         }}
         className="!max-w-2xl !w-full"
       >
@@ -162,14 +176,38 @@ export const InventarioPage = () => {
           <h3 className="text-lg font-medium">Información del producto</h3>
           {currentProduct ? (
             <div className="mt-4 space-y-2">
+              {/* Imagen */}
+              {(currentProduct.imageProduct || currentProduct.image) && (
+                <div>
+                  <strong>Imagen:</strong>
+                  <div className="mt-2">
+                    <img
+                      src={currentProduct.imageProduct || currentProduct.image}
+                      alt={currentProduct.name}
+                      className="max-h-40 object-contain rounded"
+                    />
+                  </div>
+                </div>
+              )}
+
               <p><strong>Nombre:</strong> {currentProduct.name}</p>
               <p><strong>Código:</strong> {currentProduct.productCode}</p>
-              <p><strong>Stock:</strong> {currentProduct.stock} {currentProduct.measureUnit?.name}</p>
+              <p><strong>Código de barras:</strong> {currentProduct.barCode || "-"}</p>
+              <p><strong>Descripción:</strong> {currentProduct.description || "-"}</p>
+              <p><strong>Costo:</strong> {typeof currentProduct.costPrice === 'number' ? formatPrice(currentProduct.costPrice) : (currentProduct.costPrice || "-")}</p>
               <p><strong>Precio:</strong> {formatPrice(currentProduct.sellPrice)}</p>
-              <p><strong>Categoria:</strong> {currentProduct.category?.name}</p>
-              <p><strong>Subcategoria:</strong> {currentProduct.subCategory?.name}</p>
-              <p><strong>Proveedor:</strong> {currentProduct.supplier?.name}</p>
+              <p><strong>Stock actual:</strong> {currentProduct.stock ?? "-"} {currentProduct.measureUnit?.name || ""}</p>
+              <p><strong>Stock mínimo:</strong> {currentProduct.minStock ?? "-"}</p>
+              <p><strong>Unidad de medida:</strong> {currentProduct.measureUnit?.name || "-"}</p>
+              <p><strong>Categoria:</strong> {currentProduct.category?.name || "-"}</p>
+              <p><strong>Subcategoria:</strong> {currentProduct.subCategory?.name || "-"}</p>
+              <p><strong>Proveedor:</strong> {currentProduct.supplier?.name || "-"}</p>
               <p><strong>Vence:</strong> {currentProduct.expirationDate ? formatDate(currentProduct.expirationDate) : "-"}</p>
+              <p><strong>Activo:</strong> {currentProduct.active ? "Sí" : "No"}</p>
+              <p><strong>Eliminado:</strong> {currentProduct.deleted ? "Sí" : "No"}</p>
+              <p><strong>Creado por:</strong> {currentProduct.userCreator?.name || currentProduct.userCreator || "-"}</p>
+              <p><strong>Creado:</strong> {currentProduct.createdAt ? formatDate(currentProduct.createdAt) : "-"}</p>
+              <p><strong>Actualizado:</strong> {currentProduct.updatedAt ? formatDate(currentProduct.updatedAt) : "-"}</p>
             </div>
           ) : (
             <p>No hay información</p>
