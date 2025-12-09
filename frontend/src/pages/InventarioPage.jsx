@@ -14,7 +14,7 @@ export const InventarioPage = () => {
   const [showModalInfo, setShowModalInfo] = useState(false);
   const [currentProduct, setCurrentProduct] = useState(null);
 
-  const { products, getProducts, setProducts, setNewFormDataInventory } = useInventarioContext();
+  const { products, getProducts, setProducts, setNewFormDataInventory, resetFormData } = useInventarioContext();
 
   // Abrir modal en modo editar y precargar formulario
   const openEditProduct = (p) => {
@@ -236,7 +236,10 @@ export const InventarioPage = () => {
         </div>
         {/** nuevo producto */}
         <button
-          onClick={() => setShowModalCreate(true)}
+          onClick={() => {
+            resetFormData();
+            setShowModalCreate(true);
+          }}
           className="flex items-center gap-2 text-nowrap bg-primary-color text-light-color rounded-md px-4 py-2 h-full w-fit cursor-pointer duration-150"
         >
           <Plus />

@@ -10,6 +10,7 @@ export const InventarioProvider = ({ children }) => {
     setNewFormDataInventory,
     createProduct,
     updateProduct,
+    resetFormData,
     products,
     setProducts,
     loading,
@@ -23,12 +24,13 @@ export const InventarioProvider = ({ children }) => {
       setNewFormDataInventory,
       createProduct,
       updateProduct,
+      resetFormData,
       products,
       setProducts,
       loading,
       getProducts,
     }),
-    [newFormDataInventory, setNewFormDataInventory, createProduct, updateProduct, products, setProducts, loading, getProducts]
+    [newFormDataInventory, setNewFormDataInventory, createProduct, updateProduct, resetFormData, products, setProducts, loading, getProducts]
   );
 
   return (

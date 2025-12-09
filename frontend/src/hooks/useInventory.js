@@ -23,6 +23,29 @@ export const useInventory = () => {
 
   const [products, setProducts] = useState([]);
 
+  // estado inicial del formulario
+  const initialFormData = {
+    imageProduct: "",
+    name: "",
+    productCode: "",
+    description: "",
+    category: "",
+    subCategory: "",
+    barCode: "",
+    supplier: "",
+    costPrice: "",
+    sellPrice: "",
+    stock: "",
+    minStock: "",
+    measureUnit: "",
+    expirationDate: "",
+  };
+
+  // resetear formulario a estado inicial
+  const resetFormData = () => {
+    setNewFormDataInventory(initialFormData);
+  };
+
   const createProduct = async (e, onClose) => {
     e.preventDefault();
 
@@ -172,6 +195,7 @@ export const useInventory = () => {
     setNewFormDataInventory,
     createProduct,
     updateProduct,
+    resetFormData,
     products,
     setProducts,
     loading,
