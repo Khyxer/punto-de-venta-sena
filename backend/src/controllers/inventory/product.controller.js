@@ -10,6 +10,8 @@ export const createProductController = async (req, res) => {
       ])
     );
 
+    // console.log("req.user", req.user);
+
     const {
       name,
       image,
@@ -25,18 +27,17 @@ export const createProductController = async (req, res) => {
       minStock,
       measureUnit,
       expirationDate,
-      userCreator,
     } = cleanBody;
 
     // Validación de campos requeridos
     if (
-      !name.trim() ||
-      !productCode.trim() ||
-      !costPrice ||
-      !sellPrice ||
-      !minStock ||
-      !stock ||
-      !measureUnit.trim()
+      !name?.trim() ||
+      !productCode?.trim() ||
+      (!costPrice && costPrice !== 0) ||
+      (!sellPrice && sellPrice !== 0) ||
+      minStock == null ||
+      stock == null ||
+      !measureUnit
     ) {
       return res.status(400).json({
         success: false,
@@ -102,7 +103,7 @@ export const createProductController = async (req, res) => {
       minStock,
       measureUnit,
       expirationDate,
-      userCreator,
+      userCreator: req.user._id,
     });
 
     await product.save();
@@ -156,6 +157,35 @@ export const createProductController = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Error interno del servidor al crear el producto",
+      ...(process.env.NODE_ENV === "development" && {
+        error: error.message,
+        errorName: error.name,
+        errorCode: error.code,
+      }),
+    });
+  }
+};
+
+// Obtener productos
+export const getProductsController = async (req, res) => {
+  try {
+    const products = await Product.find({ deleted: false }).populate(
+      "category subCategory supplier measureUnit"
+    );
+    // console.log("hola backend", Date.now());
+    return res.status(200).json({
+      success: true,
+      message: "Productos obtenidos exitosamente",
+      data: products,
+    });
+  } catch (error) {
+    console.error("Error en getProductsController:", error);
+    console.error("Código de error:", error.code);
+    console.error("Nombre del error:", error.name);
+
+    return res.status(500).json({
+      success: false,
+      message: "Error interno del servidor al obtener los productos",
       ...(process.env.NODE_ENV === "development" && {
         error: error.message,
         errorName: error.name,

@@ -12,6 +12,7 @@ export const InventarioProvider = ({ children }) => {
     products,
     setProducts,
     loading,
+    getProducts,
   } = useInventory();
 
   return (
@@ -23,6 +24,7 @@ export const InventarioProvider = ({ children }) => {
         products,
         setProducts,
         loading,
+        getProducts,
       }}
     >
       {children}

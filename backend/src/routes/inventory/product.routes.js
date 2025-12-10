@@ -10,28 +10,25 @@ const router = express.Router();
 // ====== Rutas de Productos ======
 
 /**
- * @route   POST /api/products/
+ * @route   POST /api/products
  * @desc    Crear un nuevo producto en el sistema.
- * @access  Private (Requiere rol de 'employee' o superior)
- * @body    {
- *            "name": "Nombre del Producto",
- *            "description": "Descripción detallada del producto",
- *            "price": 120.50,
- *            "stock": 100,
- *            "categoryId": "ID_de_la_categoria",
- *            "subcategoryId": "ID_de_la_subcategoria",
- *            "measureUnitId": "ID_de_la_unidad_de_medida",
- *            "supplierId": "ID_del_proveedor"
- *          }
- * @returns { "message": "Producto creado exitosamente", "product": { ... } }
- * @returns { "error": "Faltan campos requeridos" } 400 - Si no se envían todos los datos necesarios.
+ * @access  Private (requiere rol de "employee" o superior)
+ * @body    {string} name           - Nombre del producto.
+ * @body    {string} description    - Descripción detallada del producto.
+ * @body    {number} price          - Precio del producto.
+ * @body    {number} stock          - Cantidad en inventario.
+ * @body    {string} categoryId     - ID de la categoría.
+ * @body    {string} subcategoryId  - ID de la subcategoría.
+ * @body    {string} measureUnitId  - ID de la unidad de medida.
+ * @body    {string} supplierId     - ID del proveedor.
+ * @returns {Object} 201 - Mensaje de éxito y producto creado.
+ * @returns {Object} 400 - Error si faltan campos requeridos o los datos no son válidos.
  */
 router.post(
   "/",
   authenticateToken,
-  authorizeRoles("employee"), // Rol mínimo requerido: empleado
+  authorizeRoles("employee"), // Rol mínimo requerido: employee
   createProductController
 );
 
 export default router;
-

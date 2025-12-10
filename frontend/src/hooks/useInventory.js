@@ -71,6 +71,35 @@ export const useInventory = () => {
     }
   };
 
+  // obtener productos
+  const getProducts = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/inventory/product`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      const data = await response.json();
+      console.log(data);
+      if (!data.success) {
+        toast.error(data.message);
+        return;
+      }
+      setProducts(data.data);
+    } catch (error) {
+      console.error(error);
+      toast.error("Error al obtener los productos");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return {
     newFormDataInventory,
     setNewFormDataInventory,
@@ -78,5 +107,6 @@ export const useInventory = () => {
     products,
     setProducts,
     loading,
+    getProducts,
   };
 };

@@ -8,9 +8,11 @@ import cors from "cors";
 import inventoryRoutes from "./routes/inventory/inventory.routes.js";
 import accountsRoutes from "./routes/accounts/user.routes.js";
 import generalAccountsRoutes from "./routes/accounts/employee.routes.js";
+import saleRoutes from "./routes/sale.routes.js";
 import clientRoutes from "./routes/client.routes.js";
 import trashRoutes from "./routes/trash.routes.js";
 import productRoutes from "./routes/inventory/product.routes.js";
+import dashboardRoutes from "./routes/dashboard.routes.js";
 
 // variables de entorno
 dotenv.config();
@@ -53,7 +55,14 @@ app.use("/api/trash", trashRoutes);
 // rutas de productos
 app.use("/api/inventory/product", productRoutes);
 
+// rutas de ventas
+app.use("/api/sale", saleRoutes);
+
+// rutas de dashboard
+app.use("/api/dashboard", dashboardRoutes);
+
 // ====== servidor ======
+
 
 app.listen(process.env.PORT, () => {
   console.log(`Server is running on port ${process.env.PORT}`);
