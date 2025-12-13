@@ -1,5 +1,6 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { uploadImg } from "../useUploadImage";
 
 export const useEmployee = () => {
   const [loading, setLoading] = useState(false);
@@ -27,7 +28,6 @@ export const useEmployee = () => {
 
   //create employee
   const createEmployee = async (onClose) => {
-    console.log("employeeDataToSend");
     try {
       if (
         !dataNewEmployee.name.trim() ||
@@ -50,14 +50,35 @@ export const useEmployee = () => {
         return;
       }
 
-      if (!dataNewEmployee.profilePicture)
-        delete dataNewEmployee.profilePicture;
-
       setLoading(true);
 
-      // enviar sin el confirmPassword
-      // esto no es un error es solo que no supe como sacar la contraseña
-      const { confirmPassword, ...employeeDataToSend } = dataNewEmployee;
+      // Subir imagen si existe
+      let profilePictureUrl = "";
+      if (dataNewEmployee.profilePicture) {
+        try {
+          const loadingToast = toast.loading("Subiendo imagen...");
+          profilePictureUrl = await uploadImg(
+            dataNewEmployee.profilePicture,
+            "pos",
+            true,
+            300
+          );
+          toast.dismiss(loadingToast);
+        } catch (error) {
+          toast.error("Error al subir la imagen");
+          console.error(error);
+          return;
+        }
+      }
+
+      // Preparar datos para enviar
+      const { confirmPassword, profilePicture, ...employeeDataToSend } =
+        dataNewEmployee;
+
+      // Agregar la URL de la imagen si se subió
+      if (profilePictureUrl) {
+        employeeDataToSend.profilePicture = profilePictureUrl;
+      }
 
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/auth/register`,
@@ -72,8 +93,6 @@ export const useEmployee = () => {
       );
 
       const data = await response.json();
-
-      console.log(data, "DATA");
 
       if (!response.ok) {
         toast.error(data.message);
@@ -101,6 +120,7 @@ export const useEmployee = () => {
       onClose();
     } catch (error) {
       console.log(error);
+      toast.error("Error al crear empleado");
     } finally {
       setLoading(false);
     }
@@ -171,7 +191,28 @@ export const useEmployee = () => {
   const updateEmployee = async (onClose, id) => {
     try {
       setLoading(true);
-      // console.log(id, "ID");
+
+      // Subir imagen si es un archivo nuevo (File object)
+      let profilePictureUrl = dataNewEmployee.profilePicture;
+      if (dataNewEmployee.profilePicture instanceof File) {
+        try {
+          profilePictureUrl = await uploadImg(
+            dataNewEmployee.profilePicture,
+            "pos",
+            true,
+            300
+          );
+        } catch (error) {
+          toast.error("Error al subir la imagen");
+          console.error(error);
+          return;
+        }
+      }
+
+      // Preparar datos
+      const employeeDataToSend = { ...dataNewEmployee };
+      employeeDataToSend.profilePicture = profilePictureUrl;
+
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/accounts/employee?id=${id}`,
         {
@@ -180,20 +221,19 @@ export const useEmployee = () => {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
-          body: JSON.stringify(dataNewEmployee),
+          body: JSON.stringify(employeeDataToSend),
         }
       );
-      const data = await response.json();
 
-      // console.log(data, "DATA UPDATE");
+      const data = await response.json();
 
       if (!response.ok) {
         toast.error(data.message);
         return;
       }
+
       toast.success(data.message);
 
-      // actualizar localmente
       const updatedEmployees = employees.map((employee) => {
         if (employee._id === id) {
           return data.data;
@@ -204,6 +244,7 @@ export const useEmployee = () => {
       onClose();
     } catch (error) {
       console.log(error);
+      toast.error("Error al actualizar empleado");
     } finally {
       setLoading(false);
     }
