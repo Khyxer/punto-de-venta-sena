@@ -84,12 +84,12 @@ export const ViewProducts = () => {
                 key={product.product._id}
                 className="flex items-center gap-2 justify-between px-4 py-2 bg-white hover:bg-gray-50"
               >
-                <div className="flex-shrink-0 w-10 h-10 bg-gray-100 rounded-md overflow-hidden">
+                <div className="flex-shrink-0 w-10 h-10 rounded-md overflow-hidden">
                   {product?.product.imageProduct ? (
                     <img
                       src={product.product.imageProduct}
                       alt={product.product.name}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-contain"
                       onError={(e) => {
                         e.target.style.display = "none";
                         e.target.nextSibling.style.display = "flex";

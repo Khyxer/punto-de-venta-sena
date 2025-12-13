@@ -161,8 +161,8 @@ export const DashboardPage = () => {
   }
 
   return (
-    <div className="p-4 grid grid-cols-3 gap-4">
-      <div className="col-span-2 flex flex-col gap-4">
+    <div className="p-4 grid grid-cols-4 gap-4">
+      <div className="col-span-3 flex flex-col gap-4">
         {/* Header con las tarjetas mas pequeñass */}
         <HeaderDashboardCards data={data} />
 
@@ -201,10 +201,8 @@ export const DashboardPage = () => {
                 Métodos de Pago
               </h3>
             </div>
-            <div className="h-64 flex items-center justify-center">
-              <div className="w-full max-w-xs">
-                <Pie data={paymentMethodsData} options={chartOptions} />
-              </div>
+            <div className="h-64">
+              <Pie data={paymentMethodsData} options={chartOptions} />
             </div>
           </div>
 

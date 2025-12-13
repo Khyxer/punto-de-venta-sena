@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useConfigContext } from "../../contexts/config/useConfigContext";
 import { formatText } from "../../utils/utilFormatFunctions";
 import { useInventarioContext } from "../../contexts/inventario/useInventarioContext";
+import { Box, BoxIcon } from "lucide-react";
 
 export const NewProductoForm = ({ onClose }) => {
   const [canExpired, setCanExpired] = useState(false);
@@ -54,6 +55,30 @@ export const NewProductoForm = ({ onClose }) => {
     }
   }, [canExpired]);
 
+  // Manejar cambio de imagen
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setNewFormDataInventory({
+        ...newFormDataInventory,
+        imageProduct: file,
+      });
+    }
+  };
+
+  // Obtener URL de vista previa
+  const getImagePreview = () => {
+    if (!newFormDataInventory?.imageProduct) return null;
+
+    // Si es un File, crear URL temporal
+    if (newFormDataInventory.imageProduct instanceof File) {
+      return URL.createObjectURL(newFormDataInventory.imageProduct);
+    }
+
+    // Si es una URL string
+    return newFormDataInventory.imageProduct;
+  };
+
   return (
     <form
       className="flex flex-col gap-4"
@@ -70,28 +95,34 @@ export const NewProductoForm = ({ onClose }) => {
 
       {/** datos basicos */}
       <div className="flex gap-8">
-        {/* <h2 className="text-lg font-medium text-primary-color">
-          Datos basicos
-        </h2> */}
-
-        {/* Foto de perfil */}
+        {/* Imagen del producto */}
         <div className="flex flex-col gap-1 justify-center items-center">
-          <label htmlFor="profilePicture" className="text-sm">
-            Imagen
-          </label>
-          <div className="h-30 w-30 bg-gray-100 border-2 border-dashed border-gray-300 aspect-square rounded-lg relative mx-auto">
+          <span className="text-sm">Imagen</span>
+          <label
+            htmlFor="imageProduct"
+            className="h-30 w-30 border-2 border-dashed border-gray-300 aspect-square rounded-lg relative mx-auto overflow-hidden hover:border-primary-color transition-colors cursor-pointer block"
+          >
             <input
               type="file"
-              id="profilePicture"
-              className="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer"
+              id="imageProduct"
+              accept="image/*"
+              onChange={handleImageChange}
+              className="hidden"
             />
-            {/* <img
-              src={"NULL"}
-              alt="Perfil"
-              className="aspect-square h-full object-cover rounded-lg ring-2 ring-primary-color select-none"
-              draggable={false}
-            /> */}
-          </div>
+            {getImagePreview() ? (
+              <img
+                src={getImagePreview()}
+                alt="Producto"
+                className="aspect-square h-full w-full object-contain select-none"
+                draggable={false}
+              />
+            ) : (
+              <div className="flex flex-col items-center justify-center h-full w-full text-gray-400">
+                <BoxIcon className="w-8 h-8" />
+                <span className="text-xs mt-1 select-none">Subir imagen</span>
+              </div>
+            )}
+          </label>
         </div>
 
         {/* Nombre y codigo */}
@@ -284,8 +315,7 @@ export const NewProductoForm = ({ onClose }) => {
           label="Stock minimo"
           name="stockMin"
           type="number"
-          placeholder="Ej: 32000"
-          required
+          placeholder="Ej: 5"
           value={newFormDataInventory.minStock || ""}
           onChange={(e) =>
             setNewFormDataInventory({
@@ -296,7 +326,7 @@ export const NewProductoForm = ({ onClose }) => {
         />
         <InputModal
           label="Stock actual"
-          placeholder="Ej: 35000"
+          placeholder="Ej: 100"
           name="stockActual"
           type="number"
           value={newFormDataInventory.stock || ""}
@@ -389,7 +419,7 @@ export const NewProductoForm = ({ onClose }) => {
           className="bg-primary-color text-light-color rounded-md px-4 py-2 h-full w-fit cursor-pointer duration-150 disabled:opacity-50 disabled:cursor-default"
           disabled={loading}
         >
-          {loading ? "Creando..." : "Crear Producto"}
+          {loading ? "Procesando..." : "Crear Producto"}
         </button>
       </footer>
     </form>

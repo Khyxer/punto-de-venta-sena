@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 // paginas principales y layout
 import { LoginPage } from "./pages/LoginPage";
 import { DashboardLayout } from "./layouts/DashboardLayout";
+import { DevelopPage } from "./pages/DevelopPage";
 // paginas del dashboard
 import { VentasPage } from "./pages/VentasPage";
 import { InventarioPage } from "./pages/InventarioPage";
@@ -43,6 +44,9 @@ function App() {
                 <Routes>
                   {/* autenticación */}
                   <Route path="/auth" element={<LoginPage />} />
+
+                  {/* pruebas */}
+                  <Route path="/dev" element={<DevelopPage />} />
 
                   {/* dashboard */}
                   <Route path="/" element={<DashboardLayout />}>

@@ -264,7 +264,52 @@ export const getDashboardDataController = async (req, res) => {
     },
   ]);
 
-  //productos mas vendidos
+  // ========= PRODUCTOS A VENCER (PRÓXIMOS 30 DÍAS) =========
+  const productsToExpire = await Product.aggregate([
+    {
+      $match: {
+        expirationDate: {
+          $gte: dates.startOfToday,
+          $lte: new Date(dates.endOfToday.getTime() + 30 * 24 * 60 * 60 * 1000),
+        },
+        deleted: false,
+        active: true,
+      },
+    },
+    {
+      $lookup: {
+        from: "measureunits",
+        localField: "measureUnit",
+        foreignField: "_id",
+        as: "measureUnit",
+      },
+    },
+    { $unwind: { path: "$measureUnit", preserveNullAndEmptyArrays: true } },
+    {
+      $addFields: {
+        daysUntilExpiration: {
+          $ceil: {
+            $divide: [
+              { $subtract: ["$expirationDate", dates.startOfToday] },
+              1000 * 60 * 60 * 24,
+            ],
+          },
+        },
+      },
+    },
+    {
+      $project: {
+        name: 1,
+        expirationDate: 1,
+        daysUntilExpiration: 1,
+        stock: 1,
+        imageProduct: 1,
+        productCode: 1,
+        "measureUnit.name": 1,
+      },
+    },
+    { $sort: { expirationDate: 1 } },
+  ]);
 
   res.json({
     totalPaymentMethods,
@@ -275,5 +320,6 @@ export const getDashboardDataController = async (req, res) => {
     topProductsByP, // TODO ENCONTRAR UNA MANERA DE MOSTRAR INFORMACION RELEVANTE DE ACA
     totalSalesToday, // TODO ARREGLAR ESTA MRDA
     totalSalesMonth,
+    productsToExpire,
   });
 };
