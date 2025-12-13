@@ -9,67 +9,64 @@ import {
   updateEmployeeController,
   changePasswordController,
 } from "../../controllers/accounts/employee.controller.js";
-
 const router = express.Router();
-
-// ====== Rutas de Empleados ======
+// rutas
 
 /**
  * @route   GET /api/employees
  * @desc    Obtener una lista de todos los empleados
- * @access  Private (Cualquier usuario autenticado)
+ * @access  Private
  * @returns { "employees": [{ id, name, email, role, ... }] }
  */
+// obtener empleados
 router.get(
   "/employees",
   authenticateToken,
-  // authorizeRoles("admin"), // Acceso permitido a cualquier rol autenticado
+  // authorizeRoles("admin"),
   getEmployeesController
 );
 
 /**
- * @route   DELETE /api/employee/:id
- * @desc    Eliminar un empleado por su ID (cambio de estado a inactivo)
+ * @route   DELETE /api/employee
+ * @desc    Eliminar un empleado (cambio de estado a inactivo)
  * @access  Private (Admin)
- * @param   {string} id - El ID único del empleado a eliminar.
  * @returns { "message": "Empleado eliminado correctamente" }
  */
+// eliminar empleado
 router.delete(
-  "/employee/:id",
+  "/employee",
   authenticateToken,
   authorizeRoles("admin"),
   deleteEmployeeController
 );
 
 /**
- * @route   PUT /api/employee/:id
- * @desc    Actualizar la información de un empleado por su ID
+ * @route   PUT /api/employee
+ * @desc    Actualizar la información de un empleado
  * @access  Private (Admin)
- * @param   {string} id - El ID único del empleado a actualizar.
  * @body    { "name": "Nuevo Nombre", "email": "nuevo.email@dominio.com", "role": "nuevo_rol" }
  * @returns { "message": "Empleado actualizado correctamente", "employee": { ... } }
  */
+// actualizar empleado
 router.put(
-  "/employee/:id",
+  "/employee",
   authenticateToken,
   authorizeRoles("admin"),
   updateEmployeeController
 );
 
 /**
- * @route   PUT /api/employee-password/:id
- * @desc    Cambiar la contraseña de un empleado por su ID
+ * @route   PUT /api/employee-password
+ * @desc    Cambiar la contraseña de un empleado
  * @access  Private (Admin)
- * @param   {string} id - El ID único del empleado cuya contraseña se cambiará.
  * @body    { "newPassword": "una_contraseña_segura" }
  * @returns { "message": "Contraseña actualizada correctamente" }
  */
+// cambiar contraseña
 router.put(
-  "/employee-password/:id",
+  "/employee-password",
   authenticateToken,
   authorizeRoles("admin"),
   changePasswordController
 );
-
 export default router;
-

@@ -28,36 +28,35 @@ import {
   deleteSupplierController,
   updateSupplierController,
 } from "../../controllers/inventory/supplier.controller.js";
-
 const router = express.Router();
-
-// ====== Rutas de Productos ======
+// ====== Rutas de productos del inventario ======
 
 /**
  * @route   POST /api/inventory/product
- * @desc    Crear un nuevo producto en el inventario.
+ * @desc    Crear un nuevo producto en el inventario
  * @access  Private (Admin)
- * @body    {string} name        - Nombre del producto.
- * @body    {number} price       - Precio del producto.
- * @body    {string} categoryId  - ID de la categoría asociada.
- * @returns {Object} 201         - Mensaje y producto creado.
+ * @body    {string} name - Nombre del producto
+ * @body    {number} price - Precio del producto
+ * @body    {string} categoryId - ID de la categoría asociada
+ * @returns {Object} 201 - Mensaje y producto creado
  */
+// Crear producto
 router.post(
   "/product",
   authenticateToken,
   authorizeRoles("admin"),
   createProductController
 );
-
-// ====== Rutas de Categorías ======
+// ====== Rutas de categorias del inventario ======
 
 /**
  * @route   POST /api/inventory/category
- * @desc    Crear una nueva categoría.
+ * @desc    Crear una nueva categoría
  * @access  Private (Admin)
- * @body    {string} name - Nombre de la categoría.
- * @returns {Object} 201  - Mensaje y categoría creada.
+ * @body    {string} name - Nombre de la categoría
+ * @returns {Object} 201 - Mensaje y categoría creada
  */
+// Crear categoria
 router.post(
   "/category",
   authenticateToken,
@@ -67,24 +66,27 @@ router.post(
 
 /**
  * @route   GET /api/inventory/category
- * @desc    Obtener todas las categorías.
+ * @desc    Obtener todas las categorías
  * @access  Private
- * @returns {Object} 200          - Lista de categorías.
- * @returns {Array}  200.categories - Arreglo de categorías.
+ * @returns {Object} 200 - Lista de categorías
+ * @returns {Array} 200.categories - Arreglo de categorías
  */
+// Buscar categorias
 router.get(
   "/category",
   authenticateToken,
+  // authorizeRoles("admin"),
   searchCategoriesController
 );
 
 /**
  * @route   DELETE /api/inventory/category
- * @desc    Eliminar una categoría usando query params (?id=).
+ * @desc    Eliminar una categoría usando query params
  * @access  Private (Admin)
- * @query   {string} id - ID de la categoría a eliminar.
- * @returns {Object} 200 - Mensaje de eliminación.
+ * @query   {string} id - ID de la categoría a eliminar
+ * @returns {Object} 200 - Mensaje de eliminación
  */
+// Eliminar categoria
 router.delete(
   "/category",
   authenticateToken,
@@ -94,147 +96,155 @@ router.delete(
 
 /**
  * @route   PUT /api/inventory/category
- * @desc    Actualizar una categoría usando query params (?id=).
+ * @desc    Actualizar una categoría usando query params
  * @access  Private (Admin)
- * @query   {string} id   - ID de la categoría a actualizar.
- * @body    {string} name - Nuevo nombre de la categoría.
- * @returns {Object} 200  - Mensaje y categoría actualizada.
+ * @query   {string} id - ID de la categoría a actualizar
+ * @body    {string} name - Nuevo nombre de la categoría
+ * @returns {Object} 200 - Mensaje y categoría actualizada
  */
+// Actualizar categoria
 router.put(
   "/category",
   authenticateToken,
   authorizeRoles("admin"),
   updateCategoryController
 );
-
-// ====== Rutas de Subcategorías ======
+// ====== Rutas de Sub Categorias =======
 
 /**
- * @route   POST /api/inventory/subcategory
- * @desc    Crear una nueva subcategoría.
+ * @route   POST /api/inventory/subCategory
+ * @desc    Crear una nueva subcategoría
  * @access  Private (Admin)
- * @body    {string} name       - Nombre de la subcategoría.
- * @body    {string} categoryId - ID de la categoría padre.
- * @returns {Object} 201        - Mensaje y subcategoría creada.
+ * @body    {string} name - Nombre de la subcategoría
+ * @body    {string} categoryId - ID de la categoría padre
+ * @returns {Object} 201 - Mensaje y subcategoría creada
  */
+// Crear subcategoria
 router.post(
-  "/subcategory",
+  "/subCategory",
   authenticateToken,
   authorizeRoles("admin"),
   createSubCategoryController
 );
 
 /**
- * @route   GET /api/inventory/subcategory
- * @desc    Obtener todas las subcategorías.
+ * @route   GET /api/inventory/subCategory
+ * @desc    Obtener todas las subcategorías
  * @access  Private
- * @returns {Object} 200              - Lista de subcategorías.
- * @returns {Array}  200.subcategories - Arreglo de subcategorías.
+ * @returns {Object} 200 - Lista de subcategorías
+ * @returns {Array} 200.subcategories - Arreglo de subcategorías
  */
+// Buscar subcategorias
 router.get(
-  "/subcategory",
+  "/subCategory",
   authenticateToken,
+  // authorizeRoles("admin"),
   getSubCategoriesController
 );
 
 /**
- * @route   DELETE /api/inventory/subcategory
- * @desc    Eliminar una subcategoría usando query params (?id=).
+ * @route   DELETE /api/inventory/subCategory
+ * @desc    Eliminar una subcategoría usando query params
  * @access  Private (Admin)
- * @query   {string} id - ID de la subcategoría a eliminar.
- * @returns {Object} 200 - Mensaje de eliminación.
+ * @query   {string} id - ID de la subcategoría a eliminar
+ * @returns {Object} 200 - Mensaje de eliminación
  */
+// Eliminar subcategoria
 router.delete(
-  "/subcategory",
+  "/subCategory",
   authenticateToken,
   authorizeRoles("admin"),
   deleteSubCategoryController
 );
 
 /**
- * @route   PUT /api/inventory/subcategory
- * @desc    Actualizar una subcategoría usando query params (?id=).
+ * @route   PUT /api/inventory/subCategory
+ * @desc    Actualizar una subcategoría usando query params
  * @access  Private (Admin)
- * @query   {string} id - ID de la subcategoría a actualizar.
- * @body    {string} name - Nuevo nombre de la subcategoría.
- * @returns {Object} 200  - Mensaje y subcategoría actualizada.
+ * @query   {string} id - ID de la subcategoría a actualizar
+ * @body    {string} name - Nuevo nombre de la subcategoría
+ * @returns {Object} 200 - Mensaje y subcategoría actualizada
  */
+// Actualizar subcategoria
 router.put(
-  "/subcategory",
+  "/subCategory",
   authenticateToken,
   authorizeRoles("admin"),
   updateSubCategoryController
 );
-
-// ====== Rutas de Unidades de Medida ======
+// ====== Rutas de unidad de medida ======
 
 /**
- * @route   POST /api/inventory/measureunit
- * @desc    Crear una nueva unidad de medida.
+ * @route   POST /api/inventory/measureUnit
+ * @desc    Crear una nueva unidad de medida
  * @access  Private (Admin)
- * @body    {string} name         - Nombre de la unidad (ej. "Kilogramo").
- * @body    {string} abbreviation - Abreviatura (ej. "kg").
- * @returns {Object} 201          - Mensaje y unidad creada.
+ * @body    {string} name - Nombre de la unidad
+ * @body    {string} abbreviation - Abreviatura
+ * @returns {Object} 201 - Mensaje y unidad creada
  */
+// Crear unidad de medida
 router.post(
-  "/measureunit",
+  "/measureUnit",
   authenticateToken,
   authorizeRoles("admin"),
   createMeasureUnitController
 );
 
 /**
- * @route   GET /api/inventory/measureunit
- * @desc    Obtener todas las unidades de medida.
+ * @route   GET /api/inventory/measureUnit
+ * @desc    Obtener todas las unidades de medida
  * @access  Private
- * @returns {Object} 200           - Lista de unidades de medida.
- * @returns {Array}  200.measureUnits - Arreglo de unidades de medida.
+ * @returns {Object} 200 - Lista de unidades de medida
+ * @returns {Array} 200.measureUnits - Arreglo de unidades de medida
  */
+// Buscar unidad de medida
 router.get(
-  "/measureunit",
+  "/measureUnit",
   authenticateToken,
+  // authorizeRoles("admin"),
   getMeasureUnitsController
 );
 
 /**
- * @route   DELETE /api/inventory/measureunit
- * @desc    Eliminar una unidad de medida usando query params (?id=).
+ * @route   DELETE /api/inventory/measureUnit
+ * @desc    Eliminar una unidad de medida usando query params
  * @access  Private (Admin)
- * @query   {string} id - ID de la unidad de medida a eliminar.
- * @returns {Object} 200 - Mensaje de eliminación.
+ * @query   {string} id - ID de la unidad de medida a eliminar
+ * @returns {Object} 200 - Mensaje de eliminación
  */
+// Eliminar unidad de medida
 router.delete(
-  "/measureunit",
+  "/measureUnit",
   authenticateToken,
   authorizeRoles("admin"),
   deleteMeasureUnitController
 );
 
 /**
- * @route   PUT /api/inventory/measureunit
- * @desc    Actualizar una unidad de medida usando query params (?id=).
+ * @route   PUT /api/inventory/measureUnit
+ * @desc    Actualizar una unidad de medida usando query params
  * @access  Private (Admin)
- * @query   {string} id - ID de la unidad de medida a actualizar.
- * @body    {string} name         - Nuevo nombre.
- * @body    {string} abbreviation - Nueva abreviatura.
- * @returns {Object} 200          - Mensaje y unidad actualizada.
+ * @query   {string} id - ID de la unidad de medida a actualizar
+ * @body    {string} name - Nuevo nombre
+ * @body    {string} abbreviation - Nueva abreviatura
+ * @returns {Object} 200 - Mensaje y unidad actualizada
  */
+// Actualizar unidad de medida
 router.put(
-  "/measureunit",
+  "/measureUnit",
   authenticateToken,
   authorizeRoles("admin"),
   updateMeasureUnitController
 );
-
-// ====== Rutas de Proveedores ======
+// ===== Rutas de proveedores ======
 
 /**
  * @route   POST /api/inventory/supplier
- * @desc    Crear un nuevo proveedor.
+ * @desc    Crear un nuevo proveedor
  * @access  Private (Admin)
- * @body    {string} name    - Nombre del proveedor.
- * @body    {string} contact - Información de contacto.
- * @returns {Object} 201     - Mensaje y proveedor creado.
+ * @body    {string} name - Nombre del proveedor
+ * @body    {string} contact - Información de contacto
+ * @returns {Object} 201 - Mensaje y proveedor creado
  */
 router.post(
   "/supplier",
@@ -245,24 +255,27 @@ router.post(
 
 /**
  * @route   GET /api/inventory/supplier
- * @desc    Obtener todos los proveedores.
+ * @desc    Obtener todos los proveedores
  * @access  Private
- * @returns {Object} 200        - Lista de proveedores.
- * @returns {Array}  200.suppliers - Arreglo de proveedores.
+ * @returns {Object} 200 - Lista de proveedores
+ * @returns {Array} 200.suppliers - Arreglo de proveedores
  */
+// Buscar proveedores
 router.get(
   "/supplier",
   authenticateToken,
+  // authorizeRoles("admin"),
   getSuppliersController
 );
 
 /**
  * @route   DELETE /api/inventory/supplier
- * @desc    Eliminar un proveedor usando query params (?id=).
+ * @desc    Eliminar un proveedor usando query params
  * @access  Private (Admin)
- * @query   {string} id - ID del proveedor a eliminar.
- * @returns {Object} 200 - Mensaje de eliminación.
+ * @query   {string} id - ID del proveedor a eliminar
+ * @returns {Object} 200 - Mensaje de eliminación
  */
+// Eliminar proveedor
 router.delete(
   "/supplier",
   authenticateToken,
@@ -272,17 +285,17 @@ router.delete(
 
 /**
  * @route   PUT /api/inventory/supplier
- * @desc    Actualizar un proveedor usando query params (?id=).
+ * @desc    Actualizar un proveedor usando query params
  * @access  Private (Admin)
- * @query   {string} id - ID del proveedor a actualizar.
- * @body    {string} name - Nuevo nombre del proveedor.
- * @returns {Object} 200 - Mensaje y proveedor actualizado.
+ * @query   {string} id - ID del proveedor a actualizar
+ * @body    {string} name - Nuevo nombre del proveedor
+ * @returns {Object} 200 - Mensaje y proveedor actualizado
  */
+// Actualizar proveedor
 router.put(
   "/supplier",
   authenticateToken,
   authorizeRoles("admin"),
   updateSupplierController
 );
-
 export default router;

@@ -9,9 +9,7 @@ import {
   updateClientController,
   deleteClientController,
 } from "../controllers/client.controller.js";
-
 const router = express.Router();
-
 // ====== Rutas de clientes ======
 
 /**
@@ -21,6 +19,7 @@ const router = express.Router();
  * @body    { "name": "Nombre del Cliente", "email": "cliente@example.com", "phone": "123456789" }
  * @returns { "message": "Cliente creado exitosamente", "client": { ... } }
  */
+// Crear cliente
 router.post(
   "/client",
   authenticateToken,
@@ -34,40 +33,40 @@ router.post(
  * @access  Private
  * @returns { "clients": [{ ... }, { ... }] }
  */
+// Obtener todos los clientes
 router.get(
   "/clients",
   authenticateToken,
-  // authorizeRoles("admin"), // Comentado, acceso para usuarios autenticados
+  // authorizeRoles("admin"),
   getClientsController
 );
 
 /**
- * @route   PUT /api/client/:id
- * @desc    Actualizar un cliente por su ID
+ * @route   PUT /api/client
+ * @desc    Actualizar un cliente
  * @access  Private (Admin)
- * @param   {string} id - El ID del cliente a actualizar
  * @body    { "name": "Nuevo Nombre", "email": "nuevo@email.com" }
  * @returns { "message": "Cliente actualizado exitosamente", "client": { ... } }
  */
+// Actualizar cliente
 router.put(
-  "/client/:id", // Se recomienda usar un parámetro en la URL para identificar el recurso
+  "/client",
   authenticateToken,
   authorizeRoles("admin"),
   updateClientController
 );
 
 /**
- * @route   DELETE /api/client/:id
- * @desc    Eliminar un cliente (cambiar estado a inactivo)
+ * @route   DELETE /api/client
+ * @desc    Eliminar cliente (cambiar estado)
  * @access  Private (Admin)
- * @param   {string} id - El ID del cliente a eliminar
  * @returns { "message": "Cliente eliminado exitosamente" }
  */
+// Eliminar cliente (Estado)
 router.delete(
-  "/client/:id", // Se recomienda usar un parámetro en la URL
+  "/client",
   authenticateToken,
   authorizeRoles("admin"),
   deleteClientController
 );
-
 export default router;
