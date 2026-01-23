@@ -7,7 +7,7 @@ export const HeaderDashboard = () => {
 
   // console.log(currentUser.name);
   return (
-    <header className="h-16 border-primary-color border-b p-2 px-5">
+    <header className="h-12 border-primary-color border-b p-2 px-5">
       <div className="h-full flex items-center gap-3 w-fit ml-auto">
         {/* Foto de perfil */}
         <img
@@ -19,12 +19,12 @@ export const HeaderDashboard = () => {
 
         {/* Información del usuario */}
         <div className="mr-3">
-          <h2 className="font-medium leading-4 text-lg">
+          <h2 className="font-medium leading-4 text-base">
             {formatText(currentUser?.name) +
               " " +
               formatText(currentUser?.lastName)}
           </h2>
-          <p className="text-sm text-dark-color">
+          <p className="text-xs text-dark-color">
             {formatText(currentUser?.role)}
           </p>
         </div>
@@ -34,9 +34,9 @@ export const HeaderDashboard = () => {
             localStorage.removeItem("token");
             window.location.href = "/auth";
           }}
-          className="bg-error-color/10 hover:bg-error-color/20 duration-150 text-light-color rounded-md w-9 aspect-square flex items-center justify-center cursor-pointer"
+          className="bg-error-color/10 hover:bg-error-color/20 duration-150 text-light-color rounded-md w-8 aspect-square flex items-center justify-center cursor-pointer"
         >
-          <LogOut className="text-error-color" />
+          <LogOut className="text-error-color w-5 h-5" />
         </button>
       </div>
     </header>

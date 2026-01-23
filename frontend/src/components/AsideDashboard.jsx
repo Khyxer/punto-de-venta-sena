@@ -32,8 +32,8 @@ export const AsideDashboard = () => {
   };
 
   return (
-    <aside className="max-w-60 w-full border-primary-color border-r select-none">
-      <header className="h-16 border-primary-color border-b p-1 gap-2 flex items-center justify-center select-none">
+    <aside className="max-w-55 w-full border-primary-color border-r select-none">
+      <header className="h-12 border-primary-color border-b p-1 gap-2 flex items-center justify-center select-none">
         <img
           src="/LogoMain.png"
           alt="Logo"
@@ -51,7 +51,7 @@ export const AsideDashboard = () => {
                 {/* Botón de Configuración colapsable */}
                 <button
                   onClick={() => toggleDropdown(item.name)}
-                  className={`w-full flex items-center justify-between gap-3 px-4 py-3 duration-100
+                  className={`w-full flex items-center justify-between gap-3 px-4 py-3 duration-100 text-sm
                     ${
                       isActive(item.path)
                         ? "bg-primary-color text-light-color rounded-lg"
@@ -59,8 +59,8 @@ export const AsideDashboard = () => {
                     }
                   `}
                 >
-                  <div className="flex items-center gap-3">
-                    <item.icon />
+                  <div className="flex items-center gap-2">
+                    <item.icon size={18} />
                     {item.name}
                   </div>
                   {openDropdowns[item.name] ? (
@@ -77,7 +77,7 @@ export const AsideDashboard = () => {
                       <Link
                         key={subIndex}
                         to={subItem.path}
-                        className={`flex items-center gap-3 px-3 py-2 rounded-lg duration-100 ml-5
+                        className={`flex items-center gap-2 px-3 py-2 rounded-lg duration-100 ml-4 text-sm
                           ${
                             isActive(subItem.path)
                               ? "bg-primary-color text-light-color"
@@ -85,7 +85,7 @@ export const AsideDashboard = () => {
                           }
                         `}
                       >
-                        <subItem.icon size={16} />
+                        <subItem.icon size={18} />
                         {subItem.name}
                       </Link>
                     ))}
@@ -96,7 +96,7 @@ export const AsideDashboard = () => {
               /* Items normales sin dropdown */
               <Link
                 to={item.path}
-                className={`flex items-center gap-3 px-4 py-3 duration-100
+                className={`flex items-center gap-2 px-4 py-2 duration-100 text-sm
                   ${
                     isActive(item.path)
                       ? "bg-primary-color text-light-color rounded-lg"
@@ -104,7 +104,7 @@ export const AsideDashboard = () => {
                   }
                 `}
               >
-                <item.icon />
+                <item.icon size={18} />
                 {item.name}
               </Link>
             )}
