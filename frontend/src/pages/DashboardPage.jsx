@@ -231,7 +231,7 @@ export const DashboardPage = () => {
               Top Clientes
             </h3>
           </div>
-          <div className="space-y-3 overflow-y-auto max-h-[170px] h-full custom-scroll">
+          <div className="space-y-3 overflow-y-auto h-full custom-scroll">
             {data.totalSalesByClient.map((client) => (
               <div
                 key={client._id}
@@ -259,7 +259,7 @@ export const DashboardPage = () => {
               Top Empleados
             </h3>
           </div>
-          <div className="space-y-3 overflow-y-auto max-h-[170px] h-full custom-scroll">
+          <div className="space-y-3 overflow-y-auto h-full custom-scroll">
             {data.totalSalesByEmployee.map((employee) => (
               <div
                 key={employee._id}
