@@ -12,19 +12,22 @@
 
 /* ---- Fuentes (Falta optimizarlas) ---- */
 
-/* Open Sans */
+/*
+ === Nunca se usaron ===
+ 
+Open Sans
 @font-face {
   font-family: OpenSans;
   src: url("../public/fonts/OpenSans-VariableFont.ttf");
   font-weight: 100 200 300 400 500 600 700 800 900;
 }
 
-/* DM Sans */
+DM Sans
 @font-face {
   font-family: DMSans;
   src: url("../public/fonts/DMSans-VariableFont.ttf");
   font-weight: 100 200 300 400 500 600 700 800 900;
-}
+} */
 
 /* Poppins */
 @font-face {

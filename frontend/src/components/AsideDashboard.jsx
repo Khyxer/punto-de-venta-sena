@@ -51,7 +51,7 @@ export const AsideDashboard = () => {
                 {/* Botón de Configuración colapsable */}
                 <button
                   onClick={() => toggleDropdown(item.name)}
-                  className={`w-full flex items-center justify-between gap-3 px-4 py-3 duration-100 text-sm
+                  className={`w-full flex items-center justify-between gap-2 px-3 py-2 duration-100 cursor-pointer text-sm
                     ${
                       isActive(item.path)
                         ? "bg-primary-color text-light-color rounded-lg"
@@ -63,11 +63,7 @@ export const AsideDashboard = () => {
                     <item.icon size={18} />
                     {item.name}
                   </div>
-                  {openDropdowns[item.name] ? (
-                    <ChevronDown size={18} />
-                  ) : (
-                    <ChevronRight size={18} />
-                  )}
+                    <ChevronRight size={18} style={{ rotate: openDropdowns[item.name] ? "90deg" : "0deg" }} className="transition-transform duration-200" />
                 </button>
 
                 {/* Sub-items del dropdown (más pequeños) */}
@@ -96,11 +92,11 @@ export const AsideDashboard = () => {
               /* Items normales sin dropdown */
               <Link
                 to={item.path}
-                className={`flex items-center gap-2 px-4 py-2 duration-100 text-sm
+                className={`flex items-center gap-2 px-3 py-2 duration-100 text-sm rounded-lg
                   ${
                     isActive(item.path)
-                      ? "bg-primary-color text-light-color rounded-lg"
-                      : "hover:bg-gray-200 text-gray-600 hover:text-black rounded-lg"
+                      ? "bg-primary-color text-light-color"
+                      : "hover:bg-gray-200 text-gray-600 hover:text-black"
                   }
                 `}
               >

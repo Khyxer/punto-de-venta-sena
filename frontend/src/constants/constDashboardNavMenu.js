@@ -55,7 +55,7 @@ export const dashboardNavMenu = [
         path: "/config/subcategorias",
       },
       {
-        name: "Unidades Medida",
+        name: "Unidades",
         icon: PencilRuler,
         path: "/config/unidades-medida",
       },
