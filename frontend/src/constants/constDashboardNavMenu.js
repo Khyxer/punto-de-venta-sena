@@ -40,17 +40,17 @@ export const dashboardNavMenu = [
     path: "/reportes",
   },
   {
-    name: "Configuración",
+    name: "Ajustes",
     icon: Settings,
     path: "/config",
     dropMenu: [
       {
-        name: "Categorias",
+        name: "Categorías",
         icon: Layers2,
         path: "/config/categorias",
       },
       {
-        name: "Subcategorias",
+        name: "Subcategorías",
         icon: Layers,
         path: "/config/subcategorias",
       },
