@@ -9,7 +9,9 @@ import { InventarioPage } from "./pages/InventarioPage";
 import { DashboardPage } from "./pages/DashboardPage";
 import { ConfigPage } from "./pages/ConfigPage";
 import { ClientesPage } from "./pages/ClientesPage";
-import ReportsPage from "./pages/ReportsPage";  // ← CORREGIDO: sin llaves {}
+import ReportsPage from "./pages/ReportsPage";
+import { HelpPage } from "./pages/HelpPage";
+
 // paginas del config
 import { CategorySection } from "./components/config/category/CategorySection";
 import { SubCategorySection } from "./components/config/sub-category/SubCategorySection";
@@ -54,9 +56,8 @@ function App() {
                     <Route index element={<DashboardPage />} />
                     <Route path="venta" element={<VentasPage />} />
                     <Route path="inventario" element={<InventarioPage />} />
-                    
-                    {/* ← AGREGADO: Ruta de reportes aquí */}
                     <Route path="reportes" element={<ReportsPage />} />
+                    <Route path="ayuda/:section" element={<HelpPage />} />
                     
                     <Route path="config" element={<ConfigPage />}>
                       <Route
