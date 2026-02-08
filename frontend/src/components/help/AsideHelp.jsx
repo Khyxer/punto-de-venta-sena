@@ -36,7 +36,7 @@ export const AsideHelp = ({ content }) => {
   };
 
   return (
-    <aside className="p-4 w-72 border-r h-full overflow-y-auto sticky top-0">
+    <aside className="p-4 w-72 border-r border-primary-color h-full overflow-y-auto sticky top-0 custom-scroll">
       {/* Buscador */}
       <div className="border rounded-md border-gray-500 flex items-center pl-2 w-full focus-within:ring-1 focus-within:ring-primary-color focus-within:ring-offset-2 duration-150 mb-6">
         <Search className="w-5 h-5 text-gray-500" />

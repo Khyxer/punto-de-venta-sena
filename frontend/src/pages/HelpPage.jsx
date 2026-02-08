@@ -3,12 +3,84 @@ import { useParams, useNavigate } from "react-router-dom";
 import { AsideHelp } from "../components/help/AsideHelp";
 import { HelpSection } from "../components/help/HelpSection";
 import { helpSections } from "../constants/constAsideHelpNavMenu";
+import { BestLoader } from "../components/loaders/BestLoader";
+import { FooterNovaHelp } from "../components/help/FooterNovaHelp";
+import { ChevronRight } from "lucide-react";
 
 export const HelpPage = () => {
   const { section } = useParams();
   const navigate = useNavigate();
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(true);
+  const [navSection, setNavSection] = useState({
+    prev: {
+      id: null,
+      name: null,
+      path: null,
+    },
+    next: {
+      id: null,
+      name: null,
+      path: null,
+    },
+  });
+
+  useEffect(() => {
+    function getNavSection() {
+      const sectionIndex = helpSections.findIndex(
+        (sections) => sections.id === section,
+      );
+
+      if (sectionIndex === 0) {
+        setNavSection({
+          prev: {
+            id: null,
+            name: null,
+            path: null,
+          },
+          next: {
+            id: helpSections[sectionIndex + 1].id,
+            name: helpSections[sectionIndex + 1].name,
+            path: helpSections[sectionIndex + 1].id,
+          },
+        });
+      } else if (sectionIndex === helpSections.length) {
+        setNavSection({
+          prev: {
+            id: helpSections[sectionIndex - 1].id,
+            name: helpSections[sectionIndex - 1].name,
+            path: helpSections[sectionIndex - 1].id,
+          },
+          next: {
+            id: null,
+            name: null,
+            path: null,
+          },
+        });
+      } else {
+        setNavSection({
+          prev: {
+            id: helpSections[sectionIndex - 1].id,
+            name: helpSections[sectionIndex - 1].name,
+            path: helpSections[sectionIndex - 1].id,
+          },
+          next: {
+            id: helpSections[sectionIndex + 1].id,
+            name: helpSections[sectionIndex + 1].name,
+            path: helpSections[sectionIndex + 1].id,
+          },
+        });
+      }
+
+      // console.log(section);
+      // console.log(helpSections);
+      // console.log(sectionIndex);
+    }
+    getNavSection();
+  }, [section]);
+
+  // console.log(section);
+  // console.log(helpSections);
 
   // Si no hay sección, redirigir a la primera
   useEffect(() => {
@@ -39,21 +111,21 @@ export const HelpPage = () => {
 
   if (loading) {
     return (
-      <main className="flex">
-        <div className="w-72 border-r"></div>
-        <div className="flex-1 flex items-center justify-center">
-          <p className="text-gray-500">Cargando...</p>
-        </div>
+      <main className="flex h-screen items-center justify-center">
+        <BestLoader />
       </main>
     );
   }
 
   return (
-    <main className="flex h-full overflow-y-auto">
+    <main className="flex h-full overflow-y-auto custom-scroll">
       <AsideHelp content={content} />
-      <div className="flex-1 max-w-5xl">
-        <HelpSection content={content} />
-      </div>
+
+      <section className="max-w-5xl">
+        <HelpSection content={content} navSection={navSection} />
+
+        <FooterNovaHelp />
+      </section>
     </main>
   );
 };
