@@ -44,7 +44,7 @@ export const HelpPage = () => {
             path: helpSections[sectionIndex + 1].id,
           },
         });
-      } else if (sectionIndex === helpSections.length) {
+      } else if (sectionIndex === helpSections.length - 1) {
         setNavSection({
           prev: {
             id: helpSections[sectionIndex - 1].id,
