@@ -29,6 +29,7 @@ import { VentasProvider } from "./contexts/ventas/VentasContext";
 
 // toast
 import { Toaster } from "react-hot-toast";
+import { helpSections } from "./constants/constAsideHelpNavMenu";
 
 function App() {
   return (
@@ -57,8 +58,14 @@ function App() {
                     <Route path="venta" element={<VentasPage />} />
                     <Route path="inventario" element={<InventarioPage />} />
                     <Route path="reportes" element={<ReportsPage />} />
+                    <Route
+                      path="ayuda"
+                      element={
+                        <Navigate to={`/ayuda/${helpSections[0].id}`} replace />
+                      }
+                    />
                     <Route path="ayuda/:section" element={<HelpPage />} />
-                    
+
                     <Route path="config" element={<ConfigPage />}>
                       <Route
                         index
