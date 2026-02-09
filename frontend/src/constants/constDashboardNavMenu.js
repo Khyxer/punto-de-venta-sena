@@ -11,6 +11,7 @@ import {
   Truck,
   IdCardLanyard,
   Trash2,
+  BadgeQuestionMark,
 } from "lucide-react";
 
 export const dashboardNavMenu = [
@@ -38,6 +39,11 @@ export const dashboardNavMenu = [
     name: "Reportes",
     icon: File,
     path: "/reportes",
+  },
+  {
+    name: "Ayuda",
+    icon: BadgeQuestionMark,
+    path: "/ayuda",
   },
   {
     name: "Ajustes",
