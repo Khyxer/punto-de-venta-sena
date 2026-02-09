@@ -2,8 +2,9 @@ import { ChevronRight } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { Link } from "react-router-dom";
 
+// botones de navegación anterior/siguiente
 const NavigateButton = ({ section, type }) => {
-  console.log(section.id === null);
+  // console.log(section.id === null);
 
   if (section.id === null) {
     return (
@@ -41,6 +42,7 @@ const NavigateButton = ({ section, type }) => {
   );
 };
 
+// contenido de la sección en markdown
 export const HelpSection = ({ content, navSection }) => {
   const generateId = (text) => {
     if (!text) return "";
