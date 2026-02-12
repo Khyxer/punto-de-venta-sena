@@ -2,12 +2,16 @@ import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 // paginas principales y layout
 import { LoginPage } from "./pages/LoginPage";
 import { DashboardLayout } from "./layouts/DashboardLayout";
+import { DevelopPage } from "./pages/DevelopPage";
 // paginas del dashboard
 import { VentasPage } from "./pages/VentasPage";
 import { InventarioPage } from "./pages/InventarioPage";
 import { DashboardPage } from "./pages/DashboardPage";
 import { ConfigPage } from "./pages/ConfigPage";
 import { ClientesPage } from "./pages/ClientesPage";
+import ReportsPage from "./pages/ReportsPage";
+import { HelpPage } from "./pages/HelpPage";
+
 // paginas del config
 import { CategorySection } from "./components/config/category/CategorySection";
 import { SubCategorySection } from "./components/config/sub-category/SubCategorySection";
@@ -25,6 +29,7 @@ import { VentasProvider } from "./contexts/ventas/VentasContext";
 
 // toast
 import { Toaster } from "react-hot-toast";
+import { helpSections } from "./constants/constAsideHelpNavMenu";
 
 function App() {
   return (
@@ -44,11 +49,23 @@ function App() {
                   {/* autenticación */}
                   <Route path="/auth" element={<LoginPage />} />
 
+                  {/* pruebas */}
+                  <Route path="/dev" element={<DevelopPage />} />
+
                   {/* dashboard */}
                   <Route path="/" element={<DashboardLayout />}>
                     <Route index element={<DashboardPage />} />
                     <Route path="venta" element={<VentasPage />} />
                     <Route path="inventario" element={<InventarioPage />} />
+                    <Route path="reportes" element={<ReportsPage />} />
+                    <Route
+                      path="ayuda"
+                      element={
+                        <Navigate to={`/ayuda/${helpSections[0].id}`} replace />
+                      }
+                    />
+                    <Route path="ayuda/:section" element={<HelpPage />} />
+
                     <Route path="config" element={<ConfigPage />}>
                       <Route
                         index

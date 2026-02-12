@@ -11,6 +11,7 @@ import {
   Truck,
   IdCardLanyard,
   Trash2,
+  BadgeQuestionMark,
 } from "lucide-react";
 
 export const dashboardNavMenu = [
@@ -40,22 +41,27 @@ export const dashboardNavMenu = [
     path: "/reportes",
   },
   {
-    name: "Configuración",
+    name: "Ayuda",
+    icon: BadgeQuestionMark,
+    path: "/ayuda",
+  },
+  {
+    name: "Ajustes",
     icon: Settings,
     path: "/config",
     dropMenu: [
       {
-        name: "Categorias",
+        name: "Categorías",
         icon: Layers2,
         path: "/config/categorias",
       },
       {
-        name: "Subcategorias",
+        name: "Subcategorías",
         icon: Layers,
         path: "/config/subcategorias",
       },
       {
-        name: "Unidades Medida",
+        name: "Unidades",
         icon: PencilRuler,
         path: "/config/unidades-medida",
       },

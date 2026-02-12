@@ -41,12 +41,12 @@ export const ResumenVenta = () => {
             >
               {/** Imagen del producto */}
 
-              <div className="flex-shrink-0 w-10 h-10 bg-gray-100 rounded-md overflow-hidden">
+              <div className="flex-shrink-0 w-10 h-10  rounded-md overflow-hidden">
                 {product?.product.imageProduct ? (
                   <img
                     src={product.product.imageProduct}
                     alt={product.product.name}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-contain"
                     onError={(e) => {
                       e.target.style.display = "none";
                       e.target.nextSibling.style.display = "flex";

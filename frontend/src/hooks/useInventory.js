@@ -1,5 +1,6 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { uploadImg } from "./useUploadImage";
 
 export const useInventory = () => {
   const [newFormDataInventory, setNewFormDataInventory] = useState({
@@ -63,6 +64,34 @@ export const useInventory = () => {
 
     try {
       setLoading(true);
+
+      // Subir imagen si existe
+      let imageProductUrl = "";
+      if (newFormDataInventory.imageProduct) {
+        try {
+          const loadingToast = toast.loading("Subiendo imagen...");
+          imageProductUrl = await uploadImg(
+            newFormDataInventory.imageProduct,
+            "products" // álbum para productos
+          );
+          toast.dismiss(loadingToast);
+        } catch (error) {
+          toast.error("Error al subir la imagen");
+          console.error(error);
+          return;
+        }
+      }
+
+      // Preparar datos para enviar
+      const productDataToSend = { ...newFormDataInventory };
+
+      // Agregar la URL de la imagen si se subió
+      if (imageProductUrl) {
+        productDataToSend.imageProduct = imageProductUrl;
+      } else {
+        delete productDataToSend.imageProduct; // Eliminar si está vacía
+      }
+
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/inventory/product`,
         {
@@ -71,9 +100,10 @@ export const useInventory = () => {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
-          body: JSON.stringify(newFormDataInventory),
+          body: JSON.stringify(productDataToSend),
         }
       );
+
       if (!response.ok) {
         let errorMessage = `Error en la respuesta del servidor: ${response.status}`;
         try {
@@ -91,11 +121,31 @@ export const useInventory = () => {
         return;
       }
 
+
       const data = await response.json();
       if (!data.success) {
         toast.error(data.message);
         return;
       }
+
+      // Limpiar formulario
+      setNewFormDataInventory({
+        imageProduct: "",
+        name: "",
+        productCode: "",
+        description: "",
+        category: "",
+        subCategory: "",
+        barCode: "",
+        supplier: "",
+        costPrice: "",
+        sellPrice: "",
+        stock: "",
+        minStock: "",
+        measureUnit: "",
+        expirationDate: "",
+      });
+
       const updatedProducts = [data.data, ...products];
       setProducts(updatedProducts);
       toast.success(data.message);
@@ -123,10 +173,12 @@ export const useInventory = () => {
         }
       );
       const data = await response.json();
+
       if (!data.success) {
         toast.error(data.message);
         return;
       }
+      console.log(products.data)
       setProducts(data.data);
     } catch (error) {
       console.error(error);

@@ -1,4 +1,4 @@
-import { Box, Search } from "lucide-react";
+import { Box, Check, Search } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { useInventarioContext } from "../../contexts/inventario/useInventarioContext";
 import { formatPrice } from "../../utils/utilFormatFunctions";
@@ -101,12 +101,12 @@ export const AddProducts = () => {
                         : "cursor-pointer"
                     }`}
                   >
-                    <div className="flex-shrink-0 w-10 h-10 bg-gray-100 rounded-md overflow-hidden mr-2">
+                    <div className="flex-shrink-0 w-10 h-10 rounded-md overflow-hidden mr-2">
                       {product?.imageProduct ? (
                         <img
                           src={product.imageProduct}
                           alt={product.name}
-                          className="w-full h-full object-cover"
+                          className="w-full h-full object-contain"
                           onError={(e) => {
                             e.target.style.display = "none";
                             e.target.nextSibling.style.display = "flex";
@@ -137,7 +137,7 @@ export const AddProducts = () => {
                         {formatPrice(product?.sellPrice)}
                       </p>
                       {isAdded && (
-                        <p className="text-xs text-green-600">✓ Agregado</p>
+                        <p className="text-xs text-green-600 flex items-center"><Check className="w-4 h-4" /> Agregado</p>
                       )}
                     </div>
                   </div>

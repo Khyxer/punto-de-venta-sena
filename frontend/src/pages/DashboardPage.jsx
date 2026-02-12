@@ -161,8 +161,8 @@ export const DashboardPage = () => {
   }
 
   return (
-    <div className="p-4 grid grid-cols-3 gap-4">
-      <div className="col-span-2 flex flex-col gap-4">
+    <div className="p-4 grid grid-cols-4 gap-4">
+      <div className="col-span-3 flex flex-col gap-4">
         {/* Header con las tarjetas mas pequeñass */}
         <HeaderDashboardCards data={data} />
 
@@ -201,10 +201,8 @@ export const DashboardPage = () => {
                 Métodos de Pago
               </h3>
             </div>
-            <div className="h-64 flex items-center justify-center">
-              <div className="w-full max-w-xs">
-                <Pie data={paymentMethodsData} options={chartOptions} />
-              </div>
+            <div className="h-64">
+              <Pie data={paymentMethodsData} options={chartOptions} />
             </div>
           </div>
 
@@ -233,7 +231,7 @@ export const DashboardPage = () => {
               Top Clientes
             </h3>
           </div>
-          <div className="space-y-3 overflow-y-auto max-h-[170px] h-full custom-scroll">
+          <div className="space-y-3 overflow-y-auto h-full custom-scroll">
             {data.totalSalesByClient.map((client) => (
               <div
                 key={client._id}
@@ -261,7 +259,7 @@ export const DashboardPage = () => {
               Top Empleados
             </h3>
           </div>
-          <div className="space-y-3 overflow-y-auto max-h-[170px] h-full custom-scroll">
+          <div className="space-y-3 overflow-y-auto h-full custom-scroll">
             {data.totalSalesByEmployee.map((employee) => (
               <div
                 key={employee._id}

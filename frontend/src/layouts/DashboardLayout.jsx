@@ -4,6 +4,7 @@ import { AsideDashboard } from "../components/AsideDashboard";
 import { Navigate } from "react-router-dom";
 import { useAuthContext } from "../contexts/auth/useAuthContext";
 import { BasicLoader } from "../components/loaders/BasicLoader";
+import { BestLoader } from "../components/loaders/BestLoader";
 
 export const DashboardLayout = () => {
   const { isAuthenticated, loading } = useAuthContext();

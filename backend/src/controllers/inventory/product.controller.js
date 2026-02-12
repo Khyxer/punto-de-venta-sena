@@ -14,7 +14,7 @@ export const createProductController = async (req, res) => {
 
     const {
       name,
-      image,
+      imageProduct,
       productCode,
       barCode,
       description,
@@ -90,7 +90,7 @@ export const createProductController = async (req, res) => {
     // Crear el producto
     const product = new Product({
       name,
-      image,
+      imageProduct,
       productCode,
       barCode,
       description,

@@ -32,8 +32,8 @@ export const AsideDashboard = () => {
   };
 
   return (
-    <aside className="max-w-60 w-full border-primary-color border-r select-none">
-      <header className="h-16 border-primary-color border-b p-1 gap-2 flex items-center justify-center select-none">
+    <aside className="max-w-54 w-full border-primary-color border-r select-none">
+      <header className="h-12 border-primary-color border-b p-1 gap-2 flex items-center justify-center select-none">
         <img
           src="/LogoMain.png"
           alt="Logo"
@@ -47,11 +47,11 @@ export const AsideDashboard = () => {
         {configMenu().map((item, index) => (
           <div key={index}>
             {item.dropMenu ? (
-              <>
+              <div className="relative">
                 {/* Botón de Configuración colapsable */}
                 <button
                   onClick={() => toggleDropdown(item.name)}
-                  className={`w-full flex items-center justify-between gap-3 px-4 py-3 duration-100
+                  className={`w-full flex items-center justify-between gap-2 px-3 py-2 cursor-pointer text-sm
                     ${
                       isActive(item.path)
                         ? "bg-primary-color text-light-color rounded-lg"
@@ -59,52 +59,63 @@ export const AsideDashboard = () => {
                     }
                   `}
                 >
-                  <div className="flex items-center gap-3">
-                    <item.icon />
+                  <div className="flex items-center gap-2">
+                    <item.icon size={18} />
                     {item.name}
                   </div>
-                  {openDropdowns[item.name] ? (
-                    <ChevronDown size={18} />
-                  ) : (
-                    <ChevronRight size={18} />
-                  )}
+                  <ChevronRight
+                    size={18}
+                    style={{
+                      rotate: openDropdowns[item.name] ? "90deg" : "0deg",
+                    }}
+                    className="transition-transform duration-200"
+                  />
                 </button>
 
-                {/* Sub-items del dropdown (más pequeños) */}
-                {openDropdowns[item.name] && (
-                  <div className="mt-1">
-                    {item.dropMenu.map((subItem, subIndex) => (
-                      <Link
-                        key={subIndex}
-                        to={subItem.path}
-                        className={`flex items-center gap-3 px-3 py-2 rounded-lg duration-100 ml-5
+                {/* Cuadrado para la animación de colapsar y expandir */}
+                <div
+                  className="absolute w-full -bottom-10  duration-100 bg-white"
+                  style={{
+                    height: openDropdowns[item.name] ? "0%" : "100%",
+                  }}
+                ></div>
+
+                {/* Sub-items del dropdown */}
+                {/* Ya no debe ser un renderizado condicional porque si no el cuadrado de la animación no se muestra correctamente */}
+                {/* {openDropdowns[item.name] && ( */}
+                <div className="mt-1">
+                  {item.dropMenu.map((subItem, subIndex) => (
+                    <Link
+                      key={subIndex}
+                      to={subItem.path}
+                      className={`flex items-center gap-2 px-3 py-2 rounded-lg  ml-4 text-sm
                           ${
                             isActive(subItem.path)
                               ? "bg-primary-color text-light-color"
                               : "hover:bg-gray-200 text-gray-600 hover:text-black"
                           }
                         `}
-                      >
-                        <subItem.icon size={16} />
-                        {subItem.name}
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </>
+                    >
+                      <subItem.icon size={18} />
+                      {subItem.name}
+                    </Link>
+                  ))}
+                </div>
+                {/* )} */}
+              </div>
             ) : (
               /* Items normales sin dropdown */
               <Link
                 to={item.path}
-                className={`flex items-center gap-3 px-4 py-3 duration-100
+                className={`flex items-center gap-2 px-3 py-2 text-sm rounded-lg
                   ${
                     isActive(item.path)
-                      ? "bg-primary-color text-light-color rounded-lg"
-                      : "hover:bg-gray-200 text-gray-600 hover:text-black rounded-lg"
+                      ? "bg-primary-color text-light-color"
+                      : "hover:bg-gray-200 text-gray-600 hover:text-black"
                   }
                 `}
               >
-                <item.icon />
+                <item.icon size={18} />
                 {item.name}
               </Link>
             )}

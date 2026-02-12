@@ -1,3 +1,4 @@
+import { CameraIcon } from "lucide-react";
 import { InputModal } from "../../../UI/UiInputs";
 import { useConfigContext } from "../../../contexts/config/useConfigContext";
 import { useEffect } from "react";
@@ -27,6 +28,31 @@ export const NewEmployeeForm = ({ onClose, currentEmployee, isEdit }) => {
     }
   }, [isEdit, currentEmployee]);
 
+  // Manejar cambio de imagen
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Guardar el archivo File (no la URL aún)
+      setDataNewEmployee({
+        ...dataNewEmployee,
+        profilePicture: file,
+      });
+    }
+  };
+
+  // Obtener URL de vista previa
+  const getImagePreview = () => {
+    if (!dataNewEmployee?.profilePicture) return null;
+
+    // Si es un File, crear URL temporal
+    if (dataNewEmployee.profilePicture instanceof File) {
+      return URL.createObjectURL(dataNewEmployee.profilePicture);
+    }
+
+    // Si es una URL string (modo edición)
+    return dataNewEmployee.profilePicture;
+  };
+
   return (
     <div className="flex flex-col gap-4">
       <header>
@@ -45,24 +71,31 @@ export const NewEmployeeForm = ({ onClose, currentEmployee, isEdit }) => {
 
         {/* Foto de perfil */}
         <div className="flex flex-col gap-1 justify-center items-center">
-          <label htmlFor="profilePicture" className="text-sm">
-            Foto de perfil
-          </label>
-          <div className="h-30 w-30 bg-gray-200 aspect-square rounded-full relative mx-auto">
+          <span className="text-sm">Foto de perfil</span>
+          <label
+            htmlFor="profilePicture"
+            className="h-30 w-30 bg-gray-200 aspect-square rounded-full relative mx-auto overflow-hidden cursor-pointer block"
+          >
             <input
               type="file"
               id="profilePicture"
-              className="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer"
+              accept="image/*"
+              onChange={handleImageChange}
+              className="hidden"
             />
-            {isEdit && (
+            {getImagePreview() ? (
               <img
-                src={dataNewEmployee?.profilePicture || "NULL"}
+                src={getImagePreview()}
                 alt="Perfil"
-                className="aspect-square h-full object-cover rounded-full ring-2 ring-primary-color select-none"
+                className="aspect-square h-full w-full object-cover ring-2 ring-primary-color select-none"
                 draggable={false}
               />
+            ) : (
+              <div className="flex items-center justify-center h-full w-full text-gray-400">
+                <CameraIcon className="w-10 h-10" />
+              </div>
             )}
-          </div>
+          </label>
         </div>
 
         {/* Nombre y apellido */}
@@ -181,6 +214,7 @@ export const NewEmployeeForm = ({ onClose, currentEmployee, isEdit }) => {
             <InputModal
               label="Contraseña"
               name="password"
+              type="password"
               value={dataNewEmployee?.password || ""}
               onChange={(e) =>
                 setDataNewEmployee({
@@ -193,6 +227,7 @@ export const NewEmployeeForm = ({ onClose, currentEmployee, isEdit }) => {
             <InputModal
               label="Confirmar contraseña"
               name="confirmPassword"
+              type="password"
               value={dataNewEmployee?.confirmPassword || ""}
               onChange={(e) =>
                 setDataNewEmployee({
@@ -224,7 +259,7 @@ export const NewEmployeeForm = ({ onClose, currentEmployee, isEdit }) => {
           disabled={loadingEmployee}
           className="bg-primary-color text-light-color rounded-md px-4 py-2 h-full w-fit cursor-pointer duration-150 disabled:opacity-50 disabled:cursor-default"
         >
-          {isEdit ? "Actualizar" : "Crear"}
+          {loadingEmployee ? "Procesando..." : isEdit ? "Actualizar" : "Crear"}
         </button>
       </footer>
     </div>
