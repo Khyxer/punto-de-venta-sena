@@ -13,6 +13,7 @@ import clientRoutes from "./routes/client.routes.js";
 import trashRoutes from "./routes/trash.routes.js";
 import productRoutes from "./routes/inventory/product.routes.js";
 import dashboardRoutes from "./routes/dashboard.routes.js";
+import invoiceRoutes from "./routes/invoice.routes.js";
 
 // variables de entorno
 dotenv.config();
@@ -60,6 +61,9 @@ app.use("/api/sale", saleRoutes);
 
 // rutas de dashboard
 app.use("/api/dashboard", dashboardRoutes);
+
+// rutas de facturación
+app.use("/api/invoice", invoiceRoutes);
 
 // ====== servidor ======
 
