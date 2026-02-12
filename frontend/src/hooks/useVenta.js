@@ -11,18 +11,33 @@ export const useVenta = () => {
 
   const [lastSaleCreated, setLastSaleCreated] = useState(null);
 
-  function generateInvoiceNumber() {
+  async function generateInvoiceNumber() {
     const date = new Date();
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, "0");
     const day = String(date.getDate()).padStart(2, "0");
     const hour = String(date.getHours()).padStart(2, "0");
     const minute = String(date.getMinutes()).padStart(2, "0");
-    const second = String(date.getSeconds()).padStart(2, "0");
-    const random = Math.floor(Math.random() * 1000);
-    return `${year}${month}${day}${hour}${minute}${second}${
-      selectedClient?.documentNumber || ""
-    }${random}`;
+    
+    // Obtener el siguiente número de factura desde el backend
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/invoice/next-invoice-number`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      const data = await response.json();
+      const numFactura = String(data.invoiceNumber);
+      
+      return `${numFactura}
+    Fecha ${year}-${month}-${day} Hora:${hour}:${minute}
+    Identificación del cliente: ${selectedClient?.documentNumber || ""}`;
+    } catch (error) {
+      console.error("Error obteniendo número de factura:", error);
+      return `ERROR
+    Fecha ${year}-${month}-${day} Hora:${hour}:${minute}
+    Identificación del cliente: ${selectedClient?.documentNumber || ""}`;
+    }
   }
 
   const formatProducts = () => {
@@ -59,8 +74,12 @@ export const useVenta = () => {
 
   const handleSaveSale = async (setShowModal) => {
     const receivedAmount = parseFloat(amountReceived) || 0;
+    
+    // Obtener el número de factura
+    const invoiceNumber = await generateInvoiceNumber();
+    
     const newVentaForm = {
-      invoiceNumber: generateInvoiceNumber(), // Listo
+      invoiceNumber: invoiceNumber, // Listo
       client: selectedClient?._id, // Listo
       products: formatProducts(), // Listo
       subTotal: calculateTotal().subTotal, // Listo
