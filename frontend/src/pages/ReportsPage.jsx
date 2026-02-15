@@ -1,37 +1,72 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from "react";
+import {
+  Search,
+  Filter,
+  Calendar,
+  Plus,
+  RefreshCw,
+  FileText,
+  Download,
+  Trash2,
+  TrendingUp,
+  Package,
+  Users,
+  Wallet,
+  CheckCircle,
+  Clock,
+  XCircle,
+  AlertCircle,
+} from "lucide-react";
+import toast from "react-hot-toast";
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000/api";
 // Usamos API_URL sin '/api' si la variable de entorno ya lo incluye, o ajustamos según tu config
 // IMPORTANTE: Si tus PDFs no cargan, verifica esta URL base
-const SERVER_URL = API_URL.replace('/api', ''); 
+const SERVER_URL = API_URL.replace("/api", "");
+
+// Diccionario de tipos de reporte
+const REPORT_TYPES = {
+  sales: { label: "Ventas", icon: TrendingUp },
+  inventory: { label: "Inventario", icon: Package },
+  clients: { label: "Clientes", icon: Users },
+  cash: { label: "Caja", icon: Wallet },
+};
+
+// Diccionario de estados
+const REPORT_STATUS = {
+  pending: { label: "Pendiente", icon: Clock, color: "yellow" },
+  processing: { label: "Procesando", icon: AlertCircle, color: "blue" },
+  completed: { label: "Completado", icon: CheckCircle, color: "green" },
+  failed: { label: "Fallido", icon: XCircle, color: "red" },
+};
 
 function ReportsPage() {
   // Estados principales
   const [loading, setLoading] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [reportData, setReportData] = useState([]);
   const [filters, setFilters] = useState({
-    type: 'all',
-    sort: 'date_desc',
-    from: '',
-    to: ''
+    type: "all",
+    sort: "date_desc",
+    from: "",
+    to: "",
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newReport, setNewReport] = useState({
-    title: '',
-    type: 'sales',
-    from: '',
-    to: '',
+    title: "",
+    type: "sales",
+    from: "",
+    to: "",
     include: { totals: true, details: false, charts: false },
-    format: 'pdf'
+    format: "pdf",
   });
 
   // Función para obtener token
   const getAuthHeaders = () => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     return {
-      'Content-Type': 'application/json',
-      ...(token && { 'Authorization': `Bearer ${token}` })
+      "Content-Type": "application/json",
+      ...(token && { Authorization: `Bearer ${token}` }),
     };
   };
 
@@ -43,21 +78,21 @@ function ReportsPage() {
         page: 1,
         limit: 50,
         ...(searchTerm && { search: searchTerm }),
-        ...(filters.type !== 'all' && { type: filters.type }),
+        ...(filters.type !== "all" && { type: filters.type }),
         ...(filters.from && { startDate: filters.from }),
-        ...(filters.to && { endDate: filters.to })
+        ...(filters.to && { endDate: filters.to }),
       });
 
       const res = await fetch(`${API_URL}/reports?${params}`, {
-        headers: getAuthHeaders()
+        headers: getAuthHeaders(),
       });
 
-      if (!res.ok) throw new Error('Error al cargar reportes');
+      if (!res.ok) throw new Error("Error al cargar reportes");
 
       const data = await res.json();
       setReportData(data.data || []);
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
       // Si falla, limpiar datos para no confundir
       setReportData([]);
     } finally {
@@ -69,20 +104,20 @@ function ReportsPage() {
   useEffect(() => {
     fetchReports();
   }, [searchTerm, filters.type, filters.from, filters.to]);
-  
+
   // Filtrado y ordenamiento LOCAL
   const filteredReports = useMemo(() => {
     let data = [...reportData];
 
     // Ordenamiento
     switch (filters.sort) {
-      case 'date_desc':
+      case "date_desc":
         data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         break;
-      case 'date_asc':
+      case "date_asc":
         data.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
         break;
-      case 'title_asc':
+      case "title_asc":
         data.sort((a, b) => a.title.localeCompare(b.title));
         break;
     }
@@ -93,12 +128,15 @@ function ReportsPage() {
   // Paginación
   const PAGE_SIZE = 10;
   const [page, setPage] = useState(1);
-  const pageData = filteredReports.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+  const pageData = filteredReports.slice(
+    (page - 1) * PAGE_SIZE,
+    page * PAGE_SIZE,
+  );
 
   // Generar reporte
   const handleGenerateReport = async () => {
     if (!newReport.title) {
-      alert('⚠️ El título es requerido');
+      alert("El título es requerido");
       return;
     }
 
@@ -111,39 +149,38 @@ function ReportsPage() {
         startDate: newReport.from || undefined,
         endDate: newReport.to || undefined,
         include: newReport.include,
-        format: newReport.format
+        format: newReport.format,
       };
 
       const res = await fetch(`${API_URL}/reports/generate`, {
-        method: 'POST',
+        method: "POST",
         headers: getAuthHeaders(),
-        body: JSON.stringify(reportPayload)
+        body: JSON.stringify(reportPayload),
       });
 
       if (!res.ok) {
         const errorData = await res.json();
-        throw new Error(errorData.message || 'Error al generar reporte');
+        throw new Error(errorData.message || "Error al generar reporte");
       }
 
-      alert('✅ Reporte generado exitosamente. Se procesará en segundo plano.');
-      
+      alert("✅ Reporte generado exitosamente. Se procesará en segundo plano.");
+
       setIsModalOpen(false);
       setNewReport({
-        title: '',
-        type: 'sales',
-        from: '',
-        to: '',
+        title: "",
+        type: "sales",
+        from: "",
+        to: "",
         include: { totals: true, details: false, charts: false },
-        format: 'pdf'
+        format: "pdf",
       });
-      
+
       // Esperar un poco para dar tiempo a que se cree
       setTimeout(() => {
-          fetchReports(); 
+        fetchReports();
       }, 2000);
-
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
       alert(`❌ Error: ${error.message}`);
     } finally {
       setLoading(false);
@@ -152,22 +189,27 @@ function ReportsPage() {
 
   // --- NUEVA FUNCIÓN: ELIMINAR REPORTE ---
   const handleDelete = async (id) => {
-    if (!window.confirm('¿Estás seguro de eliminar este reporte y su archivo PDF?')) return;
+    if (
+      !window.confirm(
+        "¿Estás seguro de eliminar este reporte y su archivo PDF?",
+      )
+    )
+      return;
 
     try {
       const res = await fetch(`${API_URL}/reports/${id}`, {
-        method: 'DELETE',
-        headers: getAuthHeaders()
+        method: "DELETE",
+        headers: getAuthHeaders(),
       });
 
       if (res.ok) {
         fetchReports(); // Recargar tabla
       } else {
-        alert('Error al eliminar');
+        toast.error("Error al eliminar");
       }
     } catch (error) {
-      console.error('Error eliminando:', error);
-      alert('Error de conexión al intentar eliminar');
+      console.error("Error eliminando:", error);
+      toast.error("Error de conexión al intentar eliminar");
     }
   };
 
@@ -177,165 +219,212 @@ function ReportsPage() {
   };
 
   const updateFilter = (field, value) => {
-    setFilters(prev => ({ ...prev, [field]: value }));
+    setFilters((prev) => ({ ...prev, [field]: value }));
     setPage(1);
   };
 
-    return (
-    <div style={{ padding: '20px', maxWidth: '1400px', margin: '0 auto', fontFamily: 'Segoe UI, Tahoma, Geneva, Verdana, sans-serif' }}>
-      <h1 style={{ color: '#2563eb', fontSize: '28px', marginBottom: '30px', fontWeight: '600' }}>
-        📊 Módulo de Reportes
+  return (
+    <div className="p-5 max-w-7xl mx-auto font-sans">
+      <h1 className="text-primary-color text-[28px] mb-[30px] font-semibold flex items-center gap-3">
+        Módulo de Reportes
       </h1>
-      
+
       {/* CONTROLES */}
-      <div style={{ display: 'flex', gap: '15px', alignItems: 'end', flexWrap: 'wrap', marginBottom: '30px', padding: '25px', backgroundColor: '#f8fafc', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
-        
-        <div style={{ flex: 2, minWidth: '250px' }}>
-          <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500', color: '#374151' }}>🔍 Buscar</label>
+      <div className="flex gap-[15px] items-end flex-wrap mb-[30px] p-[25px] bg-light-color rounded-xl border border-gray-200">
+        <div className="flex-[2] min-w-[250px]">
+          <label className="block mb-2 font-medium text-gray-700 flex items-center gap-2">
+            <Search className="w-4 h-4" />
+            Buscar
+          </label>
           <input
             type="search"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Buscar reporte..."
-            style={{ width: '100%', padding: '12px 16px', border: '2px solid #e5e7eb', borderRadius: '8px', fontSize: '16px' }}
+            className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg text-base"
           />
         </div>
 
-        <div style={{ flex: 1, minWidth: '180px' }}>
-          <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500', color: '#374151' }}>Tipo</label>
-          <select value={filters.type} onChange={(e) => updateFilter('type', e.target.value)} style={{ width: '100%', padding: '12px 16px', border: '2px solid #e5e7eb', borderRadius: '8px', fontSize: '16px' }}>
+        <div className="flex-1 min-w-[180px]">
+          <label className="block mb-2 font-medium text-gray-700 flex items-center gap-2">
+            <Filter className="w-4 h-4" />
+            Tipo
+          </label>
+          <select
+            value={filters.type}
+            onChange={(e) => updateFilter("type", e.target.value)}
+            className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg text-base"
+          >
             <option value="all">Todos</option>
             <option value="sales">Ventas</option>
             <option value="inventory">Inventario</option>
+            <option value="clients">Clientes</option>
             <option value="cash">Caja</option>
           </select>
         </div>
 
-        <div style={{ flex: 1, minWidth: '160px' }}>
-          <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500', color: '#374151' }}>Desde</label>
-          <input type="date" value={filters.from} onChange={(e) => updateFilter('from', e.target.value)} style={{ width: '100%', padding: '12px 16px', border: '2px solid #e5e7eb', borderRadius: '8px' }} />
+        <div className="flex-1 min-w-[160px]">
+          <label className="block mb-2 font-medium text-gray-700 flex items-center gap-2">
+            <Calendar className="w-4 h-4" />
+            Desde
+          </label>
+          <input
+            type="date"
+            value={filters.from}
+            onChange={(e) => updateFilter("from", e.target.value)}
+            className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg"
+          />
         </div>
 
-        <div style={{ flex: 1, minWidth: '160px' }}>
-          <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500', color: '#374151' }}>Hasta</label>
-          <input type="date" value={filters.to} onChange={(e) => updateFilter('to', e.target.value)} style={{ width: '100%', padding: '12px 16px', border: '2px solid #e5e7eb', borderRadius: '8px' }} />
+        <div className="flex-1 min-w-[160px]">
+          <label className="block mb-2 font-medium text-gray-700 flex items-center gap-2">
+            <Calendar className="w-4 h-4" />
+            Hasta
+          </label>
+          <input
+            type="date"
+            value={filters.to}
+            onChange={(e) => updateFilter("to", e.target.value)}
+            className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg"
+          />
         </div>
 
-        {/* --- NUEVO BOTÓN DE ACTUALIZAR --- */}
-             {/* --- BOTÓN ACTUALIZAR CON TEXTO --- */}
-        <button 
-            onClick={fetchReports} 
-            disabled={loading}
-            title="Actualizar lista"
-            style={{ 
-              padding: '14px 20px', 
-              backgroundColor: 'white', 
-              color: '#374151', 
-              border: '2px solid #e5e7eb', 
-              borderRadius: '8px', 
-              fontSize: '16px', 
-              fontWeight: '600',
-              cursor: 'pointer',
-              height: '50px',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px'
-            }}
+        {/* --- BOTÓN ACTUALIZAR CON TEXTO --- */}
+        <button
+          onClick={fetchReports}
+          disabled={loading}
+          title="Actualizar lista"
+          className="px-5 py-[14px] bg-white text-gray-700 border-2 border-gray-200 rounded-lg text-base font-semibold cursor-pointer h-[50px] flex items-center gap-2 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-            🔄 Actualizar
-
+          <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} />
+          Actualizar
         </button>
 
-        <button onClick={() => setIsModalOpen(true)} disabled={loading} style={{ padding: '14px 28px', backgroundColor: loading ? '#9ca3af' : '#10b981', color: 'white', border: 'none', borderRadius: '8px', fontSize: '16px', fontWeight: '600', cursor: loading ? 'not-allowed' : 'pointer', height: '50px' }}>
-          {loading ? '⏳...' : '➕ Nuevo Reporte'}
+        <button
+          onClick={() => setIsModalOpen(true)}
+          disabled={loading}
+          className="px-7 py-[14px] cursor-pointer bg-primary-color text-white border-none rounded-lg text-base font-semibold h-[50px] flex items-center gap-2 hover:bg-second-color disabled:bg-gray-400 disabled:cursor-not-allowed"
+        >
+          <Plus className="w-5 h-5" />
+          {loading ? "Cargando..." : "Nuevo Reporte"}
         </button>
       </div>
 
-    {/* TABLA */}
-      <div style={{ backgroundColor: 'white', borderRadius: '12px', border: '1px solid #e2e8f0', overflow: 'hidden' }}>
-        <div style={{ padding: '20px', borderBottom: '1px solid #e2e8f0', backgroundColor: '#f8fafc' }}>
-          <h3 style={{ margin: 0, color: '#1e293b', fontSize: '18px', fontWeight: '600' }}>
+      {/* TABLA */}
+      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+        <div className="p-5 border-b border-gray-200 bg-light-color">
+          <h3 className="m-0 text-dark-color text-lg font-semibold">
             Reportes Generados ({filteredReports.length})
           </h3>
         </div>
-        
-        <div style={{ overflowX: 'auto' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse">
             <thead>
-              <tr style={{ backgroundColor: '#f1f5f9' }}>
-                <th style={{ padding: '16px', textAlign: 'left', fontWeight: '600', color: '#475569' }}>Título</th>
-                <th style={{ padding: '16px', textAlign: 'left', fontWeight: '600', color: '#475569' }}>Tipo</th>
-                <th style={{ padding: '16px', textAlign: 'left', fontWeight: '600', color: '#475569' }}>Fecha</th>
-                <th style={{ padding: '16px', textAlign: 'left', fontWeight: '600', color: '#475569' }}>Estado</th>
-                <th style={{ padding: '16px', textAlign: 'right', fontWeight: '600', color: '#475569' }}>Acciones</th>
+              <tr className="bg-gray-100">
+                <th className="px-4 py-4 text-left font-semibold text-gray-600">
+                  Título
+                </th>
+                <th className="px-4 py-4 text-left font-semibold text-gray-600">
+                  Tipo
+                </th>
+                <th className="px-4 py-4 text-left font-semibold text-gray-600">
+                  Fecha
+                </th>
+                <th className="px-4 py-4 text-left font-semibold text-gray-600">
+                  Estado
+                </th>
+                <th className="px-4 py-4 text-right font-semibold text-gray-600">
+                  Acciones
+                </th>
               </tr>
             </thead>
             <tbody>
               {pageData.length === 0 ? (
                 <tr>
-                  <td colSpan="5" style={{ padding: '40px', textAlign: 'center', color: '#6b7280' }}>
-                    {loading ? '⏳ Cargando reportes...' : 'No hay reportes disponibles'}
+                  <td colSpan="5" className="py-10 text-center text-gray-500">
+                    {loading
+                      ? "⏳ Cargando reportes..."
+                      : "No hay reportes disponibles"}
                   </td>
                 </tr>
               ) : (
                 pageData.map((item) => (
-                  <tr key={item._id || item.id} style={{ borderBottom: '1px solid #f1f5f9' }}>
-                    <td style={{ padding: '16px', color: '#1e293b', fontWeight: '500' }}>{item.title}</td>
-                    <td style={{ padding: '16px' }}>
-                      <span style={{ padding: '4px 10px', backgroundColor: '#dbeafe', color: '#1e40af', borderRadius: '20px', fontSize: '12px', fontWeight: '500' }}>
-                        {item.type}
-                      </span>
+                  <tr
+                    key={item._id || item.id}
+                    className="border-b border-gray-100"
+                  >
+                    <td className="px-4 py-4 text-dark-color font-medium">
+                      {item.title}
                     </td>
-                    <td style={{ padding: '16px', color: '#334155' }}>
-                      {new Date(item.createdAt).toLocaleDateString('es-CO')}
+                    <td className="px-4 py-4">
+                      {REPORT_TYPES[item.type] ? (
+                        <span className="px-[10px] py-1 bg-blue-100 text-second-color rounded-full text-xs font-medium inline-flex items-center gap-1">
+                          {React.createElement(REPORT_TYPES[item.type].icon, {
+                            className: "w-3 h-3",
+                          })}
+                          {REPORT_TYPES[item.type].label}
+                        </span>
+                      ) : (
+                        <span className="px-[10px] py-1 bg-gray-100 text-gray-600 rounded-full text-xs font-medium">
+                          {item.type}
+                        </span>
+                      )}
                     </td>
-                    <td style={{ padding: '16px' }}>
-                      <span style={{ padding: '6px 12px', borderRadius: '20px', fontSize: '12px', fontWeight: '600', backgroundColor: item.status === 'completed' ? '#dcfce7' : '#fef9c3', color: item.status === 'completed' ? '#166534' : '#854d0e' }}>
-                        {item.status === 'completed' ? 'Completado' : item.status === 'failed' ? 'Fallido' : 'Procesando'}
-                      </span>
+                    <td className="px-4 py-4 text-gray-700">
+                      {new Date(item.createdAt).toLocaleDateString("es-CO")}
                     </td>
-                    
-                    {/* --- COLUMNA DE ACCIONES --- */}
-                    <td style={{ padding: '16px', textAlign: 'right' }}>
-                        <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
-                            {/* Botón VER */}
-                            {item.status === 'completed' && item.downloadUrl && (
-                                <a 
-                                    href={`${SERVER_URL}${item.downloadUrl}`} 
-                                    target="_blank" 
-                                    rel="noopener noreferrer"
-                                    style={{ 
-                                        textDecoration: 'none', 
-                                        color: '#4f46e5', 
-                                        backgroundColor: '#eef2ff', 
-                                        padding: '6px 12px', 
-                                        borderRadius: '6px', 
-                                        fontSize: '13px', 
-                                        fontWeight: '500',
-                                        border: '1px solid #c7d2fe'
-                                    }}
-                                >
-                                    👁️ Ver PDF
-                                </a>
-                            )}
+                    <td className="px-4 py-4">
+                      {REPORT_STATUS[item.status] ? (
+                        <span
+                          className={`px-3 py-[6px] rounded-full text-xs font-semibold inline-flex items-center gap-1 ${
+                            REPORT_STATUS[item.status].color === "green"
+                              ? "bg-green-100 text-green-800"
+                              : REPORT_STATUS[item.status].color === "red"
+                                ? "bg-red-100 text-red-800"
+                                : REPORT_STATUS[item.status].color === "blue"
+                                  ? "bg-blue-100 text-blue-800"
+                                  : "bg-yellow-100 text-yellow-800"
+                          }`}
+                        >
+                          {React.createElement(
+                            REPORT_STATUS[item.status].icon,
+                            { className: "w-3 h-3" },
+                          )}
+                          {REPORT_STATUS[item.status].label}
+                        </span>
+                      ) : (
+                        <span className="px-3 py-[6px] rounded-full text-xs font-semibold bg-gray-100 text-gray-800">
+                          {item.status}
+                        </span>
+                      )}
+                    </td>
 
-                            {/* Botón ELIMINAR */}
-                            <button 
-                                onClick={() => handleDelete(item._id)}
-                                style={{ 
-                                    color: '#dc2626', 
-                                    backgroundColor: '#fef2f2', 
-                                    padding: '6px 12px', 
-                                    borderRadius: '6px', 
-                                    fontSize: '13px', 
-                                    fontWeight: '500',
-                                    border: '1px solid #fecaca',
-                                    cursor: 'pointer'
-                                }}
-                            >
-                                🗑️ Eliminar
-                            </button>
-                        </div>
+                    {/* --- COLUMNA DE ACCIONES --- */}
+                    <td className="px-4 py-4 text-right">
+                      <div className="flex gap-2 justify-end">
+                        {/* Botón VER */}
+                        {item.status === "completed" && item.downloadUrl && (
+                          <a
+                            href={`${SERVER_URL}${item.downloadUrl}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="no-underline text-indigo-600 bg-indigo-50 px-3 py-[6px] rounded-md text-[13px] font-medium border border-indigo-200 hover:bg-indigo-100 inline-flex items-center gap-1"
+                          >
+                            <Download className="w-3 h-3" />
+                            Ver PDF
+                          </a>
+                        )}
+
+                        {/* Botón ELIMINAR */}
+                        <button
+                          onClick={() => handleDelete(item._id)}
+                          className="text-error-color bg-red-50 px-3 py-[6px] rounded-md text-[13px] font-medium border border-red-200 cursor-pointer hover:bg-red-100 inline-flex items-center gap-1"
+                        >
+                          <Trash2 className="w-3 h-3" />
+                          Eliminar
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))
@@ -347,60 +436,116 @@ function ReportsPage() {
 
       {/* MODAL */}
       {isModalOpen && (
-        <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
-          <div style={{ backgroundColor: 'white', borderRadius: '12px', maxWidth: '500px', width: '100%', padding: '24px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
-              <h2 style={{ margin: 0, fontSize: '20px', fontWeight: '600' }}>➕ Nuevo Reporte</h2>
-              <button onClick={() => setIsModalOpen(false)} style={{ background: 'none', border: 'none', fontSize: '24px', cursor: 'pointer' }}>✕</button>
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[1000]">
+          <div className="bg-white rounded-xl max-w-[500px] w-full p-6">
+            <div className="flex justify-between mb-5">
+              <h2 className="m-0 text-xl font-semibold flex items-center gap-2">
+                <Plus className="w-5 h-5" />
+                Nuevo Reporte
+              </h2>
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="bg-transparent border-none text-2xl cursor-pointer hover:text-gray-600"
+              >
+                ✕
+              </button>
             </div>
 
             <form onSubmit={handleNewReportSubmit}>
-              <div style={{ marginBottom: '16px' }}>
-                <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500' }}>Título *</label>
+              <div className="mb-4">
+                <label className="block mb-2 font-medium">Título *</label>
                 <input
                   type="text"
                   required
                   value={newReport.title}
-                  onChange={(e) => setNewReport({...newReport, title: e.target.value})}
+                  onChange={(e) =>
+                    setNewReport({ ...newReport, title: e.target.value })
+                  }
                   placeholder="Ej: Ventas enero 2026"
-                  style={{ width: '100%', padding: '12px', border: '2px solid #e5e7eb', borderRadius: '8px' }}
+                  className="w-full px-3 py-3 border-2 border-gray-200 rounded-lg"
                 />
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
+              <div className="grid grid-cols-2 gap-4 mb-4">
                 <div>
-                  <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500' }}>Tipo</label>
-                  <select value={newReport.type} onChange={(e) => setNewReport({...newReport, type: e.target.value})} style={{ width: '100%', padding: '12px', border: '2px solid #e5e7eb', borderRadius: '8px' }}>
+                  <label className="block mb-2 font-medium">Tipo</label>
+                  <select
+                    value={newReport.type}
+                    onChange={(e) =>
+                      setNewReport({ ...newReport, type: e.target.value })
+                    }
+                    className="w-full px-3 py-3 border-2 border-gray-200 rounded-lg"
+                  >
                     <option value="sales">Ventas</option>
                     <option value="inventory">Inventario</option>
+                    <option value="clients">Clientes</option>
                     <option value="cash">Caja</option>
                   </select>
                 </div>
                 <div>
-                  <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500' }}>Formato</label>
-                  <select value={newReport.format} onChange={(e) => setNewReport({...newReport, format: e.target.value})} style={{ width: '100%', padding: '12px', border: '2px solid #e5e7eb', borderRadius: '8px' }}>
+                  <label className="block mb-2 font-medium">Formato</label>
+                  <select
+                    value={newReport.format}
+                    onChange={(e) =>
+                      setNewReport({ ...newReport, format: e.target.value })
+                    }
+                    className="w-full px-3 py-3 border-2 border-gray-200 rounded-lg"
+                  >
                     <option value="pdf">PDF</option>
                   </select>
                 </div>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '20px' }}>
+              <div className="grid grid-cols-2 gap-4 mb-5">
                 <div>
-                  <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500' }}>Desde</label>
-                  <input type="date" value={newReport.from} onChange={(e) => setNewReport({...newReport, from: e.target.value})} style={{ width: '100%', padding: '12px', border: '2px solid #e5e7eb', borderRadius: '8px' }} />
+                  <label className="block mb-2 font-medium">Desde</label>
+                  <input
+                    type="date"
+                    value={newReport.from}
+                    onChange={(e) =>
+                      setNewReport({ ...newReport, from: e.target.value })
+                    }
+                    className="w-full px-3 py-3 border-2 border-gray-200 rounded-lg"
+                  />
                 </div>
                 <div>
-                  <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500' }}>Hasta</label>
-                  <input type="date" value={newReport.to} onChange={(e) => setNewReport({...newReport, to: e.target.value})} style={{ width: '100%', padding: '12px', border: '2px solid #e5e7eb', borderRadius: '8px' }} />
+                  <label className="block mb-2 font-medium">Hasta</label>
+                  <input
+                    type="date"
+                    value={newReport.to}
+                    onChange={(e) =>
+                      setNewReport({ ...newReport, to: e.target.value })
+                    }
+                    className="w-full px-3 py-3 border-2 border-gray-200 rounded-lg"
+                  />
                 </div>
               </div>
 
-              <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', paddingTop: '16px', borderTop: '1px solid #e2e8f0' }}>
-                <button type="button" onClick={() => setIsModalOpen(false)} style={{ padding: '12px 24px', border: '2px solid #d1d5db', backgroundColor: 'white', borderRadius: '8px', cursor: 'pointer' }}>
+              <div className="flex gap-3 justify-end pt-4 border-t border-gray-200">
+                <button
+                  type="button"
+                  onClick={() => setIsModalOpen(false)}
+                  className="px-6 py-3 border-2 border-gray-300 bg-white rounded-lg cursor-pointer hover:bg-gray-50 flex items-center gap-2"
+                >
+                  <XCircle className="w-4 h-4" />
                   Cancelar
                 </button>
-                <button type="submit" disabled={loading} style={{ padding: '12px 24px', backgroundColor: loading ? '#9ca3af' : '#10b981', color: 'white', border: 'none', borderRadius: '8px', fontWeight: '600', cursor: loading ? 'not-allowed' : 'pointer' }}>
-                  {loading ? '⏳ Generando...' : '✅ Generar'}
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="px-6 py-3 bg-green-500 text-white border-none rounded-lg font-semibold hover:bg-green-600 disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center gap-2"
+                >
+                  {loading ? (
+                    <>
+                      <RefreshCw className="w-4 h-4 animate-spin" />
+                      Generando...
+                    </>
+                  ) : (
+                    <>
+                      <CheckCircle className="w-4 h-4" />
+                      Generar
+                    </>
+                  )}
                 </button>
               </div>
             </form>

@@ -15,8 +15,8 @@ Haz clic en la opción **Reportes** en el menú lateral izquierdo. Verás una li
 
 ### Paso 3: Descargar y Ver
 Una vez generado, el reporte aparecerá en la lista con estado **"Completado"**.
-- Haz clic en el botón **"👁️ Ver PDF"** para abrirlo y descargarlo.
-- Si el reporte tarda, usa el botón **"🔄 Actualizar"** para refrescar la lista.
+- Haz clic en el botón **"Ver PDF"** para abrirlo y descargarlo.
+- Si el reporte tarda, usa el botón **"Actualizar"** para refrescar la lista.
 
 ### Tipos de Reportes Disponibles
 - **Ventas:** Muestra el total vendido, número de transacciones y los 5 productos más vendidos.

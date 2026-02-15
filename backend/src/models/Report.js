@@ -7,7 +7,7 @@ const schema = new mongoose.Schema({
     },
     type: {
         type: String,
-        enum: ['sales', 'inventory', 'clients', 'cash'], // ← Agregué 'cash' que usas en frontend
+        enum: ['sales', 'inventory', 'clients', 'cash'],
         required: true
     },
     startDate: Date,
@@ -32,7 +32,7 @@ const schema = new mongoose.Schema({
     generatedBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        required: false, // ← ¡IMPORTANTE!
+        required: false,
         default: null
     }
 }, { 
