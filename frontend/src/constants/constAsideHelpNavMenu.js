@@ -11,4 +11,10 @@ export const helpSections = [
     category: "General",
     file: "clientes.md",
   },
+  {
+    id: "reportes",
+    name: "Reportes y Estadísticas",
+    category: "Gestión",
+    file: "reportes.md",
+  },
 ];
