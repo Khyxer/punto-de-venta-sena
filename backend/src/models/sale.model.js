@@ -93,8 +93,9 @@ const saleSchema = new mongoose.Schema(
 );
 
 // Índices compuestos para consultas frecuentes
-saleSchema.index({ employee: 1, saleDate: -1 });
-saleSchema.index({ client: 1, saleDate: -1 });
+saleSchema.index({ employee: 1, createdAt: -1 });
+saleSchema.index({ client: 1, createdAt: -1 });
+
 
 // Virtual para obtener total de items
 saleSchema.virtual("totalItems").get(function () {

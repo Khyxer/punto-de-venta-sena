@@ -1,10 +1,9 @@
 import jwt from "jsonwebtoken";
 import User from "../models/user.model.js";
 
-// verificar JWT
+// Verificar JWT
 export const authenticateToken = async (req, res, next) => {
   try {
-    // Obtener token del header
     const authHeader = req.header("Authorization");
     const token =
       authHeader && authHeader.startsWith("Bearer ")
@@ -18,7 +17,6 @@ export const authenticateToken = async (req, res, next) => {
       });
     }
 
-    // Verificar token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     const user = await User.findById(decoded.userId).select("-password");
@@ -29,7 +27,6 @@ export const authenticateToken = async (req, res, next) => {
       });
     }
 
-    // Agregar usuario a la request
     req.user = user;
     next();
   } catch (error) {
@@ -43,7 +40,7 @@ export const authenticateToken = async (req, res, next) => {
     if (error.name === "TokenExpiredError") {
       return res.status(401).json({
         success: false,
-        message: "Tu sesión ha expirado. Vuelve a iniciar sesión.",
+        message: "Tu sesión ha expirado.",
       });
     }
 
@@ -54,9 +51,7 @@ export const authenticateToken = async (req, res, next) => {
   }
 };
 
-// Verificar roles
-
-// escala de roles
+// Escala de roles
 const roleLevels = {
   cashier: 1,
   employee: 2,
@@ -78,14 +73,14 @@ export const authorizeRoles = (minRole) => {
     if (!roleLevels[userRole]) {
       return res.status(400).json({
         success: false,
-        message: "Rol de usuario inválido.",
+        message: "Rol inválido.",
       });
     }
 
     if (roleLevels[userRole] < roleLevels[minRole]) {
       return res.status(403).json({
         success: false,
-        message: "No tienes permisos para acceder a este recurso.",
+        message: "No tienes permisos.",
       });
     }
 
