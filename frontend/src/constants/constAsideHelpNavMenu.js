@@ -6,6 +6,12 @@ export const helpSections = [
     file: "primeros-pasos.md",
   },
   {
+    id: "clientes",
+    name: "Módulo clientes",
+    category: "General",
+    file: "clientes.md",
+  },
+  {
     id: "reportes",
     name: "Reportes y Estadísticas",
     category: "Gestión",
