@@ -163,7 +163,7 @@ function ReportsPage() {
         throw new Error(errorData.message || "Error al generar reporte");
       }
 
-      alert("✅ Reporte generado exitosamente. Se procesará en segundo plano.");
+      alert("Reporte generado exitosamente. Se procesará en segundo plano.");
 
       setIsModalOpen(false);
       setNewReport({
@@ -344,7 +344,7 @@ function ReportsPage() {
                 <tr>
                   <td colSpan="5" className="py-10 text-center text-gray-500">
                     {loading
-                      ? "⏳ Cargando reportes..."
+                      ? "Cargando reportes..."
                       : "No hay reportes disponibles"}
                   </td>
                 </tr>

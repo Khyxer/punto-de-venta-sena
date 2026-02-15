@@ -191,7 +191,7 @@ async function generatePDF(report) {
       doc.font('Helvetica').text(`Valor Total Inventario: `, { continued: true }).font('Helvetica-Bold').text(`$${data.totalValue.toLocaleString()}`);
       
       doc.moveDown(1.5);
-      doc.fontSize(14).font('Helvetica-Bold').text('⚠️ ALERTAS DE STOCK BAJO (< 10 unid.)');
+      doc.fontSize(14).font('Helvetica-Bold').text('ALERTAS DE STOCK BAJO (< 10 unid.)');
       doc.moveDown(0.5);
       
       if(data.lowStock.length > 0) {
@@ -199,7 +199,7 @@ async function generatePDF(report) {
               doc.fontSize(10).font('Helvetica').fillColor('red').text(`• ${p.name}: ${p.stock} unidades (Precio: $${p.price})`);
           });
       } else {
-          doc.fontSize(10).font('Helvetica').fillColor('green').text('✅ Todo el inventario tiene buen nivel de stock.');
+          doc.fontSize(10).font('Helvetica').fillColor('green').text('Todo el inventario tiene buen nivel de stock.');
       }
       doc.fillColor('black'); // Reset color
   }

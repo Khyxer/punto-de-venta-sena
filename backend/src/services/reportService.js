@@ -140,7 +140,7 @@ export const generateReportFile = async (reportId, params) => {
       doc.end();
 
       stream.on('finish', () => {
-        console.log(`✅ Archivo PDF creado exitosamente: ${fileName}`);
+        console.log(`Archivo PDF creado exitosamente: ${fileName}`);
         resolve({
           fileName,
           filePath: `/uploads/reports/${fileName}`, // URL relativa para guardar en BD

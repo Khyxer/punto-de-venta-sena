@@ -15,7 +15,7 @@ import trashRoutes from "./routes/trash.routes.js";
 import productRoutes from "./routes/inventory/product.routes.js";
 import dashboardRoutes from "./routes/dashboard.routes.js";
 import invoiceRoutes from "./routes/invoice.routes.js";
-import reportRoutes from "./routes/reports.js"; // ← NUEVO
+import reportRoutes from "./routes/reports.js";
 
 // --- CONFIGURACIÓN ---
 dotenv.config();
@@ -24,7 +24,7 @@ const PORT = process.env.PORT || 3000;
 
 // --- MIDDLEWARES ---
 const corsOptions = {
-  origin: "http://localhost:5173", // URL de tu frontend
+  origin: "http://localhost:5173",
   credentials: true,
 };
 app.use(cors(corsOptions));
@@ -33,8 +33,8 @@ app.use(express.json());
 // --- BASE DE DATOS ---
 mongoose
   .connect(process.env.MONGODB_ATLAS_URI)
-  .then(() => console.log("✅ Conectado a MongoDB"))
-  .catch((err) => console.error("❌ Error de conexión:", err));
+  .then(() => console.log("Conectado a MongoDB"))
+  .catch((err) => console.error("Error de conexión:", err));
 
 // --- API ROUTES ---
 app.use("/api/inventory", inventoryRoutes);
@@ -50,24 +50,24 @@ app.use("/api/reports", reportRoutes);
 
 // --- ARCHIVOS ESTÁTICOS (PDFs) ---
 const __dirname = path.resolve();
-const uploadsPath = path.join(__dirname, 'uploads');
-const reportsPath = path.join(uploadsPath, 'reports');
+const uploadsPath = path.join(__dirname, "uploads");
+const reportsPath = path.join(uploadsPath, "reports");
 
 // Crear carpetas si no existen
 if (!fs.existsSync(uploadsPath)) {
   fs.mkdirSync(uploadsPath);
-  console.log('📂 Carpeta uploads creada');
+  // console.log('Carpeta uploads creada');
 }
 if (!fs.existsSync(reportsPath)) {
   fs.mkdirSync(reportsPath);
-  console.log('📂 Carpeta reports creada');
+  // console.log('Carpeta reports creada');
 }
 
 // Servir uploads públicamente
-app.use('/uploads', express.static(uploadsPath));
+app.use("/uploads", express.static(uploadsPath));
 
 // --- SERVIDOR ---
 app.listen(PORT, () => {
-  console.log(`🚀 Server is running on port ${PORT}`);
-  console.log(`📂 Archivos públicos en: ${uploadsPath}`);
+  console.log(`Server is running on port ${PORT}`);
+  console.log(`Archivos públicos en: ${uploadsPath}`);
 });
