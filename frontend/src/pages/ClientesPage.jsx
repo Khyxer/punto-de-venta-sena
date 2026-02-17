@@ -96,6 +96,7 @@ export const ClientesPage = () => {
       render: (valor, row) => (
         <div className="flex items-center gap-2">
           <button
+           title="Información"
             onClick={() => {
               setCurrentClient(row.information);
               setShowModalCompleteInfo(true);
@@ -105,6 +106,7 @@ export const ClientesPage = () => {
             <Info size={22} className="text-green-500" />
           </button>
           <button
+          title="Editar"
             onClick={() => {
               setCurrentClient(row.information);
               setIsEdit(true);
@@ -116,6 +118,7 @@ export const ClientesPage = () => {
             <Pencil size={19} className="text-primary-color" />
           </button>
           <button
+          title="Eliminar"
             onClick={() => {
               setCurrentClient(row.id);
               setShowModalDelete(true);
