@@ -14,7 +14,7 @@ import clientRoutes from "./routes/client.routes.js";
 import trashRoutes from "./routes/trash.routes.js";
 import productRoutes from "./routes/inventory/product.routes.js";
 import dashboardRoutes from "./routes/dashboard.routes.js";
-import invoiceRoutes from "./routes/invoice.routes.js";
+// import invoiceRoutes from "./routes/invoice.routes.js";
 import reportRoutes from "./routes/reports.js";
 
 // --- CONFIGURACIÓN ---
@@ -45,7 +45,7 @@ app.use("/api/trash", trashRoutes);
 app.use("/api/inventory/product", productRoutes);
 app.use("/api/sale", saleRoutes);
 app.use("/api/dashboard", dashboardRoutes);
-app.use("/api/invoice", invoiceRoutes);
+// app.use("/api/invoice", invoiceRoutes);
 app.use("/api/reports", reportRoutes);
 
 // --- ARCHIVOS ESTÁTICOS (PDFs) ---

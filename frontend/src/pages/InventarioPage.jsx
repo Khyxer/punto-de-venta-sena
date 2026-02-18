@@ -1,11 +1,25 @@
-import { useState, useEffect, useMemo } from "react";
-import { ChevronDown, Filter, Plus, Search, Info, Pencil, Trash2 } from "lucide-react";
+import { useState, useEffect, useMemo, useRef } from "react";
+import {
+  ChevronDown,
+  Filter,
+  Plus,
+  Search,
+  Info,
+  Pencil,
+  Trash2,
+  BringToFront,
+} from "lucide-react";
 import toast from "react-hot-toast";
 import { LayoutModal } from "../components/general/LayoutModal";
 import { NewProductoForm } from "../components/inventario/NewProductoForm";
 import { SimpleTable } from "../components/general/SimpleTable";
 import { useInventarioContext } from "../contexts/inventario/useInventarioContext";
-import { formatText, formatDate, formatPrice } from "../utils/utilFormatFunctions";
+import {
+  formatText,
+  formatDate,
+  formatPrice,
+} from "../utils/utilFormatFunctions";
+import { CompleteInfoProduct } from "../components/inventario/CompleteInfoProduct";
 
 export const InventarioPage = () => {
   // Modales y estados
@@ -17,7 +31,15 @@ export const InventarioPage = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("");
 
-  const { products, getProducts, setProducts, setNewFormDataInventory, resetFormData } = useInventarioContext();
+  const filtersDropdownRef = useRef(null);
+
+  const {
+    products,
+    getProducts,
+    setProducts,
+    setNewFormDataInventory,
+    resetFormData,
+  } = useInventarioContext();
 
   // Abrir modal en modo editar y precargar formulario
   const openEditProduct = (p) => {
@@ -36,7 +58,9 @@ export const InventarioPage = () => {
       stock: p.stock || "",
       minStock: p.minStock || "",
       measureUnit: p.measureUnit?._id || "",
-      expirationDate: p.expirationDate ? new Date(p.expirationDate).toISOString().slice(0,10) : "",
+      expirationDate: p.expirationDate
+        ? new Date(p.expirationDate).toISOString().slice(0, 10)
+        : "",
     });
     setShowModalCreate(true);
   };
@@ -46,6 +70,26 @@ export const InventarioPage = () => {
     getProducts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (!showFilters) return;
+
+    const handlePointerDown = (event) => {
+      const el = filtersDropdownRef.current;
+      if (!el) return;
+      if (el.contains(event.target)) return;
+
+      setShowFilters(false);
+    };
+
+    document.addEventListener("mousedown", handlePointerDown);
+    document.addEventListener("touchstart", handlePointerDown);
+
+    return () => {
+      document.removeEventListener("mousedown", handlePointerDown);
+      document.removeEventListener("touchstart", handlePointerDown);
+    };
+  }, [showFilters]);
 
   // Columnas de la tabla (similar a ClientesPage)
   const columnas = [
@@ -62,7 +106,7 @@ export const InventarioPage = () => {
       render: (valor, row) => (
         <div className="flex items-center gap-2">
           <button
-          title="Información"
+            title="Información"
             onClick={() => {
               setCurrentProduct(row.information);
               setShowModalInfo(true);
@@ -72,7 +116,7 @@ export const InventarioPage = () => {
             <Info size={18} className="text-green-500" />
           </button>
           <button
-           title="Editar"
+            title="Editar"
             onClick={() => {
               setCurrentProduct(row.information);
               openEditProduct(row.information);
@@ -82,7 +126,7 @@ export const InventarioPage = () => {
             <Pencil size={16} className="text-primary-color" />
           </button>
           <button
-           title="Eliminar"
+            title="Eliminar"
             onClick={() => {
               setCurrentProduct(row.id);
               setShowModalDelete(true);
@@ -99,13 +143,15 @@ export const InventarioPage = () => {
   // Transformar productos para la tabla
   const data = (products || []).map((p) => ({
     id: p._id,
-    name: formatText(p.name),
-    productCode: p.productCode,
-    category: formatText(p.category?.name),
-    subCategory: formatText(p.subCategory?.name),
-    stock: `${p.stock} ${p.measureUnit?.name || ""}`,
-    sellPrice: formatPrice(p.sellPrice),
-    expirationDate: p.expirationDate ? formatDate(p.expirationDate) : "",
+    name: formatText(p.name) || "Sin nombre",
+    productCode: p.productCode || "Sin codigo",
+    category: formatText(p.category?.name || "Sin categoria"),
+    subCategory: formatText(p.subCategory?.name || "Sin subcategoria"),
+    stock: `${p.stock} ${p.measureUnit?.name || "0"}`,
+    sellPrice: formatPrice(p.sellPrice || "0"),
+    expirationDate: p.expirationDate
+      ? formatDate(p.expirationDate)
+      : "No vence",
     information: p,
   }));
 
@@ -115,7 +161,8 @@ export const InventarioPage = () => {
     (products || []).forEach((p) => {
       const cat = p.category;
       if (cat && cat._id && cat.active !== false) {
-        if (!map.has(cat._id)) map.set(cat._id, { id: cat._id, name: cat.name });
+        if (!map.has(cat._id))
+          map.set(cat._id, { id: cat._id, name: cat.name });
       }
     });
     return Array.from(map.values());
@@ -129,9 +176,12 @@ export const InventarioPage = () => {
 
     const matchesCategory =
       !selectedCategory ||
-      (product.information?.category && product.information.category._id === selectedCategory) ||
+      (product.information?.category &&
+        product.information.category._id === selectedCategory) ||
       product.category?.toLowerCase() ===
-        (activeCategories.find((c) => c.id === selectedCategory)?.name || "").toLowerCase();
+        (
+          activeCategories.find((c) => c.id === selectedCategory)?.name || ""
+        ).toLowerCase();
 
     return matchesName && matchesCategory;
   });
@@ -139,13 +189,16 @@ export const InventarioPage = () => {
   // eliminar producto (llamar API)
   const deleteProduct = async (id) => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/inventory/product?id=${id}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/inventory/product?id=${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
         },
-      });
+      );
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -191,61 +244,36 @@ export const InventarioPage = () => {
       >
         <div className="p-4">
           <h3 className="text-lg font-medium">Eliminar producto</h3>
-          <p className="text-sm text-gray-600 mt-2">¿Estás seguro de eliminar este producto?</p>
+          <p className="text-sm text-gray-600 mt-2">
+            ¿Estás seguro de eliminar este producto?
+          </p>
           <div className="flex justify-end gap-2 mt-4">
-            <button onClick={() => setShowModalDelete(false)} className="border border-gray-500 rounded-md px-4 py-2">Cancelar</button>
-            <button onClick={() => deleteProduct(currentProduct)} className="bg-error-color text-light-color rounded-md px-4 py-2">Eliminar</button>
+            <button
+              onClick={() => setShowModalDelete(false)}
+              className="border border-gray-500 rounded-md px-4 py-2"
+            >
+              Cancelar
+            </button>
+            <button
+              onClick={() => deleteProduct(currentProduct)}
+              className="bg-error-color text-light-color rounded-md px-4 py-2"
+            >
+              Eliminar
+            </button>
           </div>
         </div>
       </LayoutModal>
 
       {/** Modal info producto */}
       <LayoutModal
-        className="w-full !max-w-2xl"
+        className="w-full !max-w-4xl"
         show={showModalInfo}
         onClose={() => setShowModalInfo(false)}
       >
-        <div className="p-4">
-          <h3 className="text-lg font-medium">Información del producto</h3>
-          {currentProduct ? (
-            <div className="mt-4 space-y-2">
-              {/* Imagen */}
-              {(currentProduct.imageProduct || currentProduct.image) && (
-                <div>
-                  <strong>Imagen:</strong>
-                  <div className="mt-2">
-                    <img
-                      src={currentProduct.imageProduct || currentProduct.image}
-                      alt={currentProduct.name}
-                      className="max-h-40 object-contain rounded"
-                    />
-                  </div>
-                </div>
-              )}
-
-              <p><strong>Nombre:</strong> {currentProduct.name}</p>
-              <p><strong>Código:</strong> {currentProduct.productCode}</p>
-              <p><strong>Código de barras:</strong> {currentProduct.barCode || "-"}</p>
-              <p><strong>Descripción:</strong> {currentProduct.description || "-"}</p>
-              <p><strong>Costo:</strong> {typeof currentProduct.costPrice === 'number' ? formatPrice(currentProduct.costPrice) : (currentProduct.costPrice || "-")}</p>
-              <p><strong>Precio:</strong> {formatPrice(currentProduct.sellPrice)}</p>
-              <p><strong>Stock actual:</strong> {currentProduct.stock ?? "-"} {currentProduct.measureUnit?.name || ""}</p>
-              <p><strong>Stock mínimo:</strong> {currentProduct.minStock ?? "-"}</p>
-              <p><strong>Unidad de medida:</strong> {currentProduct.measureUnit?.name || "-"}</p>
-              <p><strong>Categoria:</strong> {currentProduct.category?.name || "-"}</p>
-              <p><strong>Subcategoria:</strong> {currentProduct.subCategory?.name || "-"}</p>
-              <p><strong>Proveedor:</strong> {currentProduct.supplier?.name || "-"}</p>
-              <p><strong>Vence:</strong> {currentProduct.expirationDate ? formatDate(currentProduct.expirationDate) : "-"}</p>
-              <p><strong>Activo:</strong> {currentProduct.active ? "Sí" : "No"}</p>
-              <p><strong>Eliminado:</strong> {currentProduct.deleted ? "Sí" : "No"}</p>
-              <p><strong>Creado por:</strong> {currentProduct.userCreator?.name || currentProduct.userCreator || "-"}</p>
-              <p><strong>Creado:</strong> {currentProduct.createdAt ? formatDate(currentProduct.createdAt) : "-"}</p>
-              <p><strong>Actualizado:</strong> {currentProduct.updatedAt ? formatDate(currentProduct.updatedAt) : "-"}</p>
-            </div>
-          ) : (
-            <p>No hay información</p>
-          )}
-        </div>
+        <CompleteInfoProduct
+          onClose={() => setShowModalInfo(false)}
+          currentProduct={currentProduct}
+        />
       </LayoutModal>
 
       {/** Header: Buscar y nuevo producto (igual que antes) */}
@@ -263,29 +291,68 @@ export const InventarioPage = () => {
             />
           </div>
           {/** filtros */}
-          <div className="relative">
+          <div ref={filtersDropdownRef} className="relative">
             <button
               onClick={() => setShowFilters((s) => !s)}
-              className="rounded-md border border-gray-500 hover:border-dark-color px-4 py-2 h-full w-fit cursor-pointer duration-150 flex items-center gap-2"
+              className="rounded-md border focus:ring-2 focus:ring-primary-color focus:ring-offset-2 border-gray-500 hover:border-dark-color px-4 py-2 h-full w-fit cursor-pointer duration-150 flex items-center gap-2"
             >
               <Filter />
               Filtros
-              <ChevronDown />
+              {selectedCategory && (
+                <span className="ml-2 text-sm text-gray-600">
+                  {
+                    activeCategories.find((c) => c.id === selectedCategory)
+                      ?.name
+                  }
+                </span>
+              )}
+              <ChevronDown
+                className={`${showFilters ? "rotate-180" : ""} duration-200`}
+              />
             </button>
 
             {showFilters && (
-              <div className="absolute right-0 mt-2 w-64 bg-white border border-gray-200 rounded shadow-md z-20 p-3">
-                <div className="text-sm font-medium mb-2">Filtrar por categoría</div>
-                <div className="max-h-48 overflow-auto space-y-1">
+              <div className="absolute right-0 mt-2 w-60 bg-white border border-gray-200 rounded-xl shadow-lg z-20 overflow-hidden animate-in fade-in slide-in-from-top-1 duration-150">
+                {/* Header */}
+                <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
+                  <div className="flex items-center gap-2">
+                    <BringToFront className="w-5 h-5 text-gray-500" />
+                    <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                      Categoría
+                    </span>
+                  </div>
+                  {selectedCategory && (
+                    <button
+                      onClick={() => {
+                        setSelectedCategory("");
+                        setShowFilters(false);
+                      }}
+                      className="text-xs text-blue-500 hover:text-blue-700 hover:bg-blue-50 px-2 py-1 rounded-md transition-colors duration-150"
+                    >
+                      Limpiar
+                    </button>
+                  )}
+                </div>
+
+                {/* Options */}
+                <div className="max-h-56 overflow-y-auto p-2 space-y-0.5 custom-scroll">
                   <button
                     onClick={() => {
                       setSelectedCategory("");
                       setShowFilters(false);
                     }}
-                    className={`w-full text-left px-2 py-1 rounded hover:bg-gray-100 ${selectedCategory === "" ? "font-semibold" : ""}`}
+                    className={`flex items-center gap-2.5 w-full text-left px-3 py-2 rounded-lg text-sm transition-colors duration-150${
+                      selectedCategory === ""
+                        ? "bg-blue-50 text-blue-600 font-semibold"
+                        : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                    }`}
                   >
+                    <span
+                      className={`w-2 h-2 rounded-full flex-shrink-0 transition-colors duration-150 ${selectedCategory === "" ? "bg-blue-500" : "bg-gray-300"}`}
+                    />
                     Todas
                   </button>
+
                   {activeCategories.map((c) => (
                     <button
                       key={c.id}
@@ -293,22 +360,24 @@ export const InventarioPage = () => {
                         setSelectedCategory(c.id);
                         setShowFilters(false);
                       }}
-                      className={`w-full text-left px-2 py-1 rounded hover:bg-gray-100 ${selectedCategory === c.id ? "font-semibold" : ""}`}
+                      className={`flex items-center gap-2.5 w-full text-left px-3 py-2 rounded-lg text-sm transition-colors duration-150 ${
+                        selectedCategory === c.id
+                          ? "bg-blue-50 text-blue-600 font-semibold"
+                          : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                      }`}
                     >
+                      <span
+                        className={`w-2 h-2 rounded-full flex-shrink-0 transition-colors duration-150 ${selectedCategory === c.id ? "bg-blue-500" : "bg-gray-300"}`}
+                      />
                       {c.name}
                     </button>
                   ))}
-                </div>
-                <div className="mt-3 flex justify-end">
-                  <button
-                    onClick={() => {
-                      setSelectedCategory("");
-                      setShowFilters(false);
-                    }}
-                    className="text-sm text-gray-600 hover:underline"
-                  >
-                    Limpiar
-                  </button>
+
+                  {activeCategories.length === 0 && (
+                    <p className="text-xs text-gray-400 italic text-center py-4">
+                      Sin categorías disponibles
+                    </p>
+                  )}
                 </div>
               </div>
             )}
@@ -329,7 +398,12 @@ export const InventarioPage = () => {
 
       {/** Tabla de inventario */}
       <div className="w-full pt-6">
-        <SimpleTable columns={columnas} data={filteredData} itemsPerPage={9} sortable={true} />
+        <SimpleTable
+          columns={columnas}
+          data={filteredData}
+          itemsPerPage={9}
+          sortable={true}
+        />
       </div>
     </section>
   );

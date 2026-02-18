@@ -1,5 +1,5 @@
 import { InputModal } from "../../UI/UiInputs";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useConfigContext } from "../../contexts/config/useConfigContext";
 import { formatText } from "../../utils/utilFormatFunctions";
 import { useInventarioContext } from "../../contexts/inventario/useInventarioContext";
@@ -31,6 +31,16 @@ export const NewProductoForm = ({ onClose }) => {
     newFormDataInventory,
     setNewFormDataInventory,
   } = useInventarioContext();
+
+  const selectedCategoryId = newFormDataInventory?.category || "";
+
+  const availableSubCategories = useMemo(() => {
+    if (!selectedCategoryId) return [];
+    return (subCategories || []).filter((sc) => {
+      const mainId = sc?.mainCategory?._id || sc?.mainCategory;
+      return mainId === selectedCategoryId;
+    });
+  }, [subCategories, selectedCategoryId]);
 
   useEffect(() => {
     if (!categories.length) {
@@ -84,10 +94,10 @@ export const NewProductoForm = ({ onClose }) => {
     // prevenir comportamiento por defecto del formulario lo antes posible
     if (e && typeof e.preventDefault === "function") e.preventDefault();
     // log temporal para depuración
-    console.log(
-      "NewProductoForm submit, isEdit:",
-      !!(newFormDataInventory && newFormDataInventory._id),
-    );
+    // console.log(
+    //   "NewProductoForm submit, isEdit:",
+    //   !!(newFormDataInventory && newFormDataInventory._id),
+    // );
 
     if (newFormDataInventory && newFormDataInventory._id) {
       return updateProduct(e, onClose, newFormDataInventory._id);
@@ -128,7 +138,7 @@ export const NewProductoForm = ({ onClose }) => {
               <img
                 src={getImagePreview()}
                 alt="Producto"
-                className="aspect-square h-full w-full object-contain select-none"
+                className="aspect-square h-full w-full object-cover select-none"
                 draggable={false}
               />
             ) : (
@@ -203,6 +213,7 @@ export const NewProductoForm = ({ onClose }) => {
               setNewFormDataInventory({
                 ...newFormDataInventory,
                 category: e.target.value,
+                subCategory: "",
               })
             }
             className="border border-gray-600 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-primary-color focus:ring-offset-2 duration-150"
@@ -234,13 +245,22 @@ export const NewProductoForm = ({ onClose }) => {
               })
             }
             className="border border-gray-600 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-primary-color focus:ring-offset-2 duration-150"
+            disabled={
+              !selectedCategoryId ||
+              loadingGetSubCategory ||
+              availableSubCategories.length === 0
+            }
           >
             <option value="" disabled>
-              {loadingGetSubCategory
-                ? "Obteniendo subcategorias..."
-                : "Seleccionar subcategoria"}
+              {!selectedCategoryId
+                ? "Debes seleccionar una categoria"
+                : loadingGetSubCategory
+                  ? "Obteniendo subcategorias..."
+                  : availableSubCategories.length === 0
+                    ? "No hay subcategorias para esta categoria"
+                    : "Seleccionar subcategoria"}
             </option>
-            {subCategories?.map((subCategory, index) => (
+            {availableSubCategories?.map((subCategory, index) => (
               <option key={`${subCategory}-${index}`} value={subCategory._id}>
                 {formatText(subCategory.name)}
               </option>

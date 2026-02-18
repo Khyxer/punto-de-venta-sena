@@ -6,15 +6,27 @@ export const createSaleController = async (req, res) => {
   try {
     const baseSale = { ...req.body };
 
-    //aregar id del empleado desde la request
+    // Generar número de factura: FAC-DD-MM-YY-RANDOM6
+    const date = new Date();
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = String(date.getFullYear()).slice(-2); // Últimos 2 dígitos del año
+    
+    // Generar string aleatorio de 6 caracteres (letras minúsculas y números)
+    const randomSuffix = Math.random().toString(36).substring(2, 8);
+    
+    const invoiceNumber = `FAC-${day}-${month}-${year}-${randomSuffix}`;
+
+    //aregar id del empleado desde la request y el número de factura generado
     const formSale = {
       ...baseSale,
       employee: req.user.id,
+      invoiceNumber: invoiceNumber,
     };
 
     //validacion de campos
     const requiredFields = {
-      invoiceNumber: "Número de factura",
+      // invoiceNumber ya no se valida desde el body porque se genera aquí
       products: "Productos",
       subTotal: "Subtotal",
       total: "Total",
@@ -59,7 +71,7 @@ export const createSaleController = async (req, res) => {
       data: sale,
     });
   } catch (error) {
-    console.error(error);
+    console.error("Error al crear la venta:", error); // Mejor logging
     res.status(500).json({
       success: false,
       message: "Error al crear la venta",
