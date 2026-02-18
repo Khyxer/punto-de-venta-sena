@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { ChevronDown, Filter, Plus, Search, Info, Pencil, Trash2 } from "lucide-react";
 import toast from "react-hot-toast";
 import { LayoutModal } from "../components/general/LayoutModal";
@@ -13,6 +13,9 @@ export const InventarioPage = () => {
   const [showModalDelete, setShowModalDelete] = useState(false);
   const [showModalInfo, setShowModalInfo] = useState(false);
   const [currentProduct, setCurrentProduct] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [showFilters, setShowFilters] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState("");
 
   const { products, getProducts, setProducts, setNewFormDataInventory, resetFormData } = useInventarioContext();
 
@@ -59,6 +62,7 @@ export const InventarioPage = () => {
       render: (valor, row) => (
         <div className="flex items-center gap-2">
           <button
+          title="Información"
             onClick={() => {
               setCurrentProduct(row.information);
               setShowModalInfo(true);
@@ -68,6 +72,7 @@ export const InventarioPage = () => {
             <Info size={18} className="text-green-500" />
           </button>
           <button
+           title="Editar"
             onClick={() => {
               setCurrentProduct(row.information);
               openEditProduct(row.information);
@@ -77,6 +82,7 @@ export const InventarioPage = () => {
             <Pencil size={16} className="text-primary-color" />
           </button>
           <button
+           title="Eliminar"
             onClick={() => {
               setCurrentProduct(row.id);
               setShowModalDelete(true);
@@ -102,6 +108,33 @@ export const InventarioPage = () => {
     expirationDate: p.expirationDate ? formatDate(p.expirationDate) : "",
     information: p,
   }));
+
+  // Extraer categorias activas únicas desde los productos
+  const activeCategories = useMemo(() => {
+    const map = new Map();
+    (products || []).forEach((p) => {
+      const cat = p.category;
+      if (cat && cat._id && cat.active !== false) {
+        if (!map.has(cat._id)) map.set(cat._id, { id: cat._id, name: cat.name });
+      }
+    });
+    return Array.from(map.values());
+  }, [products]);
+
+  // Filtrar datos por nombre y por categoria (si hay una seleccionada)
+  const filteredData = data.filter((product) => {
+    const matchesName =
+      searchTerm.trim() === "" ||
+      product.name.toLowerCase().includes(searchTerm.toLowerCase());
+
+    const matchesCategory =
+      !selectedCategory ||
+      (product.information?.category && product.information.category._id === selectedCategory) ||
+      product.category?.toLowerCase() ===
+        (activeCategories.find((c) => c.id === selectedCategory)?.name || "").toLowerCase();
+
+    return matchesName && matchesCategory;
+  });
 
   // eliminar producto (llamar API)
   const deleteProduct = async (id) => {
@@ -225,14 +258,61 @@ export const InventarioPage = () => {
               type="text"
               placeholder="Buscar producto por su codigo o nombre..."
               className="focus:outline-none p-2 w-full select-none"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
           {/** filtros */}
-          <button className="rounded-md border border-gray-500 hover:border-dark-color px-4 py-2 h-full w-fit cursor-pointer duration-150 flex items-center gap-2">
-            <Filter />
-            Filtros
-            <ChevronDown />
-          </button>
+          <div className="relative">
+            <button
+              onClick={() => setShowFilters((s) => !s)}
+              className="rounded-md border border-gray-500 hover:border-dark-color px-4 py-2 h-full w-fit cursor-pointer duration-150 flex items-center gap-2"
+            >
+              <Filter />
+              Filtros
+              <ChevronDown />
+            </button>
+
+            {showFilters && (
+              <div className="absolute right-0 mt-2 w-64 bg-white border border-gray-200 rounded shadow-md z-20 p-3">
+                <div className="text-sm font-medium mb-2">Filtrar por categoría</div>
+                <div className="max-h-48 overflow-auto space-y-1">
+                  <button
+                    onClick={() => {
+                      setSelectedCategory("");
+                      setShowFilters(false);
+                    }}
+                    className={`w-full text-left px-2 py-1 rounded hover:bg-gray-100 ${selectedCategory === "" ? "font-semibold" : ""}`}
+                  >
+                    Todas
+                  </button>
+                  {activeCategories.map((c) => (
+                    <button
+                      key={c.id}
+                      onClick={() => {
+                        setSelectedCategory(c.id);
+                        setShowFilters(false);
+                      }}
+                      className={`w-full text-left px-2 py-1 rounded hover:bg-gray-100 ${selectedCategory === c.id ? "font-semibold" : ""}`}
+                    >
+                      {c.name}
+                    </button>
+                  ))}
+                </div>
+                <div className="mt-3 flex justify-end">
+                  <button
+                    onClick={() => {
+                      setSelectedCategory("");
+                      setShowFilters(false);
+                    }}
+                    className="text-sm text-gray-600 hover:underline"
+                  >
+                    Limpiar
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
         {/** nuevo producto */}
         <button
@@ -249,7 +329,7 @@ export const InventarioPage = () => {
 
       {/** Tabla de inventario */}
       <div className="w-full pt-6">
-        <SimpleTable columns={columnas} data={data} itemsPerPage={9} sortable={true} searchTerm={""} />
+        <SimpleTable columns={columnas} data={filteredData} itemsPerPage={9} sortable={true} />
       </div>
     </section>
   );
