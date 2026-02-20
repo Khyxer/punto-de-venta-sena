@@ -5,11 +5,16 @@ import { useAuthContext } from "../contexts/auth/useAuthContext";
 export const ConfigPage = () => {
   // const { pathname } = useLocation();
 
-  const { currentUser } = useAuthContext();
+  const { currentUser, loading } = useAuthContext();
   // console.log(currentUser);
 
+  // Si aún está cargando, muestra un loader o espera
+  if (loading) {
+    return <div className="flex items-center justify-center h-full">Cargando...</div>;
+  }
+
   //si el usuario no es admin, redirige a la pagina de inicio
-  if (currentUser.role !== "admin") {
+  if (!currentUser || currentUser.role !== "admin") {
     return <Navigate to="/" />;
   }
 

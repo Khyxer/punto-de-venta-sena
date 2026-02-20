@@ -53,4 +53,4 @@ Desde el módulo de papelera, podrás restaurar el cliente o eliminarlo permanen
 
 **Nota importante:** No se recomienda eliminar clientes que tengan ventas asociadas.
 
-Para más información, consulta el [módulo de papelera](/ayuda/papelera.md).
+Para más información, consulta el [módulo de papelera](/ayuda/papelera).

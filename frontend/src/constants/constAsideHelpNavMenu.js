@@ -11,7 +11,7 @@ export const helpSections = [
     category: "General",
     file: "clientes.md",
   },
-     {
+  {
     id: "inventario",
     name: "Módulo Inventario",
     category: "General",
@@ -23,5 +23,27 @@ export const helpSections = [
     category: "Gestión",
     file: "reportes.md",
   },
-
-];
+  {
+    id: "ventas",
+    name: "Módulo Ventas",
+    category: "General",
+    file: "ventas.md",
+  },
+  {
+    id: "dashboard",
+    name: "Dashboard",
+    category: "General",
+    file: "dashboard.md",
+  },
+  {
+    id: "ajustes",
+    name: "Ajustes",
+    category: "General",
+    file: "ajustes.md",
+  },
+  {
+    id: "papelera",
+    name: "Papelera",
+    category: "General",
+    file: "papelera.md",
+  },];

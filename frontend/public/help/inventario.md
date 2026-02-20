@@ -65,4 +65,4 @@ Mientras un producto esté en la papelera, no podrá crearse otro con el mismo c
 
 **Nota importante:** Se recomienda no eliminar productos que estén asociados a registros de ventas o movimientos de inventario.
 
-Para más información, consulta el [módulo de papelera](/ayuda/papelera.md).
+Para más información, consulta el [módulo de papelera](/ayuda/papelera).

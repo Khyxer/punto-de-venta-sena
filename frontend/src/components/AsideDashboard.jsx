@@ -16,11 +16,13 @@ export const AsideDashboard = () => {
     return pathname.startsWith(itemPath);
   };
 
+  console.log(currentUser);
+
   const configMenu = () => {
     if (currentUser.role === "admin") {
       return dashboardNavMenu;
     } else {
-      return dashboardNavMenu.filter((item) => item.name !== "Configuración");
+      return dashboardNavMenu.filter((item) => item.name !== "Ajustes");
     }
   };
 
