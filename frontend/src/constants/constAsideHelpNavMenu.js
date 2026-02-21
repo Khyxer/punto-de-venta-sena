@@ -1,49 +1,57 @@
 export const helpSections = [
+  // ── Introducción ──────────────────────────────────────
   {
     id: "primeros-pasos",
     name: "Primeros pasos",
-    category: "General",
+    category: "Introducción",
     file: "primeros-pasos.md",
   },
   {
+    id: "dashboard",
+    name: "Dashboard",
+    category: "Introducción",
+    file: "dashboard.md",
+  },
+
+  // ── Módulos ───────────────────────────────────────────
+  {
     id: "clientes",
-    name: "Módulo clientes",
-    category: "General",
+    name: "Módulo Clientes",
+    category: "Módulos",
     file: "clientes.md",
   },
   {
     id: "inventario",
     name: "Módulo Inventario",
-    category: "General",
+    category: "Módulos",
     file: "inventario.md",
-  },
-  {
-    id: "reportes",
-    name: "Reportes y Estadísticas",
-    category: "Gestión",
-    file: "reportes.md",
   },
   {
     id: "ventas",
     name: "Módulo Ventas",
-    category: "General",
+    category: "Módulos",
     file: "ventas.md",
   },
+
+  // ── Reportes ──────────────────────────────────────────
   {
-    id: "dashboard",
-    name: "Dashboard",
-    category: "General",
-    file: "dashboard.md",
+    id: "reportes",
+    name: "Reportes y Estadísticas",
+    category: "Reportes",
+    file: "reportes.md",
   },
+
+  // ── Configuración ─────────────────────────────────────
   {
     id: "ajustes",
     name: "Ajustes",
-    category: "General",
+    category: "Configuración",
     file: "ajustes.md",
   },
   {
     id: "papelera",
     name: "Papelera",
-    category: "General",
+    category: "Configuración",
     file: "papelera.md",
-  },];
+  },
+];
